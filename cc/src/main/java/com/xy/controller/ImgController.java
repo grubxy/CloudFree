@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xy.info.Results;
-import com.xy.info.Scale;
+import com.xy.model.ResultModel;
+import com.xy.model.ScaleModel;
 import com.xy.service.ImgInterfaceService;
 
 @RestController
@@ -20,15 +20,9 @@ public class ImgController {
 	@Resource(name="ThumbnailatorServiceImpl")
 	private ImgInterfaceService service;
 	
-    @RequestMapping("/watermark")
-    public @ResponseBody Results Watermark(@RequestBody Scale scale) {
-    	Results rs = new Results();
-    	log.info("---->/watermark");
-    	rs.setErrCode("22");
-    	rs.setErrMsg("测试");
-    	rs.setUrl("http://www.baidu.com");
-    	service.scale(scale);
-    	log.info(rs.toString());	
-    	return rs; 	
+    @RequestMapping("/scale")
+    public @ResponseBody ResultModel Watermark(@RequestBody ScaleModel scale) {
+    	log.info("---->/scale");
+    	return service.scale(scale);
     }
 }

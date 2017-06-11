@@ -1,8 +1,9 @@
 package com.xy.service;
 
-import com.xy.info.Scale;
+import com.xy.model.ResultModel;
+import com.xy.model.ScaleModel;
 
 public interface ImgInterfaceService {
 
-	public String scale(Scale scale);
+	public ResultModel scale(ScaleModel scale);
 }

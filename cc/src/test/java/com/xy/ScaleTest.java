@@ -23,9 +23,11 @@ public class ScaleTest {
 	
 	@Test
 	public void scale() throws Exception {
-		this.mockMvc.perform(
-				post("http://localhost:8080/watermark", "json").characterEncoding("UTF-8")
+		String response = this.mockMvc.perform(
+				post("http://localhost:8080/scale", "json").characterEncoding("UTF-8")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(json.getBytes()));
+				.content(json.getBytes()))
+				.andReturn().getResponse().getContentAsString();
+		System.out.println("mockmvc response------------------<<" + response);
 	}
 }

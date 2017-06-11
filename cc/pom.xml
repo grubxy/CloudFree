@@ -21,23 +21,25 @@
   </parent>
 	
   <dependencies>
-    
     <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-    
+    </dependency> 
     <dependency>
     	<groupId>net.coobird</groupId>
     	<artifactId>thumbnailator</artifactId>
     	<version>[0.4, 0.5)</version>
     </dependency>
-    
 	<dependency>
 	  <groupId>org.springframework.boot</groupId>
 	  <artifactId>spring-boot-starter-test</artifactId>
 	  <scope>test</scope>
 	</dependency>
+	<dependency>
+    	<groupId>org.csource</groupId>
+    	<artifactId>fastdfs-client-java</artifactId>
+    	<version>1.27-SNAPSHOT</version>
+	</dependency>	
   </dependencies>
   
   <build>
