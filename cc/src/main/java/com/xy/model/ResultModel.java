@@ -11,6 +11,11 @@ public class ResultModel {
 	
 	private String errMsg;
 	
+	public ResultModel() {
+		this.errCode = "000000";
+		this.errMsg = "成功";
+	}
+	
 	public void setUrl(String url) {
 		this.url = url;
 	}
