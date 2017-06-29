@@ -8,7 +8,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import com.xy.service.FeedInterfaceService;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import javax.annotation.Resource;
 
 
 @RunWith(SpringRunner.class)
@@ -21,7 +26,10 @@ public class ScaleTest {
 	@Autowired
 	private MockMvc mockMvc;
 	
-	@Test
+	@Resource(name = "FeedServiceImpl")
+	private FeedInterfaceService FeedService;
+	
+	//@Test
 	public void scale() throws Exception {
 		String response = this.mockMvc.perform(
 				post("http://localhost:8080/scale", "json").characterEncoding("UTF-8")
@@ -29,5 +37,11 @@ public class ScaleTest {
 				.content(json.getBytes()))
 				.andReturn().getResponse().getContentAsString();
 		System.out.println("mockmvc response------------------<<" + response);
+	}
+	
+	@Test
+	public void feedTest() {
+		System.out.println("----->>rss test start...");
+		FeedService.getRss();
 	}
 }
