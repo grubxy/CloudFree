@@ -82,20 +82,20 @@ public class FeedServiceImpl implements FeedInterfaceService {
 					log.info("URL: " + en.getLink());
 					log.info("文章发布时间: " + en.getPublishedDate());
 					log.info("文章内容: " + en.getDescription().getValue());
-					// 写文件
-					String desUrl = "";
-					try {
-						FastDFSUtil util = new FastDFSUtil("fdfs_client.conf");
-						desUrl = util.uploadFile(en.getDescription().getValue().getBytes("UTF-8"), "html");		
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					// 写数据库
 					FeedInfoModel feedInfo = new FeedInfoModel();			
 					// 查询数据库  判断是否存在
 					List<FeedInfoModel> oldList = feedRep.findByTitle(en.getTitle());
 					if (oldList.size() == 0) {
+						// 写文件
+						String desUrl = "";
+						try {
+							FastDFSUtil util = new FastDFSUtil("fdfs_client.conf");
+							desUrl = util.uploadFile(en.getDescription().getValue().getBytes("UTF-8"), "html");		
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						// 写数据库
 						feedInfo.setSiteTitle(feed.getTitle());
 						feedInfo.setTitle(en.getTitle());
