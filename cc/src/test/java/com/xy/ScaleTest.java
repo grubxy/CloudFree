@@ -8,10 +8,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.containsString;
 
 import com.xy.service.FeedInterfaceService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+
+import java.io.UnsupportedEncodingException;
 
 import javax.annotation.Resource;
 
@@ -32,7 +40,7 @@ public class ScaleTest {
 	//@Test
 	public void scale() throws Exception {
 		String response = this.mockMvc.perform(
-				post("http://localhost:8080/scale", "json").characterEncoding("UTF-8")
+				post("/scale", "json").characterEncoding("UTF-8")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json.getBytes()))
 				.andReturn().getResponse().getContentAsString();
@@ -40,8 +48,17 @@ public class ScaleTest {
 	}
 	
 	@Test
-	public void feedTest() {
+	public void feedTest() throws Exception{
 		System.out.println("----->>rss test start...");
-		FeedService.getRss();
+		//FeedService.getRss();
+		//FeedService.getFeed("2017-06-30 09:00:00");
+		this.mockMvc.perform(
+				get("/getfeed")
+				.param("time", "2017-06-30 09:00:00")
+				.param("type", "财经")
+				)
+		.andDo(print())
+		.andExpect(status().isOk())
+        .andExpect(content().string(containsString("Hello World")));
 	}
 }

@@ -46,8 +46,8 @@ public class FeedInfoModel {
 		 return createDate;
 	 }
 	 
-	 public void setCreateDate(Date createData) {
-		 this.createDate = createData;
+	 public void setCreateDate(Date createDate) {
+		 this.createDate = createDate;
 	 }
 	 
 	 public void setFeedType(String feedType) {

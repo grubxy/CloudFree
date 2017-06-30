@@ -2,6 +2,8 @@ package com.xy.service.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,8 +124,23 @@ public class FeedServiceImpl implements FeedInterfaceService {
 	}
 	
 	// 获取对应时间后的消息
-	public FeedInfoModel getFeed(String time) {
-		FeedInfoModel fi = new FeedInfoModel();
-		return fi;
+	public List<FeedInfoModel> getFeed(String time) {
+		log.info("get feed start time: " + time);
+		// 解析时间
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		try {
+			Date date = formatter.parse(time);	
+			// 数据库查找新于该时间的更新
+			List<FeedInfoModel> newList = feedRep.findByDateUp(date);		
+			for (FeedInfoModel x : newList) {
+				log.info("title: " + x.getTitle());
+				log.info("create data: " + x.getCreateDate().toString());
+			}	
+			return newList;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
