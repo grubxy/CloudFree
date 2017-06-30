@@ -25,7 +25,7 @@ public class ScheduledTask {
 	
 	@Scheduled(fixedRate = 300000)
 	public void getRssSchedule() {
-		log.info("task schedule....:", dateFormat.format(new Date()));
+		log.info("task schedule....:", dateFormat.format(new Date()).toString());
 		FeedService.getRss();
 	}
 }
