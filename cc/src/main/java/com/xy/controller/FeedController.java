@@ -30,4 +30,10 @@ public class FeedController {
 				+ "type : " + type);
 		return FeedService.getFeed(time);
 	}
+	
+	@RequestMapping(value = "/deletefeed")
+	public void deleteFeed(@RequestParam(value="time") String time) {
+		log.info("----------deletefeed");
+		FeedService.deleteFeed(time);
+	}
 }

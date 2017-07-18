@@ -36,7 +36,11 @@ public class FastDFSUtil {
 		StorageClient client = new StorageClient(trackerServer, storageServer);
 		
 		String fileId[] = client.upload_file(buffer, extName, null);		
-		log.info("uploaded file_id: " + fileId[1]);	
+		log.info("uploaded file_id: " + fileId[1] + " groupid: " +  fileId[0]);	
 		return ("http://106.14.155.48:80" + "/" + fileId[1]);
 	}	
+	
+	public String deleteFile(String url) {
+		return "";
+	}
 }

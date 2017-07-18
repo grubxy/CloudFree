@@ -143,4 +143,29 @@ public class FeedServiceImpl implements FeedInterfaceService {
 		}
 		return null;
 	}
+	
+	// 删除内容
+	public void deleteFeed(String time) {
+		log.info("delete feed time: " + time);
+		
+		// 解析时间
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date;
+		try {
+			date = formatter.parse(time);
+			List<FeedInfoModel> newList = feedRep.findByDateDown(date);
+			for (FeedInfoModel x: newList) {		
+				// 删除数据库
+				log.info("deleteing...tile: " + x.getTitle());
+				feedRep.delete(x);		
+				// 删除存储url
+				// 暂时不删除，fastdfs换服务器后考虑 
+				
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
 }

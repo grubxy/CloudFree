@@ -14,4 +14,7 @@ public interface FeedInfoRepository extends CrudRepository<FeedInfoModel, Long> 
 	
 	@Query(value = "select p from FeedInfoModel p where p.createDate >= :createDate")
 	List<FeedInfoModel> findByDateUp(@Param("createDate") Date createDate);
+	
+	@Query(value = "select p from FeedInfoModel p where p.createDate < :createDate")
+	List<FeedInfoModel> findByDateDown(@Param("createDate") Date createDate);
 }

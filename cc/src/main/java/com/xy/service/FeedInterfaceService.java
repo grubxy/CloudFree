@@ -9,4 +9,6 @@ public interface FeedInterfaceService {
 	void getRss();
 	
 	List<FeedInfoModel> getFeed(String time);
+	
+	void deleteFeed(String time);
 }

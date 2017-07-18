@@ -52,13 +52,19 @@ public class ScaleTest {
 		System.out.println("----->>rss test start...");
 		//FeedService.getRss();
 		//FeedService.getFeed("2017-06-30 09:00:00");
+//		this.mockMvc.perform(
+//				get("/getfeed")
+//				.param("time", "2017-06-10 09:00:00")
+//				.param("type", "财经")
+//				)
+//		.andDo(print())
+//		.andExpect(status().isOk())
+//        .andExpect(content().string(containsString("")));
+		
+		// delete feed
 		this.mockMvc.perform(
-				get("/getfeed")
-				.param("time", "2017-06-30 09:00:00")
-				.param("type", "财经")
-				)
-		.andDo(print())
-		.andExpect(status().isOk())
-        .andExpect(content().string(containsString("Hello World")));
+				get("/deletefeed")
+				.param("time", "2017-07-11 23:16:22.0"))
+		.andDo(print()).andExpect(status().isOk());	
 	}
 }
