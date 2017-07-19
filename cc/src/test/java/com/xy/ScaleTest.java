@@ -62,9 +62,11 @@ public class ScaleTest {
 //        .andExpect(content().string(containsString("")));
 		
 		// delete feed
-		this.mockMvc.perform(
-				get("/deletefeed")
-				.param("time", "2017-07-11 23:16:22.0"))
-		.andDo(print()).andExpect(status().isOk());	
+//		this.mockMvc.perform(
+//				get("/deletefeed")
+//				.param("time", "2017-07-11 23:16:22.0"))
+//		.andDo(print()).andExpect(status().isOk());	
+		
+		FeedService.getRss();
 	}
 }

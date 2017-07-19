@@ -25,12 +25,14 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import com.xy.model.ParserDetails;
 import com.xy.model.feed.FeedInfoModel;
 import com.xy.model.feed.FeedInfoRepository;
 import com.xy.model.feed.FeedSiteModel;
 import com.xy.model.feed.FeedSiteRepository;
 import com.xy.service.FeedInterfaceService;
 import com.xy.utils.FastDFSUtil;
+import com.xy.utils.HtmlParser;
 
 @Service("FeedServiceImpl")
 public class FeedServiceImpl implements FeedInterfaceService {
@@ -82,6 +84,11 @@ public class FeedServiceImpl implements FeedInterfaceService {
 					log.info("URL: " + en.getLink());
 					log.info("文章发布时间: " + en.getPublishedDate());
 					log.info("文章内容: " + en.getDescription().getValue());
+					
+					// 解析文章内容
+					HtmlParser p = new HtmlParser();
+					ParserDetails details = p.parserContent(en.getDescription().getValue());
+					
 					// 写数据库
 					FeedInfoModel feedInfo = new FeedInfoModel();			
 					// 查询数据库  判断是否存在
@@ -91,7 +98,7 @@ public class FeedServiceImpl implements FeedInterfaceService {
 						String desUrl = "";
 						try {
 							FastDFSUtil util = new FastDFSUtil("fdfs_client.conf");
-							desUrl = util.uploadFile(en.getDescription().getValue().getBytes("UTF-8"), "html");		
+							desUrl = util.uploadFile(details.getContent().getBytes("UTF-8"), "txt");		
 						} catch (Exception e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -100,6 +107,7 @@ public class FeedServiceImpl implements FeedInterfaceService {
 						feedInfo.setSiteTitle(feed.getTitle());
 						feedInfo.setTitle(en.getTitle());
 						feedInfo.setUrl(en.getLink());
+						feedInfo.setPicUrl(details.getPicUrl());
 						feedInfo.setPubData(en.getPublishedDate().toString());
 						feedInfo.setDesc(desUrl);
 						feedInfo.setCreateDate(new Date());
