@@ -47,7 +47,7 @@ public class ScaleTest {
 		System.out.println("mockmvc response------------------<<" + response);
 	}
 	
-	@Test
+	//@Test
 	public void feedTest() throws Exception{
 		System.out.println("----->>rss test start...");
 		//FeedService.getRss();
@@ -68,5 +68,9 @@ public class ScaleTest {
 //		.andDo(print()).andExpect(status().isOk());	
 		
 		FeedService.getRss();
+	}
+	@Test
+	public void maitest() {
+		
 	}
 }
