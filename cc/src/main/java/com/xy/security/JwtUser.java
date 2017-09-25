@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class JwtUser implements UserDetails {
 
-	private final String id;
+	private final Integer id;
 	private final String username;
 	private final String password;
 	private final String email;
@@ -18,7 +18,7 @@ public class JwtUser implements UserDetails {
 	private final Collection<? extends GrantedAuthority> authorities;
 	
 	public JwtUser(
-				String id,
+			Integer id,
 				String username,
 				String password,
 				String email,
@@ -38,7 +38,7 @@ public class JwtUser implements UserDetails {
 	}
 	
 	@JsonIgnore
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
 	
