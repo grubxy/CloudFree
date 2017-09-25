@@ -2,6 +2,8 @@ package com.xy.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.xy.model.user.User;
@@ -20,6 +23,8 @@ import com.xy.service.AuthService;
 @RestController
 public class AuthController {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
 	@Value("${jwt.header}")
     private String tokenHeader;
 
@@ -29,8 +34,8 @@ public class AuthController {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException{
+    	log.info("auth...");
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
     }
@@ -48,7 +53,8 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
-    public User register(@RequestBody User addedUser) throws AuthenticationException{
+    public @ResponseBody User register(@RequestBody User addedUser) throws AuthenticationException{
+    	log.info("auth register....");
         return authService.register(addedUser);
     }
 }

@@ -1,5 +1,7 @@
 package com.xy.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +23,8 @@ import static java.util.Arrays.asList;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	
     private AuthenticationManager authenticationManager;
     private UserDetailsService userDetailsService;
     private JwtTokenUtil jwtTokenUtil;
@@ -43,7 +47,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User register(User userToAdd) {
+    	log.info("server imp register...");
         final String username = userToAdd.getUsername();
+        log.info("register user name..." + username);
         if(userRepository.findByUsername(username)!=null) {
             return null;
         }
@@ -56,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String login(String username, String password) {
+    	log.info("username:" + username + " password:" + password);
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
         // Perform the security
         final Authentication authentication = authenticationManager.authenticate(upToken);
