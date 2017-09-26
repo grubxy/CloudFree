@@ -34,7 +34,6 @@ public class AuthController {
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException{
-    	log.info("auth...");
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         // Return the token
         return ResponseEntity.ok(new JwtAuthenticationResponse(token));
@@ -54,7 +53,6 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
     public @ResponseBody User register(@RequestBody User addedUser) throws AuthenticationException{
-    	log.info("auth register....");
         return authService.register(addedUser);
     }
 }
