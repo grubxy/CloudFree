@@ -24,7 +24,4 @@ public class Role {
 	private int rid;
 	
 	private String role;
-	
-	@ManyToMany(mappedBy="role")
-	private Set<User> user;
 }

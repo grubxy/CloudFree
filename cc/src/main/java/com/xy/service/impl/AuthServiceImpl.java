@@ -32,16 +32,10 @@ public class AuthServiceImpl implements AuthService {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
     private AuthenticationManager authenticationManager;
-    
-    @Autowired
-    private UserDetailsService userDetailsService;
-    
+   
+    private UserDetailsService userDetailsService;   
     private JwtTokenUtil jwtTokenUtil;
-    
-    @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
     private RoleRepository roleRepository;
 
     @Value("${jwt.tokenHead}")
@@ -52,11 +46,13 @@ public class AuthServiceImpl implements AuthService {
             AuthenticationManager authenticationManager,
             UserDetailsService userDetailsService,
             JwtTokenUtil jwtTokenUtil,
-            UserRepository userRepository) {
+            UserRepository userRepository,
+            RoleRepository roleRepository) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
