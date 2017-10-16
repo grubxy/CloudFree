@@ -1,11 +1,16 @@
 package com.xy.security;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.annotation.security.RolesAllowed;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import com.xy.model.user.Role;
 import com.xy.model.user.User;
 
 public final class JwtUserFactory {
@@ -16,17 +21,21 @@ public final class JwtUserFactory {
 	
 	public static JwtUser create(User user) {
 		return new JwtUser(
-				user.getId(),
+				user.getUid(),
 				user.getUsername(),
 				user.getPassword(),
 				user.getEmail(),
-				mapToGrantedAuthorities(user.getRoles()),
+				mapToGrantedAuthorities(user.getRole()),
 				user.getLastPasswordResetData());
 	}
 	
-	private static List<GrantedAuthority> mapToGrantedAuthorities(List<String> authorities) {
-		  return authorities.stream()
-	                .map(SimpleGrantedAuthority::new)
-	                .collect(Collectors.toList());
+	private static List<GrantedAuthority> mapToGrantedAuthorities(Set<Role> set) {
+		List<String> roles = new ArrayList<String>();
+		for(Role temp: set) {
+			roles.add(temp.getRole());
+		}
+		return roles.stream()
+            .map(SimpleGrantedAuthority::new)
+            .collect(Collectors.toList());
 	}
 }

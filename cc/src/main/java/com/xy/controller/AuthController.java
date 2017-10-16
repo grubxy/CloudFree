@@ -53,6 +53,6 @@ public class AuthController {
 
     @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
     public @ResponseBody User register(@RequestBody User addedUser) throws AuthenticationException{
-        return authService.register(addedUser);
+    	return  authService.register(addedUser);
     }
 }

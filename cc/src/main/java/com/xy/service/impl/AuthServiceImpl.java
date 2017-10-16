@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.xy.model.user.Role;
+import com.xy.model.user.RoleRepository;
 import com.xy.model.user.User;
 import com.xy.model.user.UserRepository;
 import com.xy.security.JwtTokenUtil;
@@ -20,15 +22,27 @@ import com.xy.security.JwtUser;
 import com.xy.service.AuthService;
 import static java.util.Arrays.asList;
 
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
     private AuthenticationManager authenticationManager;
+    
+    @Autowired
     private UserDetailsService userDetailsService;
+    
     private JwtTokenUtil jwtTokenUtil;
+    
+    @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -54,7 +68,17 @@ public class AuthServiceImpl implements AuthService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
-        userToAdd.setRoles(asList("ROLE_USER"));
+        userToAdd.setLastPasswordResetData(new Date());
+        
+        // role
+        Set<Role> roles = new HashSet<Role>();
+        Role role = new Role();
+        role.setRid(1);
+        role.setRole("ROLE_USER");
+        roleRepository.save(role);
+        
+        roles.add(role);   
+        userToAdd.setRole(roles);
         return userRepository.save(userToAdd);
     }
 
