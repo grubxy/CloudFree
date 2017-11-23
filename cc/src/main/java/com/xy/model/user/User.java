@@ -40,7 +40,7 @@ public class User {
 	
 	private Date lastPasswordResetData;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 	name="user_role",
 	joinColumns={@JoinColumn(name="uid")},
