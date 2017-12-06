@@ -1,6 +1,6 @@
 package com.xy.service;
 
-import com.xy.model.user.User;
+import com.xy.dao.user.User;
 
 public interface AuthService {
 

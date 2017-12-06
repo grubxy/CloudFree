@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.security.RolesAllowed;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.xy.model.user.Role;
-import com.xy.model.user.User;
+import com.xy.dao.user.Role;
+import com.xy.dao.user.User;
 
 public final class JwtUserFactory {
 

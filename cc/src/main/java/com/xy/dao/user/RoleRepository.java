@@ -1,4 +1,4 @@
-package com.xy.model.user;
+package com.xy.dao.user;
 
 import org.springframework.data.repository.CrudRepository;
 
