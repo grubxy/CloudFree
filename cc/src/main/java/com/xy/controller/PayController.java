@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping(value="/pay")
 public class PayController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
