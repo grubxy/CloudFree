@@ -17,10 +17,17 @@ public class PayController {
     @Autowired
     private PayService payService;
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public Employee addEmployee(@RequestBody Employee em) {
         log.info("add user...");
         return payService.addEmployee(em);
+    }
+
+    @RequestMapping(value = "/employee", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Employee> selectEmployee(@RequestParam("page") int page, @RequestParam("size") int size) {
+        log.info("select employee...");
+        return payService.selectEmployee(page, size);
     }
 }
