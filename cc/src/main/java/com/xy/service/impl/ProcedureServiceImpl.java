@@ -1,7 +1,7 @@
 package com.xy.service.impl;
 
 import com.xy.dao.manage.Technics;
-import com.xy.dao.manage.ProcedureRepository;
+import com.xy.dao.manage.TechnicsRepository;
 import com.xy.service.ProcedureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ public class ProcedureServiceImpl implements ProcedureService {
     private  final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
-    private ProcedureRepository procedureRepository;
+    private TechnicsRepository procedureRepository;
 
     @Override
     public Technics addProcedure(Technics pr) {

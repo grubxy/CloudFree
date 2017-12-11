@@ -78,4 +78,26 @@ public class ManageTest {
                 .andReturn().getResponse().getContentAsString();
         System.out.println("add procedure: " + resp);
     }
+
+    @Test
+    public void selectProcedure() throws  Exception {
+        String resp = this.mockMvc.perform(get("/manage/procedure?page=0&size=10"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        System.out.println("procedure select resp: " + resp);
+    }
+
+    @Test
+    public  void delProcedure() throws Exception {
+        Technics tc = new Technics();
+        tc.setCode(1);
+        String resp = this.mockMvc
+                .perform(post("/manage/procedure/del")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(tc).getBytes()))
+                .andReturn().getResponse().getContentAsString();
+        System.out.println("procedure del:" + resp);
+    }
 }

@@ -38,7 +38,7 @@ public class PayTest {
         assertThat(payController).isNotNull();
         Faker faker = new Faker(new Locale("zh-CN"));
 
-        for (int i = 0; i < 2; i++){
+        for (int i = 0; i < 50; i++){
 
             Employee em = new Employee();
             em.setName(faker.name().fullName());
