@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.xy.controller.ManageController;
 import com.xy.dao.manage.Material;
 import com.xy.dao.manage.Technics;
+import com.xy.service.ConstructService;
+import com.xy.service.MaterialService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class ManageTest {
 
     @Autowired
     private ManageController manageController;
+
+    @Autowired
+    private ConstructService constructService;
 
 
     @Test
@@ -50,6 +55,15 @@ public class ManageTest {
                 .getResponse()
                 .getContentAsString();
         System.out.println("select resp: " + resp);
+    }
+
+    @Test
+    public void saveMaterialByCid() {
+        Material mt = new Material();
+        mt.setMcode(1);
+        mt.setName("材料1");
+        mt.setSpec("规格1");
+        constructService.saveMaterialByCid(138449459326484480L, mt);
     }
 
     @Test

@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.xy.controller.WorkflowController;
 import com.xy.dao.produce.Construct;
 import com.xy.dao.produce.Production;
+import com.xy.service.ConstructService;
+import com.xy.service.ProductionService;
 import com.xy.utils.SnowFlake;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,6 +33,9 @@ public class WorkflowTest {
 
     @Autowired
     private WorkflowController workflowController;
+
+    @Autowired
+    private ProductionService productionService;
 
 
     @Test
@@ -68,5 +73,16 @@ public class WorkflowTest {
 
     @Test
     public void addConstruction() throws Exception{
+
+        Construct cs = new Construct();
+        SnowFlake sf = new SnowFlake(0, 0);
+
+        cs.setCid(sf.nextId());
+        cs.setCmpl_counts(100);
+        cs.setErr_counts(2);
+        cs.setDst_counts(200);
+        cs.setDate(new Date());
+
+        productionService.saveConstructByPid(138446683611594752L,cs);
     }
 }

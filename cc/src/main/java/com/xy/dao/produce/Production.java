@@ -34,8 +34,8 @@ public class Production {
 
     private String detail;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    @JoinColumn(name="cid")
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name="pid")
     private Set<Construct> constructs;
 
 }
