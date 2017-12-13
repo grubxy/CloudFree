@@ -17,7 +17,7 @@ public class PayController {
     @Autowired
     private PayService payService;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value="/employee/add", method = RequestMethod.POST)
     @ResponseBody
     public Employee addEmployee(@RequestBody Employee em) {
         log.info("add user...");
@@ -29,5 +29,12 @@ public class PayController {
     public Page<Employee> selectEmployee(@RequestParam("page") int page, @RequestParam("size") int size) {
         log.info("select employee...");
         return payService.selectEmployee(page, size);
+    }
+
+    @RequestMapping(value = "/employee/del", method = RequestMethod.POST)
+    @ResponseBody
+    public void delEmployee(@RequestBody Employee em) {
+        log.info("delete employee");
+        payService.delEmployee(em);
     }
 }

@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int code;
+    private int mcode;
 
     private String name;
 

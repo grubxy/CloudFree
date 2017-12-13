@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		.sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 		.authorizeRequests()
-			.antMatchers("/auth/**", "/pay/**", "/manage/**").permitAll()
+			.antMatchers("/auth/**", "/pay/**", "/manage/**", "/workflow/**").permitAll()
 			.anyRequest().authenticated();
 		
         // 添加JWT filter

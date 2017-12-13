@@ -55,7 +55,7 @@ public class ManageTest {
     @Test
     public  void deleteMaterial() throws Exception {
         Material mt = new Material();
-        mt.setCode(1);
+        mt.setMcode(1);
         String resp = this.mockMvc
                 .perform(post("/manage/material/del")
                 .characterEncoding("UTF-8")
@@ -91,7 +91,7 @@ public class ManageTest {
     @Test
     public  void delProcedure() throws Exception {
         Technics tc = new Technics();
-        tc.setCode(1);
+        tc.setTcode(1);
         String resp = this.mockMvc
                 .perform(post("/manage/procedure/del")
                         .characterEncoding("UTF-8")

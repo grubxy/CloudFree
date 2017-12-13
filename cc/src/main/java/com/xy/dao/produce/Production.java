@@ -4,20 +4,18 @@ import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Data
 @Entity
 @Table
 public class Production {
     @Id
-    @GeneratedValue(generator = "id")
-    @GenericGenerator(name="id", strategy = "assigned")
-    private Long id;
+    @GeneratedValue(generator = "pid")
+    @GenericGenerator(name="pid", strategy = "assigned")
+    private Long pid;
 
     private String name;
 
@@ -35,5 +33,9 @@ public class Production {
     private Date date;
 
     private String detail;
+
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @JoinColumn(name="cid")
+    private Set<Construct> constructs;
 
 }

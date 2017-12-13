@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Technics {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  int code;
+    private  int tcode;
 
     private String name;
 }
