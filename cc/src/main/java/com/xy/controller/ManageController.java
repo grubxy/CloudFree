@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(value = "/manage")
 public class ManageController {
@@ -43,24 +45,30 @@ public class ManageController {
     }
 
 
-    @RequestMapping(value = "/procedure/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/technics/add", method = RequestMethod.POST)
     @ResponseBody
-    public Technics addProcedure(@RequestBody Technics pr) {
+    public Technics addTechnics(@RequestBody Technics pr) {
         log.info("procedure add...");
         return  technicsService.addTechnics(pr);
     }
 
-    @RequestMapping(value = "/procedure/del", method = RequestMethod.POST)
+    @RequestMapping(value = "/technics/del", method = RequestMethod.POST)
     @ResponseBody
-    public void delProcedure(@RequestBody Technics pr) {
+    public void delTechnics(@RequestBody Technics pr) {
         log.info("procedure del...");
         technicsService.delPTechnics(pr);
     }
 
-    @RequestMapping(value = "/procedure", method = RequestMethod.GET)
+    @RequestMapping(value = "/technics", method = RequestMethod.GET)
     @ResponseBody
-    public Page<Technics> selectProcedure(@RequestParam("page") int page, @RequestParam("size") int size){
+    public Page<Technics> selectTechnics(@RequestParam("page") int page, @RequestParam("size") int size){
         log.info("select procedure");
         return technicsService.selectTechnics(page, size);
+    }
+
+    @RequestMapping(value = "/technicsAll", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Technics> allTechnics(){
+        return technicsService.findAll();
     }
 }

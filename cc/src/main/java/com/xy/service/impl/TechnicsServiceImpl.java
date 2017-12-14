@@ -1,5 +1,5 @@
 package com.xy.service.impl;
-
+import com.google.common.collect.Lists;
 import com.xy.dao.manage.Technics;
 import com.xy.dao.manage.TechnicsRepository;
 import com.xy.service.TechnicsService;
@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TechnicsServiceImpl implements TechnicsService {
@@ -32,5 +34,10 @@ public class TechnicsServiceImpl implements TechnicsService {
     public Page<Technics> selectTechnics(int page, int size) {
         PageRequest pageRequest = new PageRequest(page, size);
         return  technicsRepository.findAll(pageRequest);
+    }
+
+    @Override
+    public List<Technics> findAll() {
+        return Lists.newArrayList(technicsRepository.findAll());
     }
 }

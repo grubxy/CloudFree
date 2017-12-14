@@ -80,12 +80,12 @@ public class ManageTest {
     }
 
     @Test
-    public  void addProcedure()throws  Exception {
+    public  void addTechnics()throws  Exception {
         assertThat(manageController).isNotNull();
         Technics pr = new Technics();
         pr.setName("工艺1");
         String resp = this.mockMvc
-                .perform(post("/manage/procedure/add")
+                .perform(post("/manage/technics/add")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(pr).getBytes()))
@@ -94,8 +94,8 @@ public class ManageTest {
     }
 
     @Test
-    public void selectProcedure() throws  Exception {
-        String resp = this.mockMvc.perform(get("/manage/procedure?page=0&size=10"))
+    public void selectTechnics() throws  Exception {
+        String resp = this.mockMvc.perform(get("/manage/technics?page=0&size=10"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -103,15 +103,24 @@ public class ManageTest {
     }
 
     @Test
-    public  void delProcedure() throws Exception {
+    public void delPTechnics() throws Exception {
         Technics tc = new Technics();
         tc.setTcode(1);
         String resp = this.mockMvc
-                .perform(post("/manage/procedure/del")
+                .perform(post("/manage/technics/del")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(tc).getBytes()))
                 .andReturn().getResponse().getContentAsString();
         System.out.println("procedure del:" + resp);
+    }
+
+    @Test
+    public void allTechnics() throws Exception {
+        String resp = this.mockMvc.perform(get("/manage/technicsAll"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        System.out.println("procedure select resp: " + resp);
     }
 }
