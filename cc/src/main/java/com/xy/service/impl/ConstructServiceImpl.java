@@ -1,6 +1,7 @@
 package com.xy.service.impl;
 
 import com.xy.dao.manage.Material;
+import com.xy.dao.manage.Technics;
 import com.xy.dao.pay.Employee;
 import com.xy.dao.pay.EmployeeRepository;
 import com.xy.dao.produce.Construct;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -72,6 +74,20 @@ public class ConstructServiceImpl implements ConstructService {
     public void saveMaterialByCid(Long cid, Material mt) {
         Construct construct = constructRepository.findOne(cid);
         construct.setMaterial(mt);
+        constructRepository.save(construct);
+    }
+
+    @Override
+    public void saveTechnicsByCid(Long cid, Technics technics) {
+        Construct construct = constructRepository.findOne(cid);
+        construct.setTechnics(technics);
+        constructRepository.save(construct);
+    }
+
+    @Override
+    public  void saveEmployeeByCid(Long cid, Employee employee) {
+        Construct construct = constructRepository.findOne(cid);
+        construct.setEmployee(employee);
         constructRepository.save(construct);
     }
 }

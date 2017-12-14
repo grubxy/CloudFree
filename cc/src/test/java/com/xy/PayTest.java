@@ -46,7 +46,7 @@ public class PayTest {
 
             System.out.println("test:"+ JSON.toJSONString(em));
             String resp = this.mockMvc
-                    .perform(post("/pay")
+                    .perform(post("/pay/employee/add")
                             .characterEncoding("UTF-8")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(JSON.toJSONString(em).getBytes())

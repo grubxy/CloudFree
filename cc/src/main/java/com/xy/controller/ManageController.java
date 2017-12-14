@@ -3,7 +3,7 @@ package com.xy.controller;
 import com.xy.dao.manage.Material;
 import com.xy.dao.manage.Technics;
 import com.xy.service.MaterialService;
-import com.xy.service.ProcedureService;
+import com.xy.service.TechnicsService;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,7 @@ public class ManageController {
     private MaterialService materialService;
 
     @Autowired
-    private ProcedureService procedureService;
+    private TechnicsService technicsService;
 
     @RequestMapping(value = "/material/add", method = RequestMethod.POST)
     @ResponseBody
@@ -47,20 +47,20 @@ public class ManageController {
     @ResponseBody
     public Technics addProcedure(@RequestBody Technics pr) {
         log.info("procedure add...");
-        return  procedureService.addProcedure(pr);
+        return  technicsService.addTechnics(pr);
     }
 
     @RequestMapping(value = "/procedure/del", method = RequestMethod.POST)
     @ResponseBody
     public void delProcedure(@RequestBody Technics pr) {
         log.info("procedure del...");
-        procedureService.delProcedure(pr);
+        technicsService.delPTechnics(pr);
     }
 
     @RequestMapping(value = "/procedure", method = RequestMethod.GET)
     @ResponseBody
     public Page<Technics> selectProcedure(@RequestParam("page") int page, @RequestParam("size") int size){
         log.info("select procedure");
-        return procedureService.selectProcedure(page, size);
+        return technicsService.selectTechnics(page, size);
     }
 }

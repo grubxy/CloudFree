@@ -37,6 +37,9 @@ public class WorkflowTest {
     @Autowired
     private ProductionService productionService;
 
+    @Autowired
+    private  ConstructService constructService;
+
 
     @Test
     public void addProduction() throws Exception {
@@ -82,7 +85,6 @@ public class WorkflowTest {
         cs.setErr_counts(2);
         cs.setDst_counts(200);
         cs.setDate(new Date());
-
-        productionService.saveConstructByPid(138446683611594752L,cs);
+        constructService.saveConstructByPid(138629067074174976L,cs);
     }
 }
