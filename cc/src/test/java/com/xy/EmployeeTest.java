@@ -1,9 +1,8 @@
 package com.xy;
 
 import com.github.javafaker.Faker;
-import com.xy.controller.PayController;
+import com.xy.controller.ManageController;
 import com.xy.dao.pay.Employee;
-import com.xy.service.PayService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +22,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PayTest {
+public class EmployeeTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private PayController payController;
+    private ManageController manageController;
 
 
     @Test
     public void addEmployee() throws Exception{
 
-        assertThat(payController).isNotNull();
+        assertThat(manageController).isNotNull();
         Faker faker = new Faker(new Locale("zh-CN"));
 
         for (int i = 0; i < 50; i++){
@@ -46,7 +45,7 @@ public class PayTest {
 
             System.out.println("test:"+ JSON.toJSONString(em));
             String resp = this.mockMvc
-                    .perform(post("/pay/employee/add")
+                    .perform(post("/manage/employee/add")
                             .characterEncoding("UTF-8")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(JSON.toJSONString(em).getBytes())
@@ -57,7 +56,16 @@ public class PayTest {
     @Test
     public void selectEmployee() throws  Exception {
 
-        String resp = this.mockMvc.perform(get("/pay/employee?page=1&size=10"))
+        String resp = this.mockMvc.perform(get("/manage/employee?page=1&size=10"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        System.out.println("select resp: " + resp);
+    }
+
+    @Test
+    public void allEmployee()throws  Exception {
+        String resp = this.mockMvc.perform(get("/manage/employeeAll"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();

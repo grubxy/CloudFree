@@ -2,6 +2,8 @@ package com.xy.controller;
 
 import com.xy.dao.manage.Material;
 import com.xy.dao.manage.Technics;
+import com.xy.dao.pay.Employee;
+import com.xy.service.EmployeeService;
 import com.xy.service.MaterialService;
 import com.xy.service.TechnicsService;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,9 @@ public class ManageController {
 
     @Autowired
     private TechnicsService technicsService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @RequestMapping(value = "/material/add", method = RequestMethod.POST)
     @ResponseBody
@@ -44,6 +49,12 @@ public class ManageController {
         return materialService.selectMaterial(page, size);
     }
 
+    @RequestMapping(value = "/materialAll", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Material> allMaterial() {
+        log.info("all material...");
+        return materialService.findAll();
+    }
 
     @RequestMapping(value = "/technics/add", method = RequestMethod.POST)
     @ResponseBody
@@ -69,6 +80,36 @@ public class ManageController {
     @RequestMapping(value = "/technicsAll", method = RequestMethod.GET)
     @ResponseBody
     public List<Technics> allTechnics(){
+        log.info("get all technics...");
         return technicsService.findAll();
+    }
+
+
+    @RequestMapping(value="/employee/add", method = RequestMethod.POST)
+    @ResponseBody
+    public Employee addEmployee(@RequestBody Employee em) {
+        log.info("add employee...");
+        return employeeService.addEmployee(em);
+    }
+
+    @RequestMapping(value = "/employee", method = RequestMethod.GET)
+    @ResponseBody
+    public Page<Employee> selectEmployee(@RequestParam("page") int page, @RequestParam("size") int size) {
+        log.info("select employee...");
+        return employeeService.selectEmployee(page, size);
+    }
+
+    @RequestMapping(value = "/employee/del", method = RequestMethod.POST)
+    @ResponseBody
+    public void delEmployee(@RequestBody Employee em) {
+        log.info("delete employee");
+        employeeService.delEmployee(em);
+    }
+
+    @RequestMapping(value = "/employeeAll", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Employee> allEmployee(){
+        log.info("get all employee...");
+        return employeeService.findAll();
     }
 }

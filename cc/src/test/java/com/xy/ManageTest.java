@@ -123,4 +123,13 @@ public class ManageTest {
                 .getContentAsString();
         System.out.println("procedure select resp: " + resp);
     }
+
+    @Test
+    public  void allMaterial() throws Exception {
+        String resp = this.mockMvc.perform(get("/manage/materialAll"))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        System.out.println("material select resp: " + resp);
+    }
 }
