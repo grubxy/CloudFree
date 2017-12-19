@@ -15,7 +15,8 @@ public class Production {
     @Id
     @GeneratedValue(generator = "pid")
     @GenericGenerator(name="pid", strategy = "assigned")
-    private Long pid;
+    @Column(length = 8)
+    private String pid;
 
     private String name;
 

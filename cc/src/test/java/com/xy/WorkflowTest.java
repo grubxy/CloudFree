@@ -49,8 +49,6 @@ public class WorkflowTest {
         Production pr = new Production();
         // 订单名
         pr.setName("给客户1的订单");
-        // 单号
-        pr.setPid(sf.nextId());
         // 日期
         pr.setDate(new Date());
         // 实际生产数量
@@ -80,7 +78,6 @@ public class WorkflowTest {
         Construct cs = new Construct();
         SnowFlake sf = new SnowFlake(0, 0);
 
-        cs.setCid(sf.nextId());
         cs.setCmpl_counts(100);
         cs.setErr_counts(2);
         cs.setDst_counts(200);

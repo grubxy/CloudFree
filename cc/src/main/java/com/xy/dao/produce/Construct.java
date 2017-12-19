@@ -17,7 +17,8 @@ public class Construct {
     @Id
     @GeneratedValue(generator = "cid")
     @GenericGenerator(name="cid", strategy = "assigned")
-    private Long cid;
+    @Column(length = 8)
+    private String cid;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date sDate;

@@ -26,7 +26,9 @@ public class ProductionImpl implements ProductionService {
     @Override
     public Production addProduction(Production p) {
         SnowFlake sf = new SnowFlake(0, 0);
-        p.setPid(sf.nextId());
+        if (p.getPid() == null) {
+            p.setPid(String.valueOf(sf.nextId()));
+        }
         return  productionRepository.save(p);
     }
 
