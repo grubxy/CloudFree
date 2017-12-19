@@ -38,8 +38,8 @@ public class ManageTest {
 
         assertThat(manageController).isNotNull();
         Material mt = new Material();
-        mt.setName("材料1");
-        mt.setSpec("规格1");
+        mt.setName("材料2");
+        mt.setSpec("规格2");
         String resp = this.mockMvc
                 .perform(post("/manage/material/add")
                 .characterEncoding("UTF-8")
@@ -63,7 +63,7 @@ public class ManageTest {
         mt.setMcode(1);
         mt.setName("材料1");
         mt.setSpec("规格1");
-        constructService.saveMaterialByCid(138449459326484480L, mt);
+        constructService.saveMaterialByCid("", mt);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class ManageTest {
     public  void addTechnics()throws  Exception {
         assertThat(manageController).isNotNull();
         Technics pr = new Technics();
-        pr.setName("工艺1");
+        pr.setName("工艺2");
         String resp = this.mockMvc
                 .perform(post("/manage/technics/add")
                         .characterEncoding("UTF-8")

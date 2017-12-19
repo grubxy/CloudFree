@@ -2,5 +2,5 @@ package com.xy.dao.produce;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductionRepository extends JpaRepository<Production, Long> {
+public interface ProductionRepository extends JpaRepository<Production, String> {
 }

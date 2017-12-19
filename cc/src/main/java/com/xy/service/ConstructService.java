@@ -13,11 +13,11 @@ public interface ConstructService {
 
     Page<Construct> selectConstruct(int page, int size);
 
-    void saveConstructByPid(Long pid, Construct cs);
+    void saveConstructByPid(String pid, Construct cs);
 
-    void saveMaterialByCid(Long cid, Material mt);
+    void saveMaterialByCid(String cid, Material mt);
 
-    void saveTechnicsByCid(Long cid, Technics technics);
+    void saveTechnicsByCid(String cid, Technics technics);
 
-    void saveEmployeeByCid(Long cid, Employee employee);
+    void saveEmployeeByCid(String cid, Employee employee);
 }

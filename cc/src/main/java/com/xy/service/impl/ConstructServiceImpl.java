@@ -9,6 +9,7 @@ import com.xy.dao.produce.ConstructRepository;
 import com.xy.dao.produce.Production;
 import com.xy.dao.produce.ProductionRepository;
 import com.xy.service.ConstructService;
+import com.xy.utils.SnowFlake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,8 +49,12 @@ public class ConstructServiceImpl implements ConstructService {
     }
 
     @Override
-    public void saveConstructByPid(Long pid, Construct cs) {
+    public void saveConstructByPid(String pid, Construct cs) {
         Production pd = productionRepository.findOne(pid);
+        SnowFlake sf = new SnowFlake(0, 0);
+        if (cs.getCid() == null) {
+            cs.setCid(String.valueOf(sf.nextId()));
+        }
         Set<Construct> csSet = new HashSet<Construct>();
         if (pd.getConstructs() == null) {
             csSet.add(cs);
@@ -71,21 +76,21 @@ public class ConstructServiceImpl implements ConstructService {
     }
 
     @Override
-    public void saveMaterialByCid(Long cid, Material mt) {
+    public void saveMaterialByCid(String cid, Material mt) {
         Construct construct = constructRepository.findOne(cid);
         construct.setMaterial(mt);
         constructRepository.save(construct);
     }
 
     @Override
-    public void saveTechnicsByCid(Long cid, Technics technics) {
+    public void saveTechnicsByCid(String cid, Technics technics) {
         Construct construct = constructRepository.findOne(cid);
         construct.setTechnics(technics);
         constructRepository.save(construct);
     }
 
     @Override
-    public  void saveEmployeeByCid(Long cid, Employee employee) {
+    public  void saveEmployeeByCid(String cid, Employee employee) {
         Construct construct = constructRepository.findOne(cid);
         construct.setEmployee(employee);
         constructRepository.save(construct);
