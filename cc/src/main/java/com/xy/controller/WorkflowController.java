@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/workflow")
@@ -63,6 +65,19 @@ public class WorkflowController {
     public void delConstruction(@RequestBody Construct cs) {
         log.info("del construction...");
         constructService.delConstruct(cs);
+    }
+
+    @RequestMapping(value = "/construction/{pid}", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveConstructionByPid(@PathVariable("pid") String pid , @RequestBody Construct cs) {
+        log.info("save by pid...");
+        constructService.saveConstructByPid(pid, cs);
+    }
+
+    @RequestMapping(value = "/constructionAll", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Construct> findAllConstruction() {
+        return constructService.findAll();
     }
 
 }

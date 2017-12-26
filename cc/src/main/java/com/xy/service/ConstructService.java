@@ -6,6 +6,8 @@ import com.xy.dao.pay.Employee;
 import com.xy.dao.produce.Construct;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface ConstructService {
     Construct addConstruct(Construct cs);
 
@@ -14,6 +16,8 @@ public interface ConstructService {
     Page<Construct> selectConstruct(int page, int size);
 
     void saveConstructByPid(String pid, Construct cs);
+
+    List<Construct> findAll();
 
     void saveMaterialByCid(String cid, Material mt);
 

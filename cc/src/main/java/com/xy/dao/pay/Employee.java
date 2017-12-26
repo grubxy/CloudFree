@@ -11,7 +11,7 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private int eid;
+    private Integer eid;
 
     private String name;
 

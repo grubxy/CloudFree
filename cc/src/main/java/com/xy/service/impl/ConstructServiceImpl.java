@@ -1,7 +1,10 @@
 package com.xy.service.impl;
 
+import com.google.common.collect.Lists;
 import com.xy.dao.manage.Material;
+import com.xy.dao.manage.MaterialRepository;
 import com.xy.dao.manage.Technics;
+import com.xy.dao.manage.TechnicsRepository;
 import com.xy.dao.pay.Employee;
 import com.xy.dao.pay.EmployeeRepository;
 import com.xy.dao.produce.Construct;
@@ -19,6 +22,7 @@ import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -31,6 +35,15 @@ public class ConstructServiceImpl implements ConstructService {
 
     @Autowired
     private ProductionRepository productionRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private MaterialRepository materialRepository;
+
+    @Autowired
+    private TechnicsRepository technicsRepository;
 
     @Override
     public Construct addConstruct(Construct cs) {
@@ -55,6 +68,14 @@ public class ConstructServiceImpl implements ConstructService {
         if (cs.getCid() == null) {
             cs.setCid(String.valueOf(sf.nextId()));
         }
+
+        // 获取员工
+        cs.setEmployee(employeeRepository.findOne(cs.getEmployee().getEid()));
+        // 获取材料
+        cs.setMaterial(materialRepository.findOne(cs.getMaterial().getMcode()));
+        // 获取工序
+        cs.setTechnics(technicsRepository.findOne(cs.getTechnics().getTcode()));
+
         Set<Construct> csSet = new HashSet<Construct>();
         if (pd.getConstructs() == null) {
             csSet.add(cs);
@@ -73,6 +94,11 @@ public class ConstructServiceImpl implements ConstructService {
 
         // save
         productionRepository.save(pd);
+    }
+
+    @Override
+    public List<Construct> findAll(){
+        return Lists.newArrayList(constructRepository.findAll());
     }
 
     @Override
