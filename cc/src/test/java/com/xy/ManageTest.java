@@ -83,7 +83,7 @@ public class ManageTest {
     public  void addTechnics()throws  Exception {
         assertThat(manageController).isNotNull();
         Technics pr = new Technics();
-        pr.setName("工艺3");
+        pr.setName("工艺2");
         String resp = this.mockMvc
                 .perform(post("/manage/technics/add")
                         .characterEncoding("UTF-8")

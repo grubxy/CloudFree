@@ -76,6 +76,7 @@ public class ConstructServiceImpl implements ConstructService {
         // 获取工序
         cs.setTechnics(technicsRepository.findOne(cs.getTechnics().getTcode()));
 
+
         Set<Construct> csSet = new HashSet<Construct>();
         if (pd.getConstructs() == null) {
             csSet.add(cs);
@@ -84,14 +85,27 @@ public class ConstructServiceImpl implements ConstructService {
             csSet.add(cs);
         }
         // 次品数量
-        pd.setErr_counts(pd.getErr_counts() + cs.getErr_counts());
-        // 完成数量
-        pd.setCmpl_counts(pd.getCmpl_counts() + cs.getCmpl_counts());
-        // 总数量
-        pd.setFact_counts(pd.getFact_counts() + cs.getCmpl_counts() + cs.getErr_counts());
-        csSet.add(cs);
+        if (pd.getErr_counts() != null) {
+            pd.setErr_counts(pd.getErr_counts() + cs.getErr_counts());
+        } else {
+            pd.setErr_counts(cs.getErr_counts());
+        }
+        if (pd.getCmpl_counts() != null) {
+            // 完成数量
+            pd.setCmpl_counts(pd.getCmpl_counts() + cs.getCmpl_counts());
+        } else {
+            pd.setCmpl_counts(cs.getCmpl_counts());
+        }
+        if (pd.getFact_counts()!= null) {
+            // 总数量
+            pd.setFact_counts(pd.getFact_counts() + cs.getCmpl_counts() + cs.getErr_counts());
+        } else
+        {
+            pd.setFact_counts(cs.getCmpl_counts() + cs.getErr_counts());
+        }
+        // 更新set
+        pd.getConstructs().clear();
         pd.setConstructs(csSet);
-
         // save
         productionRepository.save(pd);
     }
