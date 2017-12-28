@@ -41,7 +41,6 @@ public class EmployeeTest {
 
             Employee em = new Employee();
             em.setName(faker.name().fullName());
-            em.setPay(faker.number().numberBetween(1000, 2000));
 
             System.out.println("test:"+ JSON.toJSONString(em));
             String resp = this.mockMvc

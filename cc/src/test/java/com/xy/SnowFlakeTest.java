@@ -14,7 +14,7 @@ public class SnowFlakeTest {
 
     @Test
     public void snowFlakeTest() {
-        SnowFlake sf = new SnowFlake(0, 0);
+        SnowFlake sf = SnowFlake.getInstance();
         for (int i=0; i < 100; i++) {
             System.out.println("code: " + sf.nextId() + "\n");
         }

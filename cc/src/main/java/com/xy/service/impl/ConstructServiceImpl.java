@@ -64,7 +64,7 @@ public class ConstructServiceImpl implements ConstructService {
     @Override
     public void saveConstructByPid(String pid, Construct cs) {
         Production pd = productionRepository.findOne(pid);
-        SnowFlake sf = new SnowFlake(0, 0);
+        SnowFlake sf = SnowFlake.getInstance();
         if (cs.getCid() == null) {
             cs.setCid(String.valueOf(sf.nextId()));
         }

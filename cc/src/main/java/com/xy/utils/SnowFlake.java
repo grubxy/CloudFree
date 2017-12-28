@@ -39,7 +39,9 @@ public class SnowFlake {
     private long sequence = 0L; //序列号
     private long lastStmp = -1L;//上一次时间戳
 
-    public SnowFlake(long datacenterId, long machineId) {
+    private static final SnowFlake single = new SnowFlake(0,0);
+
+    private SnowFlake (long datacenterId, long machineId) {
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
         }
@@ -48,6 +50,10 @@ public class SnowFlake {
         }
         this.datacenterId = datacenterId;
         this.machineId = machineId;
+    }
+
+    public static SnowFlake getInstance() {
+        return single;
     }
 
     /**

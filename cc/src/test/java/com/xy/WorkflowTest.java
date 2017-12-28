@@ -46,7 +46,7 @@ public class WorkflowTest {
 
     @Test
     public void addProduction() throws Exception {
-        SnowFlake sf = new SnowFlake(0, 0);
+        SnowFlake sf = SnowFlake.getInstance();
         // 添加生产流程
         assertThat(workflowController).isNotNull();
         Production pr = new Production();

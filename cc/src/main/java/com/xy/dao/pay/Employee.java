@@ -14,6 +14,4 @@ public class Employee {
     private Integer eid;
 
     private String name;
-
-    private int pay;
 }
