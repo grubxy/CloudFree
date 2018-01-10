@@ -33,15 +33,15 @@ public class Construct {
     private Integer cmpl_counts;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "eid", unique = true)
+    @JoinColumn(name = "eid")
     private Employee employee;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "mcode", unique = true)
+    @JoinColumn(name = "mcode")
     private Material material;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tcode", unique = true)
+    @JoinColumn(name = "tcode")
     private Technics technics;
 
 }
