@@ -1,7 +1,7 @@
 package com.xy.service.impl;
 import com.google.common.collect.Lists;
-import com.xy.dao.manage.Technics;
-import com.xy.dao.manage.TechnicsRepository;
+import com.xy.entity.Technics;
+import com.xy.entity.TechnicsRepository;
 import com.xy.service.TechnicsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

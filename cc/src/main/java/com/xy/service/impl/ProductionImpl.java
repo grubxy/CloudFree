@@ -1,8 +1,7 @@
 package com.xy.service.impl;
 
-import com.xy.dao.produce.Construct;
-import com.xy.dao.produce.Production;
-import com.xy.dao.produce.ProductionRepository;
+import com.xy.entity.Production;
+import com.xy.entity.ProductionRepository;
 import com.xy.service.ProductionService;
 import com.xy.utils.SnowFlake;
 import org.slf4j.Logger;
@@ -11,9 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 public class ProductionImpl implements ProductionService {

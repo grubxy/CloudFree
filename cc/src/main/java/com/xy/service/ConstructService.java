@@ -1,9 +1,9 @@
 package com.xy.service;
 
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.Technics;
+import com.xy.entity.Material;
+import com.xy.entity.Technics;
 import com.xy.dao.pay.Employee;
-import com.xy.dao.produce.Construct;
+import com.xy.entity.Construct;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

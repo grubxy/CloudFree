@@ -1,16 +1,16 @@
 package com.xy.service.impl;
 
 import com.google.common.collect.Lists;
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.MaterialRepository;
-import com.xy.dao.manage.Technics;
-import com.xy.dao.manage.TechnicsRepository;
+import com.xy.entity.Material;
+import com.xy.entity.MaterialRepository;
+import com.xy.entity.Technics;
+import com.xy.entity.TechnicsRepository;
 import com.xy.dao.pay.Employee;
 import com.xy.dao.pay.EmployeeRepository;
-import com.xy.dao.produce.Construct;
-import com.xy.dao.produce.ConstructRepository;
-import com.xy.dao.produce.Production;
-import com.xy.dao.produce.ProductionRepository;
+import com.xy.entity.Construct;
+import com.xy.entity.ConstructRepository;
+import com.xy.entity.Production;
+import com.xy.entity.ProductionRepository;
 import com.xy.service.ConstructService;
 import com.xy.utils.SnowFlake;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

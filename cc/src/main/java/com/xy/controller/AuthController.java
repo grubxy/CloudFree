@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.xy.dao.user.User;
+import com.xy.entity.User;
 import com.xy.security.JwtAuthenticationRequest;
 import com.xy.security.JwtAuthenticationResponse;
 import com.xy.service.AuthService;

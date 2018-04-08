@@ -1,6 +1,6 @@
 package com.xy.service;
 
-import com.xy.dao.manage.Material;
+import com.xy.entity.Material;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

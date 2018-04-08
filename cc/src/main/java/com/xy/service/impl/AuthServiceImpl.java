@@ -13,10 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.xy.dao.user.Role;
-import com.xy.dao.user.RoleRepository;
-import com.xy.dao.user.User;
-import com.xy.dao.user.UserRepository;
+import com.xy.entity.Role;
+import com.xy.entity.RoleRepository;
+import com.xy.entity.User;
+import com.xy.entity.UserRepository;
 import com.xy.security.JwtTokenUtil;
 import com.xy.security.JwtUser;
 import com.xy.service.AuthService;

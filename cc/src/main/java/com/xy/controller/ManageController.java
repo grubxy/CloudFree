@@ -1,7 +1,7 @@
 package com.xy.controller;
 
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.Technics;
+import com.xy.entity.Material;
+import com.xy.entity.Technics;
 import com.xy.dao.pay.Employee;
 import com.xy.service.EmployeeService;
 import com.xy.service.MaterialService;

@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import com.xy.dao.user.Role;
-import com.xy.dao.user.User;
+import com.xy.entity.Role;
+import com.xy.entity.User;
 
 public final class JwtUserFactory {
 

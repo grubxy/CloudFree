@@ -1,4 +1,4 @@
-package com.xy.dao.user;
+package com.xy.entity;
 
 import java.util.Date;
 import java.util.Set;
@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.xy.entity.Role;
 import lombok.Data;
 
 @Data

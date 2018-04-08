@@ -1,19 +1,16 @@
-package com.xy.dao.manage;
+package com.xy.entity;
 
 import lombok.Data;
 
 import javax.persistence.*;
 
-
 @Data
 @Entity
 @Table
-public class Material {
+public class Technics {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer mcode;
+    private  int tcode;
 
     private String name;
-
-    private String spec;
 }

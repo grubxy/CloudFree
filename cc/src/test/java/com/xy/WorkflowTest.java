@@ -2,11 +2,11 @@ package com.xy;
 
 import com.alibaba.fastjson.JSON;
 import com.xy.controller.WorkflowController;
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.Technics;
+import com.xy.entity.Material;
+import com.xy.entity.Technics;
 import com.xy.dao.pay.Employee;
-import com.xy.dao.produce.Construct;
-import com.xy.dao.produce.Production;
+import com.xy.entity.Construct;
+import com.xy.entity.Production;
 import com.xy.service.ConstructService;
 import com.xy.service.ProductionService;
 import com.xy.utils.SnowFlake;
@@ -20,8 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

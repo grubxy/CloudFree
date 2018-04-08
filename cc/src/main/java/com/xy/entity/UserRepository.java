@@ -1,5 +1,6 @@
-package com.xy.dao.user;
+package com.xy.entity;
 
+import com.xy.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

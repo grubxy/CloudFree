@@ -1,6 +1,6 @@
 package com.xy.service;
 
-import com.xy.dao.produce.Production;
+import com.xy.entity.Production;
 import org.springframework.data.domain.Page;
 
 public interface ProductionService {

@@ -1,10 +1,8 @@
 package com.xy.service.impl;
 
 import com.google.common.collect.Lists;
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.MaterialRepository;
-import com.xy.dao.produce.Construct;
-import com.xy.dao.produce.ConstructRepository;
+import com.xy.entity.Material;
+import com.xy.entity.MaterialRepository;
 import com.xy.service.MaterialService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

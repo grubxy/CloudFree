@@ -1,7 +1,7 @@
 package com.xy.controller;
 
-import com.xy.dao.produce.Construct;
-import com.xy.dao.produce.Production;
+import com.xy.entity.Construct;
+import com.xy.entity.Production;
 import com.xy.service.ConstructService;
 import com.xy.service.ProductionService;
 import org.slf4j.Logger;

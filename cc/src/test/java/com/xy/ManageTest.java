@@ -2,10 +2,9 @@ package com.xy;
 
 import com.alibaba.fastjson.JSON;
 import com.xy.controller.ManageController;
-import com.xy.dao.manage.Material;
-import com.xy.dao.manage.Technics;
+import com.xy.entity.Material;
+import com.xy.entity.Technics;
 import com.xy.service.ConstructService;
-import com.xy.service.MaterialService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
