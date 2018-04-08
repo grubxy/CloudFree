@@ -75,14 +75,6 @@ public class ConstructServiceImpl implements ConstructService {
         // 获取工序
         cs.setTechnics(technicsRepository.findOne(cs.getTechnics().getTcode()));
 
-
-        Set<Construct> csSet = new HashSet<Construct>();
-        if (pd.getConstructs() == null) {
-            csSet.add(cs);
-        } else {
-            csSet.addAll(pd.getConstructs());
-            csSet.add(cs);
-        }
         // 次品数量
         if (pd.getErr_counts() != null) {
             pd.setErr_counts(pd.getErr_counts() + cs.getErr_counts());
@@ -102,10 +94,14 @@ public class ConstructServiceImpl implements ConstructService {
         {
             pd.setFact_counts(cs.getCmpl_counts() + cs.getErr_counts());
         }
-        // 更新set
-        pd.getConstructs().clear();
-        pd.setConstructs(csSet);
+
+        Set<Construct> csSet = new HashSet<Construct>();
+        if (pd.getConstructs() != null) {
+            csSet.addAll(pd.getConstructs());
+        }
+        csSet.add(cs);
         // save
+        pd.setConstructs(csSet);
         productionRepository.save(pd);
     }
 
