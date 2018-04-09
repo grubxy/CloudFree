@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -31,6 +32,11 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public void delProduct(int id) throws Exception {
         productRepository.delete(id);
+    }
+
+    @Override
+    public List<Product> getAllProduct() throws Exception {
+        return productRepository.findAll();
     }
 
     // 新增or更新某个产品的工序

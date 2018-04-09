@@ -18,4 +18,9 @@ public class StaffServiceImpl implements StaffService {
     public void addStaff(Staff staff) throws Exception {
         staffRepository.save(staff);
     }
+
+    @Override
+    public void delStaff(int id) throws Exception {
+        staffRepository.delete(id);
+    }
 }

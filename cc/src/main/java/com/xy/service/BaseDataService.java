@@ -5,10 +5,14 @@ import com.xy.domain.Seq;
 import com.xy.domain.Staff;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface BaseDataService {
     void addProduct(Product product) throws Exception;
 
     void delProduct(int id) throws Exception;
+
+    List<Product> getAllProduct() throws Exception;
 
     void addSeqByProductId(int id, Seq seq) throws Exception;
 

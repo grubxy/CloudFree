@@ -1,19 +1,20 @@
 package com.xy.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-@Data
 @Entity
 @Table(name = "BH_ORIGIN")
 public class Origin {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int idOrigin;
+    @Getter @Setter private int idOrigin;
 
-    private String name;
+    @Getter @Setter private String name;
 
-    private int counts;
+    @Getter @Setter private int counts;
 
 }

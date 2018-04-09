@@ -13,19 +13,13 @@ import java.util.Set;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    @Setter
-    private int idProduct;
+    @Getter @Setter private int idProduct;
 
-    @Getter
-    @Setter
-    private String ProductName; // 产品名称
+    @Getter @Setter private String ProductName; // 产品名称
 
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name="idProduct")
-    @Getter
-    @Setter
-    private Set<Seq> seq;            // 工序
+    @Getter @Setter private Set<Seq> seq;            // 工序
 
 }

@@ -53,7 +53,7 @@ public class BaseDataTest {
     public void addDefaultStaff() throws Exception {
         Staff staff = new Staff();
 
-        staff.setIdStaff(2);
+        staff.setIdStaff(1);
 
         baseDataService.addStaffBySeqId(1, staff);
     }

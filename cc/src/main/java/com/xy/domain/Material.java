@@ -12,11 +12,7 @@ import javax.persistence.*;
 public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    @Setter
-    private Integer idMaterial;
+    @Getter @Setter  private Integer idMaterial;
 
-    @Getter
-    @Setter
-    private String name;
+    @Getter @Setter private String name;
 }

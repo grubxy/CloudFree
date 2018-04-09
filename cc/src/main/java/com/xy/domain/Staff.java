@@ -12,26 +12,16 @@ import java.util.Set;
 public class Staff {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
-    @Setter
-    private int idStaff;
+    @Getter @Setter private int idStaff;
 
-    @Getter
-    @Setter
-    private String staffName;   // 员工姓名
+    @Getter @Setter private String staffName;   // 员工姓名
 
-    @Getter
-    @Setter
     @ManyToMany(fetch = FetchType.EAGER, mappedBy="staffs")
-    private Set<Seq> seqs;       // 工序
+    @Getter @Setter private Set<Seq> seqs;       // 工序
 
-    @Getter
-    @Setter
     @OneToMany
     @JoinColumn(name = "idStaff")
-    private Set<Construction> constructs;  // 工单
+    @Getter @Setter private Set<Construction> constructs;  // 工单
 
-    @Getter
-    @Setter
-    private EnumStaffStatus enumStaffStatus;    // 员工在职状态
+    @Getter @Setter private EnumStaffStatus enumStaffStatus;    // 员工在职状态
 }

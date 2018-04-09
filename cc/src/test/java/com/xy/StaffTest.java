@@ -20,7 +20,7 @@ public class StaffTest {
     @Test
     public void addStaff()throws Exception {
         Staff staff = new Staff();
-        staff.setStaffName("xiaoye");
+        staff.setStaffName("xiaowang");
         staffService.addStaff(staff);
     }
 }
