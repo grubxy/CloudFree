@@ -1,6 +1,6 @@
 package com.xy.service.impl;
 
-import com.xy.entity.*;
+import com.xy.domain.*;
 import com.xy.service.BaseDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -25,7 +24,6 @@ public class BaseDataServiceImpl implements BaseDataService {
     // 新增or更新产品
     @Override
     public void addProduct(Product product) throws Exception {
-
         productRepository.save(product);
     }
 
@@ -39,6 +37,9 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public void addSeqByProductId(int id, Seq seq) throws Exception {
         Product product = productRepository.findOne(id);
+        Material material = new Material();
+        material.setName(product.getProductName() + "_" + seq.getSeqName());
+        seq.setMaterial(material);
         if (product != null) {
             if (product.getSeq().size() != 0) {
                 product.getSeq().add(seq);
@@ -50,7 +51,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             productRepository.save(product);
 
         } else {
-            throw new Exception("产品ID异常");
+            throw new UserException(ErrorCode.PRODUCT_ID_ERROR.getCode(), ErrorCode.PRODUCT_ID_ERROR.getMsg());
         }
     }
 
@@ -75,7 +76,7 @@ public class BaseDataServiceImpl implements BaseDataService {
             seqRepository.save(seq);
 
         } else {
-            throw new Exception("工序ID异常");
+            throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
         }
     }
 

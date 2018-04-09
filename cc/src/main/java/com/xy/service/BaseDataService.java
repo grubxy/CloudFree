@@ -1,8 +1,8 @@
 package com.xy.service;
 
-import com.xy.entity.Product;
-import com.xy.entity.Seq;
-import com.xy.entity.Staff;
+import com.xy.domain.Product;
+import com.xy.domain.Seq;
+import com.xy.domain.Staff;
 import org.springframework.data.domain.Page;
 
 public interface BaseDataService {

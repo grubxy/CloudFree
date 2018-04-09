@@ -1,7 +1,8 @@
 package com.xy;
 
-import com.xy.entity.Product;
-import com.xy.entity.Seq;
+import com.xy.domain.Product;
+import com.xy.domain.Seq;
+import com.xy.domain.Staff;
 import com.xy.service.BaseDataService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,5 +46,15 @@ public class BaseDataTest {
 
         baseDataService.addSeqByProductId(1, seq);
 
+    }
+
+    // 新增默认员工
+    @Test
+    public void addDefaultStaff() throws Exception {
+        Staff staff = new Staff();
+
+        staff.setIdStaff(2);
+
+        baseDataService.addStaffBySeqId(1, staff);
     }
 }

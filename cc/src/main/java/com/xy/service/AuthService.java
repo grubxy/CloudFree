@@ -1,6 +1,6 @@
 package com.xy.service;
 
-import com.xy.entity.User;
+import com.xy.domain.User;
 
 public interface AuthService {
 
