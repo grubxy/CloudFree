@@ -1,6 +1,7 @@
 package com.xy.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,9 +18,9 @@ public class Product {
 
     @Getter @Setter private String ProductName; // 产品名称
 
-
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @JoinColumn(name="idProduct")
+    @JsonIgnore
     @Getter @Setter private Set<Seq> seq;            // 工序
 
 }

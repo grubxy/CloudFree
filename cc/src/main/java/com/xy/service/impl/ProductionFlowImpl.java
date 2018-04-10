@@ -5,6 +5,9 @@ import com.xy.service.ProductionFlowService;
 import com.xy.utils.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -40,6 +43,8 @@ public class ProductionFlowImpl implements ProductionFlowService {
             seqInfoSet.add(seqInfo);
         }
 
+        productionFlow.setSeqInfo(seqInfoSet);
+
         productionFlowRepository.save(productionFlow);
     }
 
@@ -47,6 +52,12 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public void delProductionFlow(String id) throws Exception {
         productionFlowRepository.delete(id);
+    }
+
+    @Override
+    public Page<ProductionFlow> getAllProductionFlow(int page, int size) throws Exception {
+        PageRequest pageRequest = new PageRequest(page, size);
+        return productionFlowRepository.findAll(pageRequest);
     }
 
     // 获取生产流程的所有工序
@@ -65,6 +76,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
     public void addConstructionByFlowId(String id, Construction construction) throws Exception {
         construction.setSDate(new Date());
         construction.setEnumConstructStatus(EnumConstructStatus.WAITING);
+        construction.setIdConstruct(String.valueOf(SnowFlake.getInstance().nextId()));
 
         ProductionFlow productionFlow = productionFlowRepository.findOne(id);
 
@@ -83,15 +95,18 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     }
 
-
-    // 增加施工人员
+    // 设置工单状态
     @Override
-    public void addStaffByConstrId(String id, Staff staff) throws Exception {
+    public void setConstructionStatusById(String id, int status) throws Exception {
+
+        EnumConstructStatus enumConstructStatus = EnumConstructStatus.values()[status];
+
         Construction construction = constructionRepository.findOne(id);
 
-        construction.setStaff(staff);
+        construction.setEnumConstructStatus(enumConstructStatus);
 
         constructionRepository.save(construction);
+
     }
 
 }

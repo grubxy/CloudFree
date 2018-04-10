@@ -26,7 +26,7 @@ public class BaseDataTest {
         product.setProductName("产品名称1 小刀");
         baseDataService.addProduct(product);
 
-        System.out.println(baseDataService.getAllProduct(0, 10).toString());
+        //System.out.println(baseDataService.getAllProduct(0, 10).toString());
     }
 
     // 新增 工序
@@ -56,5 +56,12 @@ public class BaseDataTest {
         staff.setIdStaff(1);
 
         baseDataService.addStaffBySeqId(1, staff);
+
+//        String resp = this.mockMvc
+//                .perform(post("/workflow/production/add")
+//                        .characterEncoding("UTF-8")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(JSON.toJSONString(pr).getBytes()))
+//                .andReturn().getResponse().getContentAsString();
     }
 }
