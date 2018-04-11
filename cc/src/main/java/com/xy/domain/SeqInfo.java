@@ -19,6 +19,8 @@ public class SeqInfo {
 
     @Getter @Setter private int dstCounts;
 
+    @Getter @Setter private int doingCounts;
+
     @Getter @Setter private int cmplCounts;
 
     @Getter @Setter private int errCounts;

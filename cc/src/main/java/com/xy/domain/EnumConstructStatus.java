@@ -3,8 +3,6 @@ package com.xy.domain;
 public enum EnumConstructStatus {
     WAITING,    // 等待材料出库
 
-    DELIVED,    // 出库
-
     WORKING,    // 制作过程中
 
     COMPLETE,   // 完工

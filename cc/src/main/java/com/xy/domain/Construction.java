@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -25,11 +26,9 @@ public class Construction {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Getter @Setter private Date Date;
 
-    @OneToOne(cascade = {CascadeType.PERSIST})
-    @Getter @Setter private Origin origin;      // 生成物料单号
-
     @ManyToOne
     @JoinColumn(name = "idProduction")
+    @JsonIgnore
     @Getter @Setter private ProductionFlow production;
 
     @Enumerated(EnumType.STRING)
@@ -37,9 +36,11 @@ public class Construction {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idStaff", nullable = false)
+    @JsonIgnore
     @Getter @Setter private Staff staff;                                // 施工人员
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Seq seq;
 
 }

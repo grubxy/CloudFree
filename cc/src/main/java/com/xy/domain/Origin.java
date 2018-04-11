@@ -13,7 +13,9 @@ public class Origin {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idOrigin;
 
-    @Getter @Setter private String name;
+    @Getter @Setter
+    @Column(unique = true)
+    private String name;
 
     @Getter @Setter private int counts;
 

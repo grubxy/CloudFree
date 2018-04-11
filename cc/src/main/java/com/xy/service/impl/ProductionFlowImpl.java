@@ -25,6 +25,9 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Autowired
     private ConstructionRepository constructionRepository;
 
+    @Autowired
+    private OriginRepository originRepository;
+
     // 新增流程
     @Override
     public void addProductionFlow(ProductionFlow productionFlow) throws Exception {
@@ -36,8 +39,20 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         Set<SeqInfo> seqInfoSet = new HashSet<SeqInfo>();
         for (Seq seq : product.getSeq()) {
+
             SeqInfo seqInfo = new SeqInfo();
+
             seqInfo.setSeq(seq);
+            seqInfo.setCmplCounts(0);
+            seqInfo.setErrCounts(0);
+            seqInfo.setDoingCounts(0);
+
+            // 如果是第一个工序 设置
+            if (seq.getSeqIndex() == 1) {
+                seqInfo.setDstCounts(productionFlow.getDstCounts());
+            } else {
+                seqInfo.setDstCounts(0);
+            }
             seqInfoSet.add(seqInfo);
         }
 
@@ -52,6 +67,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         productionFlowRepository.delete(id);
     }
 
+    // 获取生产流程 分页
     @Override
     public Page<ProductionFlow> getAllProductionFlow(int page, int size) throws Exception {
         PageRequest pageRequest = new PageRequest(page, size);
@@ -67,6 +83,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
             seqList.add(tmp.getSeq());
         }
         return seqList;
+    }
+
+    // 获取生产流程的工序详情
+    @Override
+    public Set<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception {
+        ProductionFlow productionFlow = productionFlowRepository.findOne(id);
+        return productionFlow.getSeqInfo();
     }
 
     // 增加施工单
@@ -93,6 +116,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     }
 
+    // 获取某流程所有施工单
+    @Override
+    public Set<Construction> getConstructionByFlowId(String id) throws Exception {
+        ProductionFlow productionFlow = productionFlowRepository.findOne(id);
+        return productionFlow.getConstructs();
+    }
+
     // 设置工单状态
     @Override
     public void setConstructionStatusById(String id, int status) throws Exception {
@@ -100,11 +130,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
         EnumConstructStatus enumConstructStatus = EnumConstructStatus.values()[status];
 
         Construction construction = constructionRepository.findOne(id);
-
         construction.setEnumConstructStatus(enumConstructStatus);
-
         constructionRepository.save(construction);
+    }
 
+    // 工单完成，将工单制作完成的物料入库
+    @Override
+    public void ConstructToOriginBySeqInfoId(String id, House house) throws Exception {
     }
 
 }

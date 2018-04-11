@@ -17,7 +17,7 @@ public class House {
 
     private String name;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "idHouse")
     @Getter @Setter private Set<Origin> origins;
 }
