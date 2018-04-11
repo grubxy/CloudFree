@@ -29,12 +29,10 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public void addProductionFlow(ProductionFlow productionFlow) throws Exception {
 
-        Product product = new Product();
-
         // 生产编号
         productionFlow.setIdProduction(String.valueOf(SnowFlake.getInstance().nextId()));
 
-        product = productRepository.findOne(productionFlow.getProduct().getIdProduct());
+        Product product = productRepository.findOne(productionFlow.getProduct().getIdProduct());
 
         Set<SeqInfo> seqInfoSet = new HashSet<SeqInfo>();
         for (Seq seq : product.getSeq()) {

@@ -24,7 +24,7 @@ public class WorkflowController {
     }
 
     // 获取生产流程信息
-    @RequestMapping(value = "/getflows", method = RequestMethod.GET)
+    @RequestMapping(value = "/getflow", method = RequestMethod.GET)
     public Page<ProductionFlow> getFlows(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception{
         return productionFlowService.getAllProductionFlow(page, size);
     }

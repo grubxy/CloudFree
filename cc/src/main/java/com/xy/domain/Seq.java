@@ -1,15 +1,17 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "BH_SEQ")
-public class Seq {
+public class Seq implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idSeq;
@@ -21,14 +23,17 @@ public class Seq {
     @Getter @Setter private float seqCost;  // 制作单价
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @Getter @Setter private Material material;  // 工序生成材料
+    @Getter @Setter
+    @JsonIgnore
+    private Material material;  // 工序生成材料
 
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name="BH_SEQ_STAFF",
             joinColumns = {@JoinColumn(name="idSeq")},
             inverseJoinColumns = {@JoinColumn(name="idStaff")}
     )
+    @JsonIgnore
     @Getter @Setter private Set<Staff> staffs;
 }

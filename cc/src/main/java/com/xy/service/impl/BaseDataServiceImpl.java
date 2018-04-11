@@ -67,6 +67,13 @@ public class BaseDataServiceImpl implements BaseDataService {
         seqRepository.delete(id);
     }
 
+    // 获取产品的工序信息
+    @Override
+    public Set<Seq> getSeqListByProductId(int id) throws Exception {
+        Product product = productRepository.findOne(id);
+        return product.getSeq();
+    }
+
     // 给某个工序添加默认员工
     @Override
     public void addStaffBySeqId(int id, Staff staff) throws Exception {
@@ -84,6 +91,13 @@ public class BaseDataServiceImpl implements BaseDataService {
         } else {
             throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
         }
+    }
+
+    // 获取工序默认员工
+    @Override
+    public Set<Staff> getStaffBySeqId(int id) throws Exception {
+        Seq seq = seqRepository.findOne(id);
+        return seq.getStaffs();
     }
 
     // 获取所有基础数据信息

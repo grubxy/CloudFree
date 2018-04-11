@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,18 +45,23 @@ public class ProductionFlowTest {
 
         productionFlow.setProduct(product);
 
-        productionFlowService.addProductionFlow(productionFlow);
+        String resp = this.mockMvc
+                .perform(post("/workflow/addflow")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(productionFlow).getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
 
     }
 
     // 获取所有生产流程
     @Test
     public void getFlow() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getflows?page=0&size=10"))
+        String resp = this.mockMvc.perform(get("/workflow/getflow?page=0&size=10"))
+                .andDo(print())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        System.out.println("select resp: " + resp);
     }
 
     // 新增施工单

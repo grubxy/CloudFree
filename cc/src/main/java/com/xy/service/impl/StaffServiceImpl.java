@@ -1,5 +1,6 @@
 package com.xy.service.impl;
 
+import com.xy.domain.EnumStaffStatus;
 import com.xy.domain.Staff;
 import com.xy.domain.StaffRepository;
 import com.xy.service.StaffService;
@@ -22,5 +23,13 @@ public class StaffServiceImpl implements StaffService {
     @Override
     public void delStaff(int id) throws Exception {
         staffRepository.delete(id);
+    }
+
+    @Override
+    public void setStaffStatus(int id, int status) throws Exception {
+        EnumStaffStatus enumStaffStatus = EnumStaffStatus.values()[status];
+        Staff staff = staffRepository.findOne(id);
+        staff.setEnumStaffStatus(enumStaffStatus);
+        staffRepository.save(staff);
     }
 }

@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +17,19 @@ public class Staff {
 
     @Getter @Setter private String staffName;   // 员工姓名
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy="staffs")
-    @Getter @Setter private Set<Seq> seqs;       // 工序
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy="staffs")
+    @Getter
+    @Setter
+    @JsonIgnore
+    private Set<Seq> seqs;       // 工序
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "idStaff")
-    @Getter @Setter private Set<Construction> constructs;  // 工单
+    @Getter
+    @Setter
+    @JsonIgnore
+    private Set<Construction> constructs;  // 工单
 
-    @Getter @Setter private EnumStaffStatus enumStaffStatus;    // 员工在职状态
+    @Getter
+    @Setter private EnumStaffStatus enumStaffStatus;    // 员工在职状态
 }
