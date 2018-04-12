@@ -1,10 +1,7 @@
 package com.xy;
 
 import com.alibaba.fastjson.JSON;
-import com.xy.domain.Construction;
-import com.xy.domain.Product;
-import com.xy.domain.ProductionFlow;
-import com.xy.domain.Staff;
+import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +42,8 @@ public class ProductionFlowTest {
 
         productionFlow.setProduct(product);
 
+        productionFlow.setDstCounts(1750);
+
         String resp = this.mockMvc
                 .perform(post("/workflow/addflow")
                         .characterEncoding("UTF-8")
@@ -70,12 +69,22 @@ public class ProductionFlowTest {
 
         Construction construction = new Construction();
 
+        construction.setDstCount(1000);
+
+        Seq seq = new Seq();
+        seq.setIdSeq(1);
+        construction.setSeq(seq);
+
         Staff staff = new Staff();
         staff.setIdStaff(1);
-
         construction.setStaff(staff);
 
-        productionFlowService.addConstructionByFlowId("181195689575841792", construction);
+        String resp = this.mockMvc
+                .perform(post("/workflow/addConstruction/181764615846232064")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(construction).getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
     }
 
     @Test

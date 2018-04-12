@@ -14,5 +14,6 @@ public class Material {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter  private Integer idMaterial;
 
+    @Column(unique = true)
     @Getter @Setter private String name;
 }

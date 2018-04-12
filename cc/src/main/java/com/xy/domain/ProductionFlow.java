@@ -15,7 +15,7 @@ import java.util.Set;
 
 // 生产流程实体类
 @Entity
-@Table(name = "BH_PRODUCTION")
+@Table(name = "BH_PRODUCTIONFLOW")
 public class ProductionFlow implements Serializable{
 
     @Id
@@ -45,7 +45,6 @@ public class ProductionFlow implements Serializable{
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "idProduction")
     @JsonIgnore
-    @OrderBy(value = "seqIndex asc")
     @Getter @Setter private Set<SeqInfo> seqInfo;            // 对应产品工序的详情
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.xy.controller;
 
+import com.xy.domain.Construction;
 import com.xy.domain.ProductionFlow;
 import com.xy.domain.Seq;
 import com.xy.service.ProductionFlowService;
@@ -29,4 +30,8 @@ public class WorkflowController {
         return productionFlowService.getAllProductionFlow(page, size);
     }
 
+    @RequestMapping(value = "/addConstruction/{idFlow}", method = RequestMethod.POST)
+    public void addConstructionByFlow(@RequestBody Construction construction, @PathVariable("idFlow") String id) throws Exception {
+        productionFlowService.addConstructionByFlowId(id, construction);
+    }
 }

@@ -26,6 +26,9 @@ public class ProductionFlowImpl implements ProductionFlowService {
     private ConstructionRepository constructionRepository;
 
     @Autowired
+    private SeqInfoRepository seqInfoRepository;
+
+    @Autowired
     private OriginRepository originRepository;
 
     // 新增流程
@@ -39,10 +42,10 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         Set<SeqInfo> seqInfoSet = new HashSet<SeqInfo>();
         for (Seq seq : product.getSeq()) {
-
             SeqInfo seqInfo = new SeqInfo();
 
             seqInfo.setSeq(seq);
+
             seqInfo.setCmplCounts(0);
             seqInfo.setErrCounts(0);
             seqInfo.setDoingCounts(0);
@@ -95,14 +98,48 @@ public class ProductionFlowImpl implements ProductionFlowService {
     // 增加施工单
     @Override
     public void addConstructionByFlowId(String id, Construction construction) throws Exception {
+
         construction.setSDate(new Date());
         construction.setEnumConstructStatus(EnumConstructStatus.WAITING);
         construction.setIdConstruct(String.valueOf(SnowFlake.getInstance().nextId()));
 
         ProductionFlow productionFlow = productionFlowRepository.findOne(id);
 
-        //  校验数量依赖关系
+        /**  校验数量依赖关系 **/
 
+        // 查找该工单对应的工序详情
+        for (SeqInfo seqInfo:productionFlow.getSeqInfo()) {
+            if (seqInfo.getSeq().getIdSeq() == construction.getSeq().getIdSeq()) {
+                // 如果是第一道工序
+                if (seqInfo.getSeq().getSeqIndex() == 1) {
+                    // 设置数量关系
+                    if (construction.getDstCount() <= seqInfo.getDstCounts()
+                            && construction.getDstCount() > 0) {
+                        seqInfo.setDoingCounts(construction.getDstCount());
+                        seqInfo.setDstCounts(seqInfo.getDstCounts() - construction.getDstCount());
+                    } else {
+                        throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
+                    }
+
+                } else {
+                    // 非第一道工序 依赖之前工序完成量
+                    for (SeqInfo before:productionFlow.getSeqInfo()) {
+                        // 找到前1道工序
+                        if (before.getSeq().getSeqIndex() == seqInfo.getSeq().getSeqIndex() - 1) {
+                            if (construction.getDstCount() <= before.getCmplCounts()
+                                    && construction.getDstCount() > 0) {
+                                before.setCmplCounts(before.getCmplCounts() - construction.getDstCount());
+                                seqInfo.setDoingCounts(construction.getDstCount());
+                            }else {
+                                throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
+                            }
+                        }
+                        seqInfoRepository.save(before);
+                    }
+                }
+                seqInfoRepository.save(seqInfo);
+            }
+        }
 
         //  保存工单
         Set<Construction> constructionSet = new HashSet<Construction>();

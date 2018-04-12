@@ -26,6 +26,9 @@ public class Construction {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Getter @Setter private Date Date;
 
+    @Getter @Setter
+    private int dstCount;
+
     @ManyToOne
     @JoinColumn(name = "idProduction")
     @JsonIgnore
@@ -36,11 +39,12 @@ public class Construction {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idStaff", nullable = false)
-    @JsonIgnore
-    @Getter @Setter private Staff staff;                                // 施工人员
+    @Getter(onMethod = @__( @JsonIgnore ))
+    @Setter private Staff staff;                                // 施工人员
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
+    @Getter(onMethod = @__( @JsonIgnore ))
+    @Setter
     private Seq seq;
 
 }

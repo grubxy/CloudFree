@@ -43,9 +43,23 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public void addSeqByProductId(int id, Seq seq) throws Exception {
         Product product = productRepository.findOne(id);
+
+        // 设置源材料
+        if (product.getSeq().size() == 0) {
+            seq.setSeqIndex(1);
+            Material material = new Material();
+            material.setName(product.getProductName() + "_原始材料");
+            seq.setSrcMaterial(material);
+        } else {
+            seq.setSeqIndex(product.getSeq().size() + 1);
+            seq.setSrcMaterial(seqRepository.findSeqBySeqIndexEquals(product.getSeq().size()).getDstMaterial());
+        }
+
+        // 设置生成材料
         Material material = new Material();
         material.setName(product.getProductName() + "_" + seq.getSeqName());
-        seq.setMaterial(material);
+        seq.setDstMaterial(material);
+
         if (product != null) {
             if (product.getSeq().size() != 0) {
                 product.getSeq().add(seq);

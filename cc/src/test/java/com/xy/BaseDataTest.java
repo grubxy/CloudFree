@@ -72,7 +72,6 @@ public class BaseDataTest {
     public void addSeqByProductId() throws Exception {
         Seq seq = new Seq();
         seq.setSeqCost(0.001f);
-        seq.setSeqIndex(1);
         seq.setSeqName("洗");
 
         String resp = this.mockMvc
@@ -84,7 +83,6 @@ public class BaseDataTest {
 
         seq = new Seq();
         seq.setSeqCost(0.0002f);
-        seq.setSeqIndex(2);
         seq.setSeqName("刷");
 
         resp = this.mockMvc
