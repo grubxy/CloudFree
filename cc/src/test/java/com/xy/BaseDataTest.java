@@ -1,6 +1,7 @@
 package com.xy;
 
 import com.alibaba.fastjson.JSON;
+import com.xy.domain.EnumStaffStatus;
 import com.xy.domain.Product;
 import com.xy.domain.Seq;
 import com.xy.domain.Staff;
@@ -134,6 +135,7 @@ public class BaseDataTest {
         Staff staff = new Staff();
 
         staff.setStaffName("xiaowang");
+        staff.setEnumStaffStatus(EnumStaffStatus.POSITIONING);
 
         String resp = this.mockMvc
                 .perform(post("/data/addStaff")

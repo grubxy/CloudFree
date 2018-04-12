@@ -31,6 +31,8 @@ public class ProductionFlowTest {
     @Autowired
     private MockMvc mockMvc;
 
+    private static final String flowId= "181921975780769792";
+
     // 新增生产流程
     @Test
     public void addFlow() throws Exception {
@@ -63,6 +65,26 @@ public class ProductionFlowTest {
                 .getContentAsString();
     }
 
+    // 获取产品工序
+    @Test
+    public void getSeq() throws Exception {
+        String resp = this.mockMvc.perform(get("/workflow/getSeq/" + flowId))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
+    // 获取工序详情
+    @Test
+    public void getSeqInfo() throws Exception {
+        String resp = this.mockMvc.perform(get("/workflow/getSeqInfo/" + flowId))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
     // 新增施工单
     @Test
     public void addConstructByFlow() throws Exception {
@@ -80,7 +102,7 @@ public class ProductionFlowTest {
         construction.setStaff(staff);
 
         String resp = this.mockMvc
-                .perform(post("/workflow/addConstruction/181764615846232064")
+                .perform(post("/workflow/addConstruction/" + flowId)
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(construction).getBytes())).andDo(print())
@@ -88,8 +110,13 @@ public class ProductionFlowTest {
     }
 
     @Test
-    public void setConstructStatus() throws Exception {
-        productionFlowService.setConstructionStatusById("181197818432585728", 1);
+    public void getConstructions() throws Exception {
+        String resp = this.mockMvc.perform(get("/workflow/getConstruction/" + flowId))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
+
 
 }

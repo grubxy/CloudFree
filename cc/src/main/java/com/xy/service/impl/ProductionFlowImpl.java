@@ -115,7 +115,6 @@ public class ProductionFlowImpl implements ProductionFlowService {
                     // 设置数量关系
                     if (construction.getDstCount() <= seqInfo.getDstCounts()
                             && construction.getDstCount() > 0) {
-                        seqInfo.setDoingCounts(construction.getDstCount());
                         seqInfo.setDstCounts(seqInfo.getDstCounts() - construction.getDstCount());
                     } else {
                         throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
@@ -129,7 +128,6 @@ public class ProductionFlowImpl implements ProductionFlowService {
                             if (construction.getDstCount() <= before.getCmplCounts()
                                     && construction.getDstCount() > 0) {
                                 before.setCmplCounts(before.getCmplCounts() - construction.getDstCount());
-                                seqInfo.setDoingCounts(construction.getDstCount());
                             }else {
                                 throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
                             }
@@ -165,6 +163,33 @@ public class ProductionFlowImpl implements ProductionFlowService {
     public void setConstructionStatusById(String id, int status) throws Exception {
 
         EnumConstructStatus enumConstructStatus = EnumConstructStatus.values()[status];
+
+        // 根据不同的状态做处理
+        switch (enumConstructStatus) {
+            case WORKING:
+                // 物料出库 设置工序详情 Doing 个数
+
+                break;
+            case COMPLETE:
+                // 设置 完成 废料个数，暂定与工单及Doing个数相等
+
+                break;
+            case STORED:
+                // 将完成物料 入库
+
+                break;
+            case APPROVING:
+                // 进入审批流程
+
+                break;
+            case APPROVED:
+                // 审批完成，计算工资
+
+                break;
+            default:
+                log.error("status error ! 工单状态设置有无，不应该出现:" + enumConstructStatus);
+                return;
+        }
 
         Construction construction = constructionRepository.findOne(id);
         construction.setEnumConstructStatus(enumConstructStatus);
