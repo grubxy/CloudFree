@@ -39,11 +39,11 @@ public class Construction {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idStaff", nullable = false)
-    @Getter(onMethod = @__( @JsonIgnore ))
+    @Getter
     @Setter private Staff staff;                                // 施工人员
 
     @OneToOne(fetch = FetchType.EAGER)
-    @Getter(onMethod = @__( @JsonIgnore ))
+    @Getter
     @Setter
     private Seq seq;
 
