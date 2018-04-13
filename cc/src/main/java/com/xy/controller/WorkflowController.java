@@ -1,5 +1,6 @@
 package com.xy.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.xy.domain.Construction;
 import com.xy.domain.ProductionFlow;
 import com.xy.domain.Seq;
@@ -56,6 +57,16 @@ public class WorkflowController {
     @RequestMapping(value = "/getConstruction/{idFlow}", method = RequestMethod.GET)
     public Set<Construction> getConstruction(@PathVariable("idFlow") String id) throws Exception {
         return productionFlowService.getConstructionByFlowId(id);
+    }
+
+    // 设置工单状态
+    @RequestMapping(value = "/setStatus/{idFlow}", method = RequestMethod.POST)
+    public void setStatus(@RequestBody JSONObject obj, @PathVariable("idFlow") String id) throws Exception {
+        int status = obj.getIntValue("status");
+        int idHouse = obj.getIntValue("idHouse");
+        int error = obj.getIntValue("error");
+        int cmpl = obj.getIntValue("cmpl");
+        productionFlowService.setConstructionStatusById(id, idHouse, status, error, cmpl);
     }
 
 }

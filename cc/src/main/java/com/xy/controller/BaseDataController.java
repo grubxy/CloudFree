@@ -2,10 +2,12 @@ package com.xy.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xy.domain.House;
 import com.xy.domain.Product;
 import com.xy.domain.Seq;
 import com.xy.domain.Staff;
 import com.xy.service.BaseDataService;
+import com.xy.service.HouseService;
 import com.xy.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class BaseDataController {
 
     @Autowired
     private StaffService staffService;
+
+    @Autowired
+    private HouseService houseService;
 
     // 增加产品
     @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
@@ -84,5 +89,23 @@ public class BaseDataController {
     @RequestMapping(value = "/addStaff", method = RequestMethod.POST)
     private void addStaff(@RequestBody Staff staff) throws Exception {
         staffService.addStaff(staff);
+    }
+
+    // 添加仓库
+    @RequestMapping(value = "/addHouse", method = RequestMethod.POST)
+    public void addHouse(@RequestBody House house) throws Exception {
+        houseService.addHouse(house);
+    }
+
+    // 获取仓库详情
+    @RequestMapping(value = "/getHoseList", method = RequestMethod.GET)
+    public List<House> getHouseList() throws Exception {
+        return houseService.getAllHouse();
+    }
+
+    // 获取仓库 分页
+    @RequestMapping(value = "/getHouses", method = RequestMethod.GET)
+    public Page<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return houseService.getPageHouse(page, size);
     }
 }

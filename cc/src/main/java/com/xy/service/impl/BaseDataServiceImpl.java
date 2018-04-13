@@ -22,6 +22,9 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Autowired
     private SeqRepository seqRepository;
 
+    @Autowired
+    private HouseRepository houseRepository;
+
     // 新增or更新产品
     @Override
     public void addProduct(Product product) throws Exception {

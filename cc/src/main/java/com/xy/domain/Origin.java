@@ -14,8 +14,8 @@ public class Origin {
     @Getter @Setter private int idOrigin;
 
     @Getter @Setter
-    @Column(unique = true)
-    private String name;
+    @OneToOne(fetch = FetchType.EAGER)
+    private Material material;
 
     @Getter @Setter private int counts;
 

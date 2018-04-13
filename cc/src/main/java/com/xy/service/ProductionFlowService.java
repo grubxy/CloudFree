@@ -27,7 +27,8 @@ public interface ProductionFlowService {
     // 获取某流程所有施工单
     Set<Construction> getConstructionByFlowId(String id) throws Exception;
 
-    void setConstructionStatusById(String id, int status) throws Exception;
+    // 设置工单状态
+    void setConstructionStatusById(String id, int idHouse, int status, int error, int cmpl) throws Exception;
 
     // 工单完成，将工单制作完成的物料入库
     void ConstructToOriginBySeqInfoId(String id, House house) throws Exception;

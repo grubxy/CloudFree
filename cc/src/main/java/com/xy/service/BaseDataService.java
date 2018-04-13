@@ -1,8 +1,6 @@
 package com.xy.service;
 
-import com.xy.domain.Product;
-import com.xy.domain.Seq;
-import com.xy.domain.Staff;
+import com.xy.domain.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

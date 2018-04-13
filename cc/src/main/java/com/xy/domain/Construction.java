@@ -29,6 +29,12 @@ public class Construction {
     @Getter @Setter
     private int dstCount;
 
+    @Getter @Setter
+    private int cmplCount;
+
+    @Getter @Setter
+    private int errCount;
+
     @ManyToOne
     @JoinColumn(name = "idProduction")
     @JsonIgnore

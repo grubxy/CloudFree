@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,11 @@ public class House {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idHouse;
 
-    private String name;
+    @Getter @Setter
+    private String houseName;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "idHouse")
+    @JsonIgnore
     @Getter @Setter private Set<Origin> origins;
 }

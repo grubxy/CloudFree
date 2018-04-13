@@ -29,7 +29,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
     private SeqInfoRepository seqInfoRepository;
 
     @Autowired
-    private OriginRepository originRepository;
+    private HouseRepository houseRepository;
 
     // 新增流程
     @Override
@@ -158,40 +158,83 @@ public class ProductionFlowImpl implements ProductionFlowService {
         return productionFlow.getConstructs();
     }
 
+    // 根据工单获取对应工序详情
+    private SeqInfo getSeqInfoFromConstruction(Construction construction) throws Exception {
+        for (SeqInfo seqInfo:construction.getProduction().getSeqInfo()) {
+            if (seqInfo.getSeq().getIdSeq() == construction.getSeq().getIdSeq()) {
+                return seqInfo;
+            }
+        }
+        log.error("工单中的工序，找不到相对应的流程对应工序详情");
+        throw new UserException(ErrorCode.CONSTRUCTION_SEQINFO_ERROR.getCode(), ErrorCode.CONSTRUCTION_SEQINFO_ERROR.getMsg());
+    }
+
     // 设置工单状态
     @Override
-    public void setConstructionStatusById(String id, int status) throws Exception {
+    public void setConstructionStatusById(String id, int idHouse, int status, int error, int cmpl) throws Exception {
 
         EnumConstructStatus enumConstructStatus = EnumConstructStatus.values()[status];
+
+        Construction construction = constructionRepository.findOne(id);
+        SeqInfo seqInfo = getSeqInfoFromConstruction(construction);
 
         // 根据不同的状态做处理
         switch (enumConstructStatus) {
             case WORKING:
                 // 物料出库 设置工序详情 Doing 个数
-
+                seqInfo.setDoingCounts(seqInfo.getDoingCounts() + construction.getDstCount());
+                seqInfoRepository.save(seqInfo);
                 break;
             case COMPLETE:
-                // 设置 完成 废料个数，暂定与工单及Doing个数相等
+                if (cmpl + error != construction.getDstCount()) {
+                    throw new UserException(ErrorCode.CONSTRUCTION_COMPLETECOUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COMPLETECOUNTS_ERROR.getMsg());
+                }
 
+                // 设置工单 完成 废料个数
+                construction.setCmplCount(cmpl);
+                construction.setErrCount(error);
+
+                // 设置工序详情 完成 废料个数，暂定与工单及Doing个数相等
+                seqInfo.setDoingCounts(seqInfo.getDoingCounts() - cmpl - error);
+                seqInfo.setCmplCounts(seqInfo.getCmplCounts() + cmpl);
+                seqInfo.setErrCounts(seqInfo.getErrCounts() + error);
+                seqInfoRepository.save(seqInfo);
                 break;
             case STORED:
                 // 将完成物料 入库
+                Origin origin = new Origin();
+                origin.setCounts(construction.getCmplCount());
+                origin.setMaterial(seqInfo.getSeq().getDstMaterial());
 
+                House house = houseRepository.findOne(idHouse);
+
+                // 仓库原料不为空
+                if (house.getOrigins().size()!=0) {
+                    for (Origin tmp: house.getOrigins()) {
+                        // 如果原料已经存在
+                        if (tmp.getMaterial().getIdMaterial() == origin.getMaterial().getIdMaterial()) {
+                            tmp.setCounts(tmp.getCounts() +  origin.getCounts());
+                        }
+                    }
+                } else {
+                    Set<Origin> originSet = new HashSet<Origin>();
+                    originSet.add(origin);
+                    house.setOrigins(originSet);
+                }
+                houseRepository.save(house);
                 break;
             case APPROVING:
                 // 进入审批流程
-
+                // to do noting else
                 break;
             case APPROVED:
                 // 审批完成，计算工资
-
+                // to do nothing else
                 break;
             default:
                 log.error("status error ! 工单状态设置有无，不应该出现:" + enumConstructStatus);
                 return;
         }
-
-        Construction construction = constructionRepository.findOne(id);
         construction.setEnumConstructStatus(enumConstructStatus);
         constructionRepository.save(construction);
     }

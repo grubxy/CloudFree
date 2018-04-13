@@ -1,10 +1,7 @@
 package com.xy;
 
 import com.alibaba.fastjson.JSON;
-import com.xy.domain.EnumStaffStatus;
-import com.xy.domain.Product;
-import com.xy.domain.Seq;
-import com.xy.domain.Staff;
+import com.xy.domain.*;
 import com.xy.service.BaseDataService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -145,6 +142,27 @@ public class BaseDataTest {
                 .andReturn().getResponse().getContentAsString();
     }
 
+    @Test
+    public void addHouse() throws Exception {
+        House house = new House();
+        house.setHouseName("仓库1号");
+
+        String resp = this.mockMvc
+                .perform(post("/data/addHouse")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JSON.toJSONString(house).getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    @Test
+    public void getHouseList()throws Exception {
+        String resp = this.mockMvc.perform(get("/data/getHoseList"))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
 
     @Test
     public void addBaseData() throws Exception {
@@ -152,6 +170,7 @@ public class BaseDataTest {
         this.addSeqByProductId();
         this.addStaff();
         this.addDefaultStaff();
+        this.addHouse();
     }
 
 }

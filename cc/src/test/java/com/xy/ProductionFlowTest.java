@@ -1,6 +1,7 @@
 package com.xy;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
 import org.junit.Test;
@@ -31,7 +32,9 @@ public class ProductionFlowTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private static final String flowId= "181921975780769792";
+    private static final String flowId= "182216875214635008";
+
+    private static final String consId = "182226859126161408";
 
     // 新增生产流程
     @Test
@@ -91,10 +94,10 @@ public class ProductionFlowTest {
 
         Construction construction = new Construction();
 
-        construction.setDstCount(1000);
+        construction.setDstCount(747);
 
         Seq seq = new Seq();
-        seq.setIdSeq(1);
+        seq.setIdSeq(2);
         construction.setSeq(seq);
 
         Staff staff = new Staff();
@@ -118,5 +121,40 @@ public class ProductionFlowTest {
                 .getContentAsString();
     }
 
+    /** 对某个工单进行处理 **/
+
+    // 出库
+    @Test
+    public void setWorking() throws Exception {
+        JSONObject object = new JSONObject();
+        object.put("status", EnumConstructStatus.WORKING.ordinal());
+        object.put("idHouse",0);
+        object.put("error",0);
+        object.put("cmpl",0);
+
+        String resp = this.mockMvc
+                .perform(post("/workflow/setStatus/" + consId)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(object.toJSONString().getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    // 完工
+    @Test
+    public void completeWorking() throws Exception {
+        JSONObject object = new JSONObject();
+        object.put("status", EnumConstructStatus.COMPLETE.ordinal());
+        object.put("idHouse",0);
+        object.put("error",3);
+        object.put("cmpl",747);
+
+        String resp = this.mockMvc
+                .perform(post("/workflow/setStatus/" + consId)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(object.toJSONString().getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+    }
 
 }
