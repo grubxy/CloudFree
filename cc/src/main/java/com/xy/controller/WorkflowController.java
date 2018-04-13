@@ -59,6 +59,12 @@ public class WorkflowController {
         return productionFlowService.getConstructionByFlowId(id);
     }
 
+    // 获取工单
+    @RequestMapping(value = "/getConstructionByStatus", method = RequestMethod.GET)
+    public Page<Construction> getConstructionsByStatus(@RequestParam("status") int status, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return productionFlowService.getConstructionByStatus(status, page, size);
+    }
+
     // 设置工单状态
     @RequestMapping(value = "/setStatus/{idFlow}", method = RequestMethod.POST)
     public void setStatus(@RequestBody JSONObject obj, @PathVariable("idFlow") String id) throws Exception {
