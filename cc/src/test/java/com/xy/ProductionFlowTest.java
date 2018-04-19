@@ -27,14 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 public class ProductionFlowTest {
 
     @Autowired
-    private ProductionFlowService productionFlowService;
-
-    @Autowired
     private MockMvc mockMvc;
 
-    private static final String flowId= "182216875214635008";
+    private static final String flowId= "182273233192484864";
 
-    private static final String consId = "182226859126161408";
+    private static final String consId = "182274367034490880";
 
     // 新增生产流程
     @Test
@@ -94,10 +91,10 @@ public class ProductionFlowTest {
 
         Construction construction = new Construction();
 
-        construction.setDstCount(747);
+        construction.setDstCount(1000);
 
         Seq seq = new Seq();
-        seq.setIdSeq(2);
+        seq.setIdSeq(1);
         construction.setSeq(seq);
 
         Staff staff = new Staff();
@@ -112,9 +109,20 @@ public class ProductionFlowTest {
                 .andReturn().getResponse().getContentAsString();
     }
 
+    // 获取工单
     @Test
     public void getConstructions() throws Exception {
         String resp = this.mockMvc.perform(get("/workflow/getConstruction/" + flowId))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
+    // 获取某个状态的工单
+    @Test
+    public void getConstructionByStatus() throws Exception {
+        String resp = this.mockMvc.perform(get("/workflow/getConstructionByStatus?status=3&page=0&size=10"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
@@ -146,8 +154,25 @@ public class ProductionFlowTest {
         JSONObject object = new JSONObject();
         object.put("status", EnumConstructStatus.COMPLETE.ordinal());
         object.put("idHouse",0);
-        object.put("error",3);
-        object.put("cmpl",747);
+        object.put("error",2);
+        object.put("cmpl",998);
+
+        String resp = this.mockMvc
+                .perform(post("/workflow/setStatus/" + consId)
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(object.toJSONString().getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    // 入库
+    @Test
+    public void storeWorking() throws Exception {
+        JSONObject object = new JSONObject();
+        object.put("status", EnumConstructStatus.STORED.ordinal());
+        object.put("idHouse",1);
+        object.put("error",0);
+        object.put("cmpl",0);
 
         String resp = this.mockMvc
                 .perform(post("/workflow/setStatus/" + consId)

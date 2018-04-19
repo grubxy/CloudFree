@@ -158,6 +158,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
         return productionFlow.getConstructs();
     }
 
+    // 根据状态获取工单
+    @Override
+    public Page<Construction> getConstructionByStatus(int status, int page, int size) throws Exception {
+        Pageable pageable = new PageRequest(page, size);
+        return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable);
+    }
+
     // 根据工单获取对应工序详情
     private SeqInfo getSeqInfoFromConstruction(Construction construction) throws Exception {
         for (SeqInfo seqInfo:construction.getProduction().getSeqInfo()) {
@@ -194,11 +201,6 @@ public class ProductionFlowImpl implements ProductionFlowService {
                 construction.setCmplCount(cmpl);
                 construction.setErrCount(error);
 
-                // 设置工序详情 完成 废料个数，暂定与工单及Doing个数相等
-                seqInfo.setDoingCounts(seqInfo.getDoingCounts() - cmpl - error);
-                seqInfo.setCmplCounts(seqInfo.getCmplCounts() + cmpl);
-                seqInfo.setErrCounts(seqInfo.getErrCounts() + error);
-                seqInfoRepository.save(seqInfo);
                 break;
             case STORED:
                 // 将完成物料 入库
@@ -222,6 +224,12 @@ public class ProductionFlowImpl implements ProductionFlowService {
                     house.setOrigins(originSet);
                 }
                 houseRepository.save(house);
+
+                // 设置工序详情 完成 废料个数，暂定与工单及Doing个数相等
+                seqInfo.setDoingCounts(seqInfo.getDoingCounts() - construction.getCmplCount() - construction.getErrCount());
+                seqInfo.setCmplCounts(seqInfo.getCmplCounts() + construction.getCmplCount());
+                seqInfo.setErrCounts(seqInfo.getErrCounts() + construction.getErrCount());
+                seqInfoRepository.save(seqInfo);
                 break;
             case APPROVING:
                 // 进入审批流程
@@ -238,10 +246,4 @@ public class ProductionFlowImpl implements ProductionFlowService {
         construction.setEnumConstructStatus(enumConstructStatus);
         constructionRepository.save(construction);
     }
-
-    // 工单完成，将工单制作完成的物料入库
-    @Override
-    public void ConstructToOriginBySeqInfoId(String id, House house) throws Exception {
-    }
-
 }
