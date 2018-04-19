@@ -1,5 +1,6 @@
 package com.xy.service.impl;
 
+import com.xy.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.xy.domain.Role;
-import com.xy.domain.RoleRepository;
-import com.xy.domain.User;
-import com.xy.domain.UserRepository;
 import com.xy.security.JwtTokenUtil;
 import com.xy.security.JwtUser;
 import com.xy.service.AuthService;
@@ -53,24 +50,16 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User register(User userToAdd) {
+    public User register(User userToAdd) throws Exception{
         final String username = userToAdd.getUsername();
         if(userRepository.findByUsername(username)!=null) {
-            return null;
+            throw new UserException(ErrorCode.USER_USERNAME_EXIST.getCode(), ErrorCode.USER_USERNAME_EXIST.getMsg());
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetData(new Date());
-        // role
-        List<Role> roles = new ArrayList<Role>();
-        Role role = new Role();
-        role.setRid(1);
-        role.setRole("ROLE_USER");
-        roleRepository.save(role);
 
-        roles.add(role);
-        userToAdd.setRoles(roles);
         return userRepository.save(userToAdd);
     }
 
@@ -101,6 +90,11 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<User> getUserList() throws Exception {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void deleteUser(Integer id) throws Exception {
+        userRepository.delete(id);
     }
 
 }

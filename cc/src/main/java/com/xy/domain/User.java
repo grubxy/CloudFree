@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -12,7 +13,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="BH_USER")
-public class User {
+public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Getter

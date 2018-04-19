@@ -6,11 +6,13 @@ import java.util.List;
 
 public interface AuthService {
 
-	User register(User userToAdd);
+	User register(User userToAdd) throws Exception;
 	
     String login(String username, String password);
     
     String refresh(String oldToken);
 
     List<User> getUserList() throws Exception;
+
+    void deleteUser(Integer id) throws Exception;
 }

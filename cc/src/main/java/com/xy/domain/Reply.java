@@ -13,7 +13,7 @@ public class Reply {
     }
 
     public Reply(int status, String content) {
-        this(content);
+        this.status = status;
         this.content = content;
     }
 

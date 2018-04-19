@@ -8,11 +8,12 @@ import org.hibernate.annotations.GenericGenerator;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="BH_ROLE")
-public class Role {
+public class Role implements Serializable{
 
 	@Id
 	@GeneratedValue(generator="rid")

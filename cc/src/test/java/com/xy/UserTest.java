@@ -32,13 +32,15 @@ public class UserTest {
     @Test
     public void addUser() throws Exception {
         User user = new User();
-        user.setUsername("yexiaoyong");
+        user.setUsername("yexiaoyong11");
         user.setPassword("351351");
         user.setOwner("ss");
         Role role = new Role();
-        role.setRid(1);
-        role.setRole("ROLE_USER");
+        role.setRid(2);
         List<Role> roleSet = new ArrayList<Role>();
+        roleSet.add(role);
+        role = new Role();
+        role.setRid(1);
         roleSet.add(role);
 
         user.setRoles(roleSet);
@@ -56,6 +58,17 @@ public class UserTest {
     @Test
     public void getUserList() throws Exception {
         String resp = this.mockMvc.perform(get("/userlist")
+                .characterEncoding("UTF-8")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
+    @Test
+    public void deleteUser() throws Exception {
+        String resp = this.mockMvc.perform(get("/delUser/1")
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
