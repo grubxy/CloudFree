@@ -1,6 +1,8 @@
 package com.xy.domain;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -8,21 +10,18 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class ControllerAdvice {
+
     // 服务异常
     @ExceptionHandler(value = UserException.class)
-    public Map errHandle(UserException ex) {
-        Map map = new HashMap();
-        map.put("code", ex.getCode());
-        map.put("msg", ex.getMsg());
-        return map;
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public Reply errHandle(UserException ex) {
+        return new Reply(ex.getCode(), ex.getMsg());
     }
 
     // 全局异常
     @ExceptionHandler(value = Exception.class)
-    public Map globleErrHandle(Exception ex) {
-        Map map = new HashMap();
-        map.put("code", "100");
-        map.put("msg", ex.getMessage());
-        return map;
+    @ResponseStatus
+    public Reply globleErrHandle(Exception ex) {
+        return new Reply(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
     }
 }

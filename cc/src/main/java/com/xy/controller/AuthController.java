@@ -19,6 +19,8 @@ import com.xy.security.JwtAuthenticationRequest;
 import com.xy.security.JwtAuthenticationResponse;
 import com.xy.service.AuthService;
 
+import java.util.List;
+
 
 @RestController
 public class AuthController {
@@ -33,11 +35,11 @@ public class AuthController {
 
 
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(
+    public String createAuthenticationToken(
             @RequestBody JwtAuthenticationRequest authenticationRequest) throws AuthenticationException{
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         // Return the token
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        return token;
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
@@ -53,7 +55,12 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
-    public @ResponseBody User register(@RequestBody User addedUser) throws AuthenticationException{
+    public User register(@RequestBody User addedUser) throws AuthenticationException{
     	return  authService.register(addedUser);
+    }
+
+    @RequestMapping(value = "/userlist", method = RequestMethod.GET)
+    public List<User> getUserList() throws Exception {
+        return authService.getUserList();
     }
 }

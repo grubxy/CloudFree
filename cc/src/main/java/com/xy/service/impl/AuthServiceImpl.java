@@ -21,9 +21,7 @@ import com.xy.security.JwtTokenUtil;
 import com.xy.security.JwtUser;
 import com.xy.service.AuthService;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -64,16 +62,15 @@ public class AuthServiceImpl implements AuthService {
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetData(new Date());
-        
         // role
-        Set<Role> roles = new HashSet<Role>();
+        List<Role> roles = new ArrayList<Role>();
         Role role = new Role();
         role.setRid(1);
         role.setRole("ROLE_USER");
         roleRepository.save(role);
-        
-        roles.add(role);   
-        userToAdd.setRole(roles);
+
+        roles.add(role);
+        userToAdd.setRoles(roles);
         return userRepository.save(userToAdd);
     }
 
@@ -99,6 +96,11 @@ public class AuthServiceImpl implements AuthService {
             return jwtTokenUtil.refreshToken(token);
         }
         return null;
+    }
+
+    @Override
+    public List<User> getUserList() throws Exception {
+        return userRepository.findAll();
     }
 
 }

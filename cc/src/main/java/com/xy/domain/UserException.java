@@ -1,14 +1,19 @@
 package com.xy.domain;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+
 public class UserException extends RuntimeException {
-    private String code;
 
+    @Getter @Setter
+    private int code;
+
+    @Getter @Setter
     private String msg;
 
-    public UserException(String code, String msg) {
+    public UserException(int code, String msg) {
         this.code = code;
         this.msg = msg;
     }

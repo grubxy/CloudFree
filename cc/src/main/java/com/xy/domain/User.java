@@ -1,18 +1,10 @@
 package com.xy.domain;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.Getter;
@@ -30,6 +22,8 @@ public class User {
 	@Column(unique=true)
 	@Getter @Setter private String username;
 
+	@Getter @Setter private String owner;	// 账户所有者中文名
+
 	@Getter @Setter private String password;
 
 	@Getter @Setter private String email;
@@ -41,5 +35,5 @@ public class User {
 	name="BH_USER_ROLE",
 	joinColumns={@JoinColumn(name="uid")},
 	inverseJoinColumns={@JoinColumn(name="rid")})
-	@Getter @Setter private Set<Role> role;
+	@Getter @Setter private List<Role> roles;
 }
