@@ -1,7 +1,9 @@
 package com.xy;
 
 import com.alibaba.fastjson.JSON;
+import com.xy.domain.EnumRole;
 import com.xy.domain.Role;
+import com.xy.domain.RoleRepository;
 import com.xy.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,6 +30,27 @@ public class UserTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Test
+    public void addRoles() throws Exception {
+        Role role = new Role();
+        role.setRid(EnumRole.SYSTEM.getId());
+        role.setRole(EnumRole.SYSTEM.getRole());
+        roleRepository.save(role);
+
+        role = new Role();
+        role.setRid(EnumRole.FLOW.getId());
+        role.setRole(EnumRole.FLOW.getRole());
+        roleRepository.save(role);
+
+        role = new Role();
+        role.setRid(EnumRole.STORE.getId());
+        role.setRole(EnumRole.STORE.getRole());
+        roleRepository.save(role);
+    }
 
     @Test
     public void addUser() throws Exception {

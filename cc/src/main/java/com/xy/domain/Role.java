@@ -2,6 +2,7 @@ package com.xy.domain;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -23,5 +24,6 @@ public class Role implements Serializable{
 	@Getter @Setter private String role;
 
 	@ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+	@JsonIgnore
 	@Getter @Setter private List<User> users;
 }

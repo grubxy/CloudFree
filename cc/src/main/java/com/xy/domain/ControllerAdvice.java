@@ -15,13 +15,13 @@ public class ControllerAdvice {
     @ExceptionHandler(value = UserException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public Reply errHandle(UserException ex) {
-        return new Reply(ex.getCode(), ex.getMsg());
+        return new Reply(ex.getMsg());
     }
 
     // 全局异常
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus
     public Reply globleErrHandle(Exception ex) {
-        return new Reply(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new Reply(ex.getMessage());
     }
 }
