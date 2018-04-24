@@ -51,17 +51,17 @@ public class AuthController {
         }
     }
 
-    @RequestMapping(value = "/auth/register", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     public User register(@RequestBody User addedUser) throws Exception {
     	return authService.register(addedUser);
     }
 
-    @RequestMapping(value = "/userlist", method = RequestMethod.GET)
-    public List<User> getUserList() throws Exception {
-        return authService.getUserList();
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public List<User> getUserList(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return authService.getUserList(page, size);
     }
 
-    @RequestMapping(value = "/delUser/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable("id") Integer id) throws Exception {
         authService.deleteUser(id);
     }

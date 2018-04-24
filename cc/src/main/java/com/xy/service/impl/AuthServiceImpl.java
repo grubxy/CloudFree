@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -88,8 +89,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public List<User> getUserList() throws Exception {
-        return userRepository.findAll();
+    public List<User> getUserList(int page, int size) throws Exception {
+        Long total = (size != 0)?size:userRepository.count();
+        PageRequest pageRequest = new PageRequest(page, total.intValue());
+        List<User> userList = userRepository.findAll(pageRequest).getContent();
+        return userList;
     }
 
     @Override

@@ -19,7 +19,6 @@ import java.util.Set;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/data")
 public class BaseDataController {
 
     @Autowired
@@ -32,79 +31,67 @@ public class BaseDataController {
     private HouseService houseService;
 
     // 增加产品
-    @RequestMapping(value = "/addProduct", method = RequestMethod.POST)
+    @RequestMapping(value = "/product", method = RequestMethod.POST)
     private void addProduct(@RequestBody Product product) throws Exception {
         baseDataService.addProduct(product);
     }
 
     // 删除产品
-    @RequestMapping(value = "/delProduct", method = RequestMethod.POST)
-    private void delProduct(@RequestBody JSONObject obj) throws Exception {
-        baseDataService.delProduct(obj.getIntValue("id"));
+    @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
+    private void delProduct(@PathVariable("id") int id) throws Exception {
+        baseDataService.delProduct(id);
     }
 
     // 获取产品 带分页
-    @RequestMapping(value = "/getProducts", method = RequestMethod.GET)
-    private Page<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    @RequestMapping(value = "/product", method = RequestMethod.GET)
+    private List<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return baseDataService.getAllProduct(page, size);
     }
 
-    // 获取产品 列表
-    @RequestMapping(value = "/getProductsList", method = RequestMethod.GET)
-    private List<Product> getProductList() throws Exception {
-        return baseDataService.getAllProduct();
-    }
-
     // 添加工序
-    @RequestMapping(value = "/addSeq/{idProduct}", method = RequestMethod.POST)
-    private void addSeq(@RequestBody Seq seq, @PathVariable("idProduct") int id) throws Exception {
+    @RequestMapping(value = "/product/{id}/seq", method = RequestMethod.POST)
+    private void addSeq(@RequestBody Seq seq, @PathVariable("id") int id) throws Exception {
         baseDataService.addSeqByProductId(id, seq);
     }
 
     // 查询工序
-    @RequestMapping(value = "/getSeq/{idProduct}", method = RequestMethod.GET)
-    private Set<Seq> getSeq(@PathVariable("idProduct") int id) throws Exception {
+    @RequestMapping(value = "/product/{id}/seq", method = RequestMethod.GET)
+    private Set<Seq> getSeq(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
        return baseDataService.getSeqListByProductId(id);
     }
 
     // 删除工序
-    @RequestMapping(value = "/delSeq", method = RequestMethod.POST)
-    private void delSeq(@RequestBody JSONObject obj) throws Exception {
-        baseDataService.delSeqById(obj.getIntValue("id"));
+    @RequestMapping(value = "/product/{id}/seq/{idseq}", method = RequestMethod.DELETE)
+    private void delSeq(@PathVariable("idSeq") int id) throws Exception {
+        baseDataService.delSeqById(id);
     }
 
     // 给工序添加默认员工
-    @RequestMapping(value = "/addStaff/{idSeq}", method = RequestMethod.POST)
-    private void addStaff(@RequestBody Staff staff, @PathVariable("idSeq") int id) throws Exception {
+    @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.POST)
+    private void addStaff(@RequestBody Staff staff, @PathVariable("id") int id) throws Exception {
         baseDataService.addStaffBySeqId(id, staff);
     }
 
     // 获得工序的默认员工
-    @RequestMapping(value = "/getStaff/{idSeq}", method = RequestMethod.GET)
-    private Set<Staff> getStaff(@PathVariable("idSeq") int id) throws Exception {
+    @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.GET)
+    private Set<Staff> getStaff(@PathVariable("id") int id, @PathVariable("page") int page, @PathVariable("size") int size) throws Exception {
         return baseDataService.getStaffBySeqId(id);
     }
 
     // 添加员工
-    @RequestMapping(value = "/addStaff", method = RequestMethod.POST)
+    @RequestMapping(value = "/staff", method = RequestMethod.POST)
     private void addStaff(@RequestBody Staff staff) throws Exception {
         staffService.addStaff(staff);
     }
 
     // 添加仓库
-    @RequestMapping(value = "/addHouse", method = RequestMethod.POST)
+    @RequestMapping(value = "/house", method = RequestMethod.POST)
     public void addHouse(@RequestBody House house) throws Exception {
         houseService.addHouse(house);
     }
 
-    // 获取仓库详情
-    @RequestMapping(value = "/getHoseList", method = RequestMethod.GET)
-    public List<House> getHouseList() throws Exception {
-        return houseService.getAllHouse();
-    }
-
     // 获取仓库 分页
-    @RequestMapping(value = "/getHouses", method = RequestMethod.GET)
+    @RequestMapping(value = "/house", method = RequestMethod.GET)
     public Page<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return houseService.getPageHouse(page, size);
     }

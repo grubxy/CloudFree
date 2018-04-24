@@ -12,7 +12,7 @@ public interface AuthService {
     
     String refresh(String oldToken);
 
-    List<User> getUserList() throws Exception;
+    List<User> getUserList(int page, int size) throws Exception;
 
     void deleteUser(Integer id) throws Exception;
 }

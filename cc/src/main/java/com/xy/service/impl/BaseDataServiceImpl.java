@@ -37,11 +37,6 @@ public class BaseDataServiceImpl implements BaseDataService {
         productRepository.delete(id);
     }
 
-    @Override
-    public List<Product> getAllProduct() throws Exception {
-        return productRepository.findAll();
-    }
-
     // 新增or更新某个产品的工序
     @Override
     public void addSeqByProductId(int id, Seq seq) throws Exception {
@@ -119,8 +114,10 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     // 获取所有基础数据信息
     @Override
-    public Page<Product> getAllProduct(int page, int size) throws Exception {
+    public List<Product> getAllProduct(int page, int size) throws Exception {
+        Long total = (size != 0)?size:productRepository.count();
         PageRequest pageRequest = new PageRequest(page, size);
-        return productRepository.findAll(pageRequest);
+        List<Product> productList = productRepository.findAll(pageRequest).getContent();
+        return productList;
     }
 }
