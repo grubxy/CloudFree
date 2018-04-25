@@ -62,8 +62,9 @@ public class BaseDataTest {
         seq.setSeqCost(0.001f);
         seq.setSeqName("洗");
 
+        System.out.println(JSON.toJSONString(seq));
         String resp = this.mockMvc
-                .perform(post("/data/addSeq/1")
+                .perform(post("/product/1/seq")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(seq).getBytes())).andDo(print())
@@ -74,7 +75,7 @@ public class BaseDataTest {
         seq.setSeqName("刷");
 
         resp = this.mockMvc
-                .perform(post("/data/addSeq/1")
+                .perform(post("/product/1/seq")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(seq).getBytes())).andDo(print())
@@ -84,7 +85,7 @@ public class BaseDataTest {
 
     @Test
     public void getSeqByProductId() throws Exception {
-        String resp = this.mockMvc.perform(get("/data/getSeq/1"))
+        String resp = this.mockMvc.perform(get("/product/1/seq?page=0&size=0"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
