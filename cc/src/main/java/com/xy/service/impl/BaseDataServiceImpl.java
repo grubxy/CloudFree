@@ -50,7 +50,12 @@ public class BaseDataServiceImpl implements BaseDataService {
             seq.setSrcMaterial(material);
         } else {
             seq.setSeqIndex(product.getSeq().size() + 1);
-            seq.setSrcMaterial(seqRepository.findSeqBySeqIndexEquals(product.getSeq().size()).getDstMaterial());
+            int size = product.getSeq().size();
+            for (Seq tmp:product.getSeq()) {
+                if (tmp.getSeqIndex() == size) {
+                    seq.setSrcMaterial(tmp.getDstMaterial());
+                }
+            }
         }
 
         // 设置生成材料

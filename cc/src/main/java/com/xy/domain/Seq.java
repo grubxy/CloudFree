@@ -24,10 +24,12 @@ public class Seq implements Serializable{
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @Getter @Setter
+    @JsonIgnore
     private Material srcMaterial;  // 工序源材料
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @Getter @Setter
+    @JsonIgnore
     private Material dstMaterial;  // 工序生成
 
 

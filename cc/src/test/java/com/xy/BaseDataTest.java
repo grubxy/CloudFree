@@ -122,15 +122,25 @@ public class BaseDataTest {
     public void addStaff() throws Exception {
         Staff staff = new Staff();
 
-        staff.setStaffName("xiaowang");
+        staff.setStaffName("晓西");
         staff.setEnumStaffStatus(EnumStaffStatus.POSITIONING);
 
         String resp = this.mockMvc
-                .perform(post("/data/addStaff")
+                .perform(post("/staff")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(staff).getBytes())).andDo(print())
                 .andReturn().getResponse().getContentAsString();
+    }
+
+    // 获取员工
+    @Test
+    public void getStaff()throws Exception {
+        String resp = this.mockMvc.perform(get("/staff?page=0&size=0&status=0"))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
     }
 
     @Test

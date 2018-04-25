@@ -22,6 +22,7 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void addStaff(Staff staff) throws Exception {
+        staff.setEnumStaffStatus(EnumStaffStatus.POSITIONING);
         staffRepository.save(staff);
     }
 
@@ -39,13 +40,9 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<Staff> getStaffListByStatus(int status) throws Exception {
-        return  staffRepository.findStaffByEnumStaffStatus(EnumStaffStatus.values()[status]);
-    }
-
-    @Override
-    public Page<Staff> getStaffByStatus(int status, int page, int size) throws Exception {
-        Pageable pageable = new PageRequest(page, size);
-        return staffRepository.findStaffByEnumStaffStatus(EnumStaffStatus.values()[status], pageable);
+    public List<Staff> getStaffListByStatus(int page, int size, int status) throws Exception {
+        Long total = (size!=0)?size:staffRepository.count();
+        PageRequest pageRequest = new PageRequest(page, total.intValue());
+        return staffRepository.findStaffByEnumStaffStatus(EnumStaffStatus.values()[status], pageRequest).getContent();
     }
 }

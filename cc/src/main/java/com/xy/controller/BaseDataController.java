@@ -74,7 +74,7 @@ public class BaseDataController {
 
     // 获得工序的默认员工
     @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.GET)
-    private Set<Staff> getStaff(@PathVariable("id") int id, @PathVariable("page") int page, @PathVariable("size") int size) throws Exception {
+    private Set<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return baseDataService.getStaffBySeqId(id);
     }
 
@@ -84,6 +84,11 @@ public class BaseDataController {
         staffService.addStaff(staff);
     }
 
+    // 获取员工
+    @RequestMapping(value = "/staff", method = RequestMethod.GET)
+    private List<Staff> getStaff(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("status") int status) throws Exception{
+        return staffService.getStaffListByStatus(page, size, status);
+    }
     // 添加仓库
     @RequestMapping(value = "/house", method = RequestMethod.POST)
     public void addHouse(@RequestBody House house) throws Exception {

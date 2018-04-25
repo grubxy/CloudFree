@@ -12,7 +12,5 @@ public interface StaffService {
 
     void setStaffStatus(int id, int status) throws Exception;
 
-    List<Staff> getStaffListByStatus(int status) throws Exception;
-
-    Page<Staff> getStaffByStatus(int status, int page, int size) throws Exception;
+    List<Staff> getStaffListByStatus(int page, int size, int status) throws Exception;
 }
