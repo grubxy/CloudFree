@@ -116,7 +116,7 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public List<Product> getAllProduct(int page, int size) throws Exception {
         Long total = (size != 0)?size:productRepository.count();
-        PageRequest pageRequest = new PageRequest(page, size);
+        PageRequest pageRequest = new PageRequest(page, total.intValue());
         List<Product> productList = productRepository.findAll(pageRequest).getContent();
         return productList;
     }

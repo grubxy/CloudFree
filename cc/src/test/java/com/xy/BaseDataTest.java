@@ -31,10 +31,10 @@ public class BaseDataTest {
     @Test
     public void addProduct() throws Exception {
         Product product = new Product();
-        product.setProductName("产品名称1 小刀");
+        product.setProductName("产品名1 小刀");
 
         String resp = this.mockMvc
-        .perform(post("/data/addProduct")
+        .perform(post("/product")
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JSON.toJSONString(product).getBytes())).andDo(print())
@@ -45,17 +45,7 @@ public class BaseDataTest {
     @Test
     public void getProduct() throws Exception {
 
-        String resp = this.mockMvc.perform(get("/data/getProductsList")
-                .characterEncoding("UTF-8")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-        System.out.println("no page resp: " + resp);
-
-
-        resp = this.mockMvc.perform(get("/data/getProducts?page=0&size=10")
+        String resp = this.mockMvc.perform(get("/product?page=0&size=0")
                 .characterEncoding("UTF-8")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
