@@ -72,9 +72,10 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 获取生产流程 分页
     @Override
-    public Page<ProductionFlow> getAllProductionFlow(int page, int size) throws Exception {
-        PageRequest pageRequest = new PageRequest(page, size);
-        return productionFlowRepository.findAll(pageRequest);
+    public List<ProductionFlow> getAllProductionFlow(int page, int size) throws Exception {
+        Long total = (size !=0)?size:productionFlowRepository.count();
+        PageRequest pageRequest = new PageRequest(page, total.intValue());
+        return productionFlowRepository.findAll(pageRequest).getContent();
     }
 
     // 获取生产流程的所有工序

@@ -16,7 +16,6 @@ import java.util.Set;
 
 
 @RestController
-@RequestMapping(value = "/workflow")
 @Slf4j
 public class WorkflowController {
 
@@ -24,50 +23,50 @@ public class WorkflowController {
     private ProductionFlowService productionFlowService;
 
     // 添加生产流程
-    @RequestMapping(value = "/addflow", method = RequestMethod.POST)
+    @RequestMapping(value = "/flow", method = RequestMethod.POST)
     public void addFlow(@RequestBody ProductionFlow productionFlow) throws Exception {
         productionFlowService.addProductionFlow(productionFlow);
     }
 
     // 获取生产流程信息
-    @RequestMapping(value = "/getflow", method = RequestMethod.GET)
-    public Page<ProductionFlow> getFlows(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception{
+    @RequestMapping(value = "/flow", method = RequestMethod.GET)
+    public List<ProductionFlow> getFlows(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception{
         return productionFlowService.getAllProductionFlow(page, size);
     }
 
     // 获取生产产品工序
-    @RequestMapping(value = "/getSeq/{idFlow}", method = RequestMethod.GET)
-    public List<Seq> getSeq(@PathVariable("idFlow") String id) throws Exception {
+    @RequestMapping(value = "/flow/{id}/seq", method = RequestMethod.GET)
+    public List<Seq> getSeq(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getAllSeqByFlowId(id);
     }
 
     // 获取生产流程的工序详情
-    @RequestMapping(value = "/getSeqInfo/{idFlow}", method = RequestMethod.GET)
-    public Set<SeqInfo> getSeqInfo(@PathVariable("idFlow") String id) throws Exception {
+    @RequestMapping(value = "/seqinfo/{id}", method = RequestMethod.GET)
+    public Set<SeqInfo> getSeqInfo(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getAllSeqInfoByFlowId(id);
     }
 
     // 添加工单
-    @RequestMapping(value = "/addConstruction/{idFlow}", method = RequestMethod.POST)
-    public void addConstructionByFlow(@RequestBody Construction construction, @PathVariable("idFlow") String id) throws Exception {
+    @RequestMapping(value = "/flow/{id}/construction", method = RequestMethod.POST)
+    public void addConstructionByFlow(@RequestBody Construction construction, @PathVariable("id") String id) throws Exception {
         productionFlowService.addConstructionByFlowId(id, construction);
     }
 
     // 获取工单
-    @RequestMapping(value = "/getConstruction/{idFlow}", method = RequestMethod.GET)
-    public Set<Construction> getConstruction(@PathVariable("idFlow") String id) throws Exception {
+    @RequestMapping(value = "/flow/{id}/construction", method = RequestMethod.GET)
+    public Set<Construction> getConstruction(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getConstructionByFlowId(id);
     }
 
     // 获取工单
-    @RequestMapping(value = "/getConstructionByStatus", method = RequestMethod.GET)
+    @RequestMapping(value = "/construction", method = RequestMethod.GET)
     public Page<Construction> getConstructionsByStatus(@RequestParam("status") int status, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return productionFlowService.getConstructionByStatus(status, page, size);
     }
 
     // 设置工单状态
-    @RequestMapping(value = "/setStatus/{idFlow}", method = RequestMethod.POST)
-    public void setStatus(@RequestBody JSONObject obj, @PathVariable("idFlow") String id) throws Exception {
+    @RequestMapping(value = "/construction/{id}", method = RequestMethod.POST)
+    public void setStatus(@RequestBody JSONObject obj, @PathVariable("id") String id) throws Exception {
         int status = obj.getIntValue("status");
         int idHouse = obj.getIntValue("idHouse");
         int error = obj.getIntValue("error");

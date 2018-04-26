@@ -47,7 +47,7 @@ public class ProductionFlowTest {
         productionFlow.setDstCounts(1750);
 
         String resp = this.mockMvc
-                .perform(post("/workflow/addflow")
+                .perform(post("/flow")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(productionFlow).getBytes())).andDo(print())
@@ -58,7 +58,7 @@ public class ProductionFlowTest {
     // 获取所有生产流程
     @Test
     public void getFlow() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getflow?page=0&size=10"))
+        String resp = this.mockMvc.perform(get("/flow?page=0&size=0"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
