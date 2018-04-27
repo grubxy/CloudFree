@@ -91,7 +91,7 @@ public class ProductionFlowTest {
 
         Construction construction = new Construction();
 
-        construction.setDstCount(1000);
+        construction.setDstCount(2);
 
         Seq seq = new Seq();
         seq.setIdSeq(1);
@@ -102,7 +102,7 @@ public class ProductionFlowTest {
         construction.setStaff(staff);
 
         String resp = this.mockMvc
-                .perform(post("/workflow/addConstruction/" + flowId)
+                .perform(post("/flow/187349472194330624/construction")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JSON.toJSONString(construction).getBytes())).andDo(print())
@@ -112,7 +112,7 @@ public class ProductionFlowTest {
     // 获取工单
     @Test
     public void getConstructions() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getConstruction/" + flowId))
+        String resp = this.mockMvc.perform(get("/flow/187349472194330624/construction"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
@@ -141,7 +141,7 @@ public class ProductionFlowTest {
         object.put("cmpl",0);
 
         String resp = this.mockMvc
-                .perform(post("/workflow/setStatus/" + consId)
+                .perform(post("/construction/xx/")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(object.toJSONString().getBytes())).andDo(print())
@@ -158,7 +158,7 @@ public class ProductionFlowTest {
         object.put("cmpl",998);
 
         String resp = this.mockMvc
-                .perform(post("/workflow/setStatus/" + consId)
+                .perform(post("/construction/xx/")
                         .characterEncoding("UTF-8")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(object.toJSONString().getBytes())).andDo(print())

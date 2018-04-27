@@ -102,6 +102,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public void addConstructionByFlowId(String id, Construction construction) throws Exception {
 
+        construction.setCmplCount(0);
         construction.setSDate(new Date());
         construction.setEnumConstructStatus(EnumConstructStatus.WAITING);
         construction.setIdConstruct(String.valueOf(SnowFlake.getInstance().nextId()));
