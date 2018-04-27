@@ -68,7 +68,7 @@ public class ProductionFlowTest {
     // 获取产品工序
     @Test
     public void getSeq() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getSeq/" + flowId))
+        String resp = this.mockMvc.perform(get("/flow/187280196921982976/seq/"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
@@ -78,7 +78,7 @@ public class ProductionFlowTest {
     // 获取工序详情
     @Test
     public void getSeqInfo() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getSeqInfo/" + flowId))
+        String resp = this.mockMvc.perform(get("/flow/187280196921982976/seqinfo" ))
                 .andDo(print())
                 .andReturn()
                 .getResponse()

@@ -41,7 +41,7 @@ public class WorkflowController {
     }
 
     // 获取生产流程的工序详情
-    @RequestMapping(value = "/seqinfo/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/flow/{id}/seqinfo", method = RequestMethod.GET)
     public Set<SeqInfo> getSeqInfo(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getAllSeqInfoByFlowId(id);
     }

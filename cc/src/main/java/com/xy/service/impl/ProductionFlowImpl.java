@@ -37,6 +37,8 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         // 生产编号
         productionFlow.setIdProduction(String.valueOf(SnowFlake.getInstance().nextId()));
+        productionFlow.setCmplCounts(0);
+        productionFlow.setErrCounts(0);
 
         Product product = productRepository.findOne(productionFlow.getProduct().getIdProduct());
 
