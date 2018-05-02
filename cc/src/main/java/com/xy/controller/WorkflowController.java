@@ -60,12 +60,12 @@ public class WorkflowController {
 
     // 获取工单
     @RequestMapping(value = "/construction", method = RequestMethod.GET)
-    public Page<Construction> getConstructionsByStatus(@RequestParam("status") int status, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    public List<Construction> getConstructionsByStatus(@RequestParam("status") int status, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return productionFlowService.getConstructionByStatus(status, page, size);
     }
 
     // 设置工单状态
-    @RequestMapping(value = "/construction/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/construction/{id}", method = RequestMethod.PATCH)
     public void setStatus(@RequestBody JSONObject obj, @PathVariable("id") String id) throws Exception {
         int status = obj.getIntValue("status");
         int idHouse = obj.getIntValue("idHouse");

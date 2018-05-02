@@ -122,7 +122,7 @@ public class ProductionFlowTest {
     // 获取某个状态的工单
     @Test
     public void getConstructionByStatus() throws Exception {
-        String resp = this.mockMvc.perform(get("/workflow/getConstructionByStatus?status=3&page=0&size=10"))
+        String resp = this.mockMvc.perform(get("/construction?status=3&page=0&size=0"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()

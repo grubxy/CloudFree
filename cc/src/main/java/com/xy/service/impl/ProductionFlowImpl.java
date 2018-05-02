@@ -164,9 +164,10 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 根据状态获取工单
     @Override
-    public Page<Construction> getConstructionByStatus(int status, int page, int size) throws Exception {
-        Pageable pageable = new PageRequest(page, size);
-        return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable);
+    public List<Construction> getConstructionByStatus(int status, int page, int size) throws Exception {
+        Long total = (size !=0)?size:constructionRepository.count();
+        Pageable pageable = new PageRequest(page, total.intValue());
+        return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable).getContent();
     }
 
     // 根据工单获取对应工序详情
