@@ -1,15 +1,56 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.AttributeConverter;
+
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum EnumConstructStatus {
-    WAITING,    // 等待材料出库
+    ALL(0, "所有状态"),
 
-    WORKING,    // 制作过程中
+    WAITING(1, "等待材料出库"),
 
-    COMPLETE,   // 完工
+    WORKING(2, "制作过程中"),
 
-    STORED,     // 入库
+    COMPLETE(3, "完工待入库"),
 
-    APPROVING,    // 审批中
+    STORED(4, "入库完毕"),
 
-    APPROVED      // 审批完成
+    APPROVING(5, "审批中"),
+
+    APPROVED(6, "审批完成");
+
+    EnumConstructStatus(int value, String desc) {
+        this.value = value;
+        this.desc = desc;
+    }
+
+    @Setter @Getter
+    //@Getter(onMethod = @__(@JsonValue))
+    private int value;
+
+    @Setter @Getter
+    private String desc;
+
+    public static class Convert implements AttributeConverter<EnumConstructStatus, String> {
+        @Override
+        public String convertToDatabaseColumn(EnumConstructStatus attribute) {
+            return attribute == null?null:attribute.getDesc();
+        }
+
+        @Override
+        public EnumConstructStatus convertToEntityAttribute(String desc) {
+            for (EnumConstructStatus type:EnumConstructStatus.values()) {
+                if (desc.equals(type.getDesc())) {
+                    return type;
+                }
+            }
+            throw new UserException(ErrorCode.CONSTRUCTION_ENUM_ERROR.getCode(), ErrorCode.CONSTRUCTION_ENUM_ERROR.getMsg());
+        }
+    }
+
 }

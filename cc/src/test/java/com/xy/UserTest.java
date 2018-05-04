@@ -55,7 +55,7 @@ public class UserTest {
     @Test
     public void addUser() throws Exception {
         User user = new User();
-        user.setUsername("yexiaoyong11");
+        user.setUsername("yexiaoyong");
         user.setPassword("351351");
         user.setOwner("ss");
         Role role = new Role();

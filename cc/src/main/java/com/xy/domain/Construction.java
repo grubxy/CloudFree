@@ -35,12 +35,11 @@ public class Construction {
     @Getter @Setter
     private int errCount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idProduction")
-    @JsonIgnore
     @Getter @Setter private ProductionFlow production;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = EnumConstructStatus.Convert.class)
     @Getter @Setter private EnumConstructStatus enumConstructStatus;    // 工单状态
 
     @ManyToOne(fetch = FetchType.EAGER)

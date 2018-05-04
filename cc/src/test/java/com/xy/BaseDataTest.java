@@ -122,7 +122,7 @@ public class BaseDataTest {
     public void addStaff() throws Exception {
         Staff staff = new Staff();
 
-        staff.setStaffName("晓东");
+        staff.setStaffName("晓xi");
         staff.setEnumStaffStatus(EnumStaffStatus.POSITIONING);
 
         String resp = this.mockMvc

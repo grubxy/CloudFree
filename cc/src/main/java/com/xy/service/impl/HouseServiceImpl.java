@@ -26,17 +26,12 @@ public class HouseServiceImpl implements HouseService{
         houseRepository.save(house);
     }
 
-    // 获取仓库列表
+    // 获取仓库
     @Override
-    public List<House> getAllHouse() throws Exception {
-        return houseRepository.findAll();
-    }
-
-    // 获取仓库 分页
-    @Override
-    public Page<House> getPageHouse(int page, int size) throws Exception {
-        PageRequest pageRequest = new PageRequest(page, size);
-        return houseRepository.findAll(pageRequest);
+    public List<House> getHouse(int page, int size) throws Exception {
+        Long total = (size !=0)?size:houseRepository.count();
+        PageRequest pageRequest = new PageRequest(page,total.intValue());
+        return houseRepository.findAll(pageRequest).getContent();
     }
 
     // 获取某个仓库下物料

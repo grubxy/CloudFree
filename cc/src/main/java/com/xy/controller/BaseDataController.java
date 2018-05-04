@@ -97,7 +97,7 @@ public class BaseDataController {
 
     // 获取仓库 分页
     @RequestMapping(value = "/house", method = RequestMethod.GET)
-    public Page<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
-        return houseService.getPageHouse(page, size);
+    public List<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return houseService.getHouse(page, size);
     }
 }

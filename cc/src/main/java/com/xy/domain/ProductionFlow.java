@@ -36,6 +36,8 @@ public class ProductionFlow implements Serializable{
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Getter @Setter private Date date;
 
+    @Getter @Setter private String owner;   // 提单人
+
     @Getter @Setter private String detail;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -47,8 +49,7 @@ public class ProductionFlow implements Serializable{
     @JsonIgnore
     @Getter @Setter private Set<SeqInfo> seqInfo;            // 对应产品工序的详情
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn(name="idProduction")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "production")
     @JsonIgnore
     @Getter @Setter private Set<Construction> constructs;  // 工单
 

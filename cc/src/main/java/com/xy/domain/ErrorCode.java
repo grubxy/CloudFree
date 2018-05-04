@@ -10,9 +10,12 @@ public enum  ErrorCode {
 
     CONSTRUCTION_SEQINFO_ERROR(3002, "工单找不到匹配的工序详情，系统有异常"),
 
+    CONSTRUCTION_ENUM_ERROR(3003, "工单状态枚举错误"),
+
     CONSTRUCTION_COMPLETECOUNTS_ERROR(3003, "完工数量和次品数量与工单数量不匹配"),
 
     USER_USERNAME_EXIST(4001, "用户名已经存在");
+
 
     private int code;
 

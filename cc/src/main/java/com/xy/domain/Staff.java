@@ -17,6 +17,8 @@ public class Staff {
 
     @Getter @Setter private String staffName;   // 员工姓名
 
+    @Getter @Setter private String staffPhone;  // 员工姓名
+
     @ManyToMany(fetch = FetchType.LAZY, mappedBy="staffs")
     @Getter
     @Setter

@@ -39,6 +39,9 @@ public class ProductionFlowImpl implements ProductionFlowService {
         productionFlow.setIdProduction(String.valueOf(SnowFlake.getInstance().nextId()));
         productionFlow.setCmplCounts(0);
         productionFlow.setErrCounts(0);
+        productionFlow.setDate(new Date());
+        // 获取提单人姓名
+        productionFlow.setOwner("叶晓勇");
 
         Product product = productRepository.findOne(productionFlow.getProduct().getIdProduct());
 
@@ -109,6 +112,8 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         ProductionFlow productionFlow = productionFlowRepository.findOne(id);
 
+        construction.setProduction(productionFlow);
+
         /**  校验数量依赖关系 **/
 
         // 查找该工单对应的工序详情
@@ -167,7 +172,11 @@ public class ProductionFlowImpl implements ProductionFlowService {
     public List<Construction> getConstructionByStatus(int status, int page, int size) throws Exception {
         Long total = (size !=0)?size:constructionRepository.count();
         Pageable pageable = new PageRequest(page, total.intValue());
-        return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable).getContent();
+        if (status == EnumConstructStatus.ALL.ordinal()) {
+            return constructionRepository.findAll(pageable).getContent();
+        } else {
+            return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable).getContent();
+        }
     }
 
     // 根据工单获取对应工序详情

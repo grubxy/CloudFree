@@ -11,11 +11,8 @@ public interface HouseService {
     // 新增仓库
     void addHouse(House house) throws Exception;
 
-    // 获取仓库列表
-    List<House> getAllHouse() throws Exception;
-
-    // 获取仓库 分页
-    Page<House> getPageHouse(int page, int size) throws Exception;
+    // 获取仓库
+    List<House> getHouse(int page, int size) throws Exception;
 
     // 获取某个仓库下物料
     Set<Origin> getOriginByHouseId(int id) throws Exception;
