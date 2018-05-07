@@ -19,6 +19,9 @@ public class House {
     @Getter @Setter
     private String houseName;
 
+    @Getter @Setter
+    private String houseDesc;
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "idHouse")
     @JsonIgnore
