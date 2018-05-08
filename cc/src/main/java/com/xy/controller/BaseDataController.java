@@ -110,7 +110,7 @@ public class BaseDataController {
     // 删除物料
     @RequestMapping(value = "/house/{id}/origin/{idOrigin}", method = RequestMethod.DELETE)
     public void delOriginByHouseId(@PathVariable("id") int id, @PathVariable("idOrigin") int idOrigin, @RequestBody JSONObject object) throws Exception {
-
+        houseService.delOriginByHouseId(id, idOrigin, Integer.valueOf(object.getString("counts")));
     }
 
     // 获取仓库 分页

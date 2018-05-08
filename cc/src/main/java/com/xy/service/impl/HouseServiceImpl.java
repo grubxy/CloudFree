@@ -83,6 +83,7 @@ public class HouseServiceImpl implements HouseService{
     }
 
     // 删除原料
+    @Override
     public void delOriginByHouseId(int id, int idOrigin, int counts) throws Exception {
         House house = houseRepository.findOne(id);
         for (Origin origin:house.getOrigins()) {
@@ -93,10 +94,11 @@ public class HouseServiceImpl implements HouseService{
                     // 相等 删除house中origin
                     house.getOrigins().remove(origin);
                     houseRepository.save(house);
-                    //originRepository.delete(origin.getIdOrigin());
+                    originRepository.delete(origin.getIdOrigin());
                 } else {
                     // 处理数量关系
                     origin.setCounts(origin.getCounts() - counts);
+                    originRepository.save(origin);
                 }
             } else {
                 throw new UserException(ErrorCode.HOUSE_ORIGIN_ID_ERROR.getCode(), ErrorCode.HOUSE_ORIGIN_ID_ERROR.getMsg());
