@@ -14,6 +14,9 @@ public interface HouseService {
     // 获取仓库
     List<House> getHouse(int page, int size) throws Exception;
 
+    // 给仓库添加原料
+    void addOriginByHouseId(int id, String name, int counts) throws Exception;
+
     // 获取某个仓库下物料
     Set<Origin> getOriginByHouseId(int id) throws Exception;
 }

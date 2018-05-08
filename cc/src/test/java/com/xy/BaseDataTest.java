@@ -143,6 +143,32 @@ public class BaseDataTest {
                 .getContentAsString();
     }
 
+    // 获取原料
+    @Test
+    public void getOrigins() throws Exception {
+        String resp = this.mockMvc.perform(get("/house/1"))
+                .andDo(print())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+    }
+
+    // 给仓库添加物料
+    @Test
+    public void addOriginByHouseId()throws Exception {
+
+//        String body = "{\"name\":\"测试材料\", \"counts\":\"111\"}";
+
+        String body = "{\"name\":\"小刀_洗洗\", \"counts\":\"8\"}";
+
+        String resp = this.mockMvc
+                .perform(post("/house/1/origin")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body.getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+    }
+
     @Test
     public void addHouse() throws Exception {
         House house = new House();

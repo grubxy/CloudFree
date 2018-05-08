@@ -18,11 +18,9 @@ public enum EnumConstructStatus {
 
     COMPLETE(3, "完工待入库"),
 
-    STORED(4, "入库完毕"),
+    STORED(4, "入库完待审批"),
 
-    APPROVING(5, "审批中"),
-
-    APPROVED(6, "审批完成");
+    APPROVED(5, "审批完毕");
 
     EnumConstructStatus(int value, String desc) {
         this.value = value;

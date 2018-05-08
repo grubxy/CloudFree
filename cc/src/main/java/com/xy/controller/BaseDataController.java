@@ -2,10 +2,7 @@ package com.xy.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xy.domain.House;
-import com.xy.domain.Product;
-import com.xy.domain.Seq;
-import com.xy.domain.Staff;
+import com.xy.domain.*;
 import com.xy.service.BaseDataService;
 import com.xy.service.HouseService;
 import com.xy.service.StaffService;
@@ -89,10 +86,25 @@ public class BaseDataController {
     private List<Staff> getStaff(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("status") int status) throws Exception{
         return staffService.getStaffListByStatus(page, size, status);
     }
+
     // 添加仓库
     @RequestMapping(value = "/house", method = RequestMethod.POST)
     public void addHouse(@RequestBody House house) throws Exception {
         houseService.addHouse(house);
+    }
+
+    // 获取物料
+    @RequestMapping(value = "/house/{id}", method = RequestMethod.GET)
+    public Set<Origin> getOriginsByHouseId(@PathVariable("id") int id) throws Exception {
+        return houseService.getOriginByHouseId(id);
+    }
+
+    // 添加物料
+    @RequestMapping(value = "/house/{id}/origin", method = RequestMethod.POST)
+    public void addOriginByHouseId(@PathVariable("id") int id, @RequestBody JSONObject object) throws Exception {
+        String name = object.getString("name");
+        int counts = Integer.valueOf(object.getString("counts"));
+        houseService.addOriginByHouseId(id, name, counts);
     }
 
     // 获取仓库 分页

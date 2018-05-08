@@ -226,11 +226,17 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
                 // 仓库原料不为空
                 if (house.getOrigins().size()!=0) {
+                    boolean bContain = false;
                     for (Origin tmp: house.getOrigins()) {
                         // 如果原料已经存在
                         if (tmp.getMaterial().getIdMaterial() == origin.getMaterial().getIdMaterial()) {
-                            tmp.setCounts(tmp.getCounts() +  origin.getCounts());
+                            tmp.setCounts(tmp.getCounts() + origin.getCounts());
+                            bContain = true;
+                            break;
                         }
+                    }
+                    if (!bContain) {
+                        house.getOrigins().add(origin);
                     }
                 } else {
                     Set<Origin> originSet = new HashSet<Origin>();
@@ -244,10 +250,6 @@ public class ProductionFlowImpl implements ProductionFlowService {
                 seqInfo.setCmplCounts(seqInfo.getCmplCounts() + construction.getCmplCount());
                 seqInfo.setErrCounts(seqInfo.getErrCounts() + construction.getErrCount());
                 seqInfoRepository.save(seqInfo);
-                break;
-            case APPROVING:
-                // 进入审批流程
-                // to do noting else
                 break;
             case APPROVED:
                 // 审批完成，计算工资

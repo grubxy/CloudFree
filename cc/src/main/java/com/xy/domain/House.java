@@ -22,7 +22,7 @@ public class House {
     @Getter @Setter
     private String houseDesc;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
     @JoinColumn(name = "idHouse")
     @JsonIgnore
     @Getter @Setter private Set<Origin> origins;
