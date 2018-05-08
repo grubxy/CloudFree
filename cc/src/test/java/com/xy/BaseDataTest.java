@@ -159,7 +159,7 @@ public class BaseDataTest {
 
 //        String body = "{\"name\":\"测试材料\", \"counts\":\"111\"}";
 
-        String body = "{\"name\":\"小刀_洗洗\", \"counts\":\"8\"}";
+        String body = "{\"name\":\"小刀_原始材料\", \"counts\":\"7\"}";
 
         String resp = this.mockMvc
                 .perform(post("/house/1/origin")

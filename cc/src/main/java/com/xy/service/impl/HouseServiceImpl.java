@@ -82,6 +82,29 @@ public class HouseServiceImpl implements HouseService{
         houseRepository.save(house);
     }
 
+    // 删除原料
+    public void delOriginByHouseId(int id, int idOrigin, int counts) throws Exception {
+        House house = houseRepository.findOne(id);
+        for (Origin origin:house.getOrigins()) {
+            if (origin.getIdOrigin()==idOrigin) {
+                if ( counts > origin.getCounts() || counts < 0) {
+                    throw new UserException(ErrorCode.HOUSE_ORIGIN_COUNT_ERROR.getCode(), ErrorCode.HOUSE_ORIGIN_COUNT_ERROR.getMsg());
+                } else if (origin.getCounts() == counts) {
+                    // 相等 删除house中origin
+                    house.getOrigins().remove(origin);
+                    houseRepository.save(house);
+                    //originRepository.delete(origin.getIdOrigin());
+                } else {
+                    // 处理数量关系
+                    origin.setCounts(origin.getCounts() - counts);
+                }
+            } else {
+                throw new UserException(ErrorCode.HOUSE_ORIGIN_ID_ERROR.getCode(), ErrorCode.HOUSE_ORIGIN_ID_ERROR.getMsg());
+            }
+        }
+    }
+
+
     // 获取某个仓库下物料
     @Override
     public Set<Origin> getOriginByHouseId(int id) throws Exception {

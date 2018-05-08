@@ -14,7 +14,11 @@ public enum  ErrorCode {
 
     CONSTRUCTION_COMPLETECOUNTS_ERROR(3003, "完工数量和次品数量与工单数量不匹配"),
 
-    USER_USERNAME_EXIST(4001, "用户名已经存在");
+    USER_USERNAME_EXIST(4001, "用户名已经存在"),
+
+    HOUSE_ORIGIN_ID_ERROR(5001, "原料有误"),
+
+    HOUSE_ORIGIN_COUNT_ERROR(5002, "数量有误");
 
 
     private int code;
