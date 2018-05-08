@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -167,6 +168,19 @@ public class BaseDataTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body.getBytes())).andDo(print())
                 .andReturn().getResponse().getContentAsString();
+    }
+
+    @Test
+    public void delOriginByHouseId() throws Exception {
+        String body = "{\"counts\":\"8\"}";
+
+        String resp = this.mockMvc
+                .perform(delete("/house/1/origin/1")
+                        .characterEncoding("UTF-8")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body.getBytes())).andDo(print())
+                .andReturn().getResponse().getContentAsString();
+
     }
 
     @Test
