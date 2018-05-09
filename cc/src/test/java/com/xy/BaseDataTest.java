@@ -198,7 +198,7 @@ public class BaseDataTest {
 
     @Test
     public void getHouseList()throws Exception {
-        String resp = this.mockMvc.perform(get("/data/getHoseList"))
+        String resp = this.mockMvc.perform(get("/house?page=0&size=0"))
                 .andDo(print())
                 .andReturn()
                 .getResponse()
