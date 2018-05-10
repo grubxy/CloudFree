@@ -32,6 +32,6 @@ public class Staff {
     @JsonIgnore
     private Set<Construction> constructs;  // 工单
 
-    @Getter
-    @Setter private EnumStaffStatus enumStaffStatus;    // 员工在职状态
+    @Convert(converter = EnumStaffStatus.Convert.class)
+    @Getter @Setter private EnumStaffStatus enumStaffStatus;    // 员工在职状态
 }
