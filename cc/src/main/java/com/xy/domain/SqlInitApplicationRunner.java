@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.xy.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -12,6 +13,9 @@ public class SqlInitApplicationRunner implements ApplicationRunner {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private AuthService authService;
     
     @Override
     public void run(ApplicationArguments var1) throws Exception {
@@ -30,5 +34,11 @@ public class SqlInitApplicationRunner implements ApplicationRunner {
         role.setRid(EnumRole.STORE.getId());
         role.setRole(EnumRole.STORE.getRole());
         roleRepository.save(role);
+
+
+        User user = new User();
+        user.setUsername("yexiaoyong");
+        user.setPassword("123456");
+        authService.register(user);
     }
 }
