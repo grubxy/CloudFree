@@ -1,5 +1,7 @@
 package com.xy.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Predicate;
 import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
 import com.xy.utils.SnowFlake;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -77,10 +80,22 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 获取生产流程 分页
     @Override
-    public List<ProductionFlow> getAllProductionFlow(int page, int size) throws Exception {
+    public Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name) throws Exception {
+
         Long total = (size !=0)?size:productionFlowRepository.count();
-        PageRequest pageRequest = new PageRequest(page, total.intValue());
-        return productionFlowRepository.findAll(pageRequest).getContent();
+
+        Pageable pageable = new PageRequest(page, total.intValue());
+
+        QProductionFlow qProductionFlow = QProductionFlow.productionFlow;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (!StringUtils.isEmpty(id)) {
+            booleanBuilder.and(qProductionFlow.idProduction.like("%" + id + "%"));
+        }
+        if (!StringUtils.isEmpty(name)) {
+            booleanBuilder.and(qProductionFlow.product.ProductName.like("%" + name + "%"));
+        }
+
+        return productionFlowRepository.findAll(booleanBuilder, pageable);
     }
 
     // 获取生产流程的所有工序

@@ -1,12 +1,15 @@
 package com.xy.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.xy.domain.*;
 import com.xy.service.BaseDataService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -119,10 +122,16 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     // 获取所有基础数据信息
     @Override
-    public List<Product> getAllProduct(int page, int size) throws Exception {
+    public Page<Product> getAllProduct(int page, int size, String name) throws Exception {
         Long total = (size != 0)?size:productRepository.count();
-        PageRequest pageRequest = new PageRequest(page, total.intValue());
-        List<Product> productList = productRepository.findAll(pageRequest).getContent();
-        return productList;
+        Pageable pageable = new PageRequest(page, total.intValue());
+
+        QProduct qProduct = QProduct.product;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (!StringUtils.isEmpty(name)) {
+            booleanBuilder.and(qProduct.ProductName.like("%" + name + "%"));
+        }
+        return productRepository.findAll(booleanBuilder, pageable);
+
     }
 }

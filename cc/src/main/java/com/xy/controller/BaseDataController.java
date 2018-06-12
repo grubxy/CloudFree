@@ -41,8 +41,8 @@ public class BaseDataController {
 
     // 获取产品 带分页
     @RequestMapping(value = "/product", method = RequestMethod.GET)
-    private List<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
-        return baseDataService.getAllProduct(page, size);
+    private Page<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(value = "name", required = false) String name) throws Exception {
+        return baseDataService.getAllProduct(page, size, name);
     }
 
     // 添加工序

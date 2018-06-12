@@ -25,5 +25,5 @@ public interface BaseDataService {
     Set<Staff> getStaffBySeqId(int id) throws Exception;
 
     // 获取所有基础数据信息
-    List<Product> getAllProduct(int page, int size) throws Exception;
+    Page<Product> getAllProduct(int page, int size, String name) throws Exception;
 }
