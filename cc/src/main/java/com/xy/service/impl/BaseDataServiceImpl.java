@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -124,7 +125,7 @@ public class BaseDataServiceImpl implements BaseDataService {
     @Override
     public Page<Product> getAllProduct(int page, int size, String name) throws Exception {
         Long total = (size != 0)?size:productRepository.count();
-        Pageable pageable = new PageRequest(page, total.intValue());
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idProduct"));
 
         QProduct qProduct = QProduct.product;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
