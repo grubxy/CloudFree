@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -84,7 +85,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         Long total = (size !=0)?size:productionFlowRepository.count();
 
-        Pageable pageable = new PageRequest(page, total.intValue());
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "date"));
 
         QProductionFlow qProductionFlow = QProductionFlow.productionFlow;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
