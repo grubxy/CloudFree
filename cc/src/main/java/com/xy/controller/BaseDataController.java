@@ -85,7 +85,7 @@ public class BaseDataController {
     @RequestMapping(value = "/staff", method = RequestMethod.GET)
     private Page<Staff> getStaff(@RequestParam("page") int page,
                                  @RequestParam("size") int size,
-                                 @RequestParam(name="status", required = false) String status,
+                                 @RequestParam(name="status", required = false, defaultValue = "1") String status,
                                  @RequestParam(name="name", required = false) String name) throws Exception{
         return staffService.getStaffListByStatus(page, size, status, name);
     }
