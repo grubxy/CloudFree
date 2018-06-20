@@ -12,7 +12,7 @@ public interface HouseService {
     void addHouse(House house) throws Exception;
 
     // 获取仓库
-    List<House> getHouse(int page, int size) throws Exception;
+    Page<House> getHouse(int page, int size) throws Exception;
 
     // 给仓库添加原料
     void addOriginByHouseId(int id, String name, int counts) throws Exception;

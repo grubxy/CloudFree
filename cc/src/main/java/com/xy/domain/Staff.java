@@ -15,9 +15,10 @@ public class Staff {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idStaff;
 
+    @Column(unique = true)
     @Getter @Setter private String staffName;   // 员工姓名
 
-    @Getter @Setter private String staffPhone;  // 员工姓名
+    @Getter @Setter private String staffPhone;  // 员工手机号码
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy="staffs")
     @Getter

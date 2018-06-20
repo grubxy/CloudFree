@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -34,10 +36,10 @@ public class HouseServiceImpl implements HouseService{
 
     // 获取仓库
     @Override
-    public List<House> getHouse(int page, int size) throws Exception {
+    public Page<House> getHouse(int page, int size) throws Exception {
         Long total = (size !=0)?size:houseRepository.count();
-        PageRequest pageRequest = new PageRequest(page,total.intValue());
-        return houseRepository.findAll(pageRequest).getContent();
+        Pageable pageable = new PageRequest(page,total.intValue(), new Sort(Sort.Direction.DESC, "idHouse"));
+        return houseRepository.findAll(pageable);
     }
 
     // 给仓库添加原料

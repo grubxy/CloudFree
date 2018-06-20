@@ -83,8 +83,11 @@ public class BaseDataController {
 
     // 获取员工
     @RequestMapping(value = "/staff", method = RequestMethod.GET)
-    private List<Staff> getStaff(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam("status") int status) throws Exception{
-        return staffService.getStaffListByStatus(page, size, status);
+    private Page<Staff> getStaff(@RequestParam("page") int page,
+                                 @RequestParam("size") int size,
+                                 @RequestParam(name="status", required = false) String status,
+                                 @RequestParam(name="name", required = false) String name) throws Exception{
+        return staffService.getStaffListByStatus(page, size, status, name);
     }
 
     // 添加仓库
@@ -115,7 +118,7 @@ public class BaseDataController {
 
     // 获取仓库 分页
     @RequestMapping(value = "/house", method = RequestMethod.GET)
-    public List<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    public Page<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return houseService.getHouse(page, size);
     }
 }

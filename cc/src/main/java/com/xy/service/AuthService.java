@@ -1,6 +1,7 @@
 package com.xy.service;
 
 import com.xy.domain.User;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface AuthService {
     
     String refresh(String oldToken);
 
-    List<User> getUserList(int page, int size) throws Exception;
+    Page<User> getUserList(int page, int size) throws Exception;
 
     void deleteUser(Integer id) throws Exception;
 }

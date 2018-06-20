@@ -1,6 +1,8 @@
 package com.xy.service.impl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.xy.domain.EnumStaffStatus;
+import com.xy.domain.QStaff;
 import com.xy.domain.Staff;
 import com.xy.domain.StaffRepository;
 import com.xy.service.StaffService;
@@ -9,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -40,9 +44,17 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public List<Staff> getStaffListByStatus(int page, int size, int status) throws Exception {
+    public Page<Staff> getStaffListByStatus(int page, int size, String status, String name) throws Exception {
         Long total = (size!=0)?size:staffRepository.count();
-        PageRequest pageRequest = new PageRequest(page, total.intValue());
-        return staffRepository.findStaffByEnumStaffStatus(EnumStaffStatus.values()[status], pageRequest).getContent();
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idStaff"));
+        QStaff qStaff = QStaff.staff;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (!StringUtils.isEmpty(name)) {
+            booleanBuilder.and(qStaff.staffName.like("%"+name+"%"));
+        }
+        if (!StringUtils.isEmpty(status)) {
+            booleanBuilder.and(qStaff.enumStaffStatus.eq(EnumStaffStatus.values()[Integer.valueOf(status)]));
+        }
+        return staffRepository.findAll(booleanBuilder, pageable);
     }
 }

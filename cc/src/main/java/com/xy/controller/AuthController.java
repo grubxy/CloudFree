@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
@@ -57,7 +58,7 @@ public class AuthController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public List<User> getUserList(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    public Page<User> getUserList(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return authService.getUserList(page, size);
     }
 
