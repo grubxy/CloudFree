@@ -29,7 +29,7 @@ public interface ProductionFlowService {
     Set<Construction> getConstructionByFlowId(String id) throws Exception;
 
     // 根据状态获取工单
-    List<Construction> getConstructionByStatus(int status, int page, int size) throws Exception;
+    Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff) throws Exception;
 
     // 设置工单状态
     void setConstructionStatusById(String id, int idHouse, int status, int error, int cmpl) throws Exception;

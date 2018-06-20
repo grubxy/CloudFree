@@ -1,5 +1,6 @@
 package com.xy.service.impl;
 
+import com.github.javafaker.Bool;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.xy.domain.*;
@@ -185,14 +186,27 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 根据状态获取工单
     @Override
-    public List<Construction> getConstructionByStatus(int status, int page, int size) throws Exception {
+    public Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff) throws Exception {
         Long total = (size !=0)?size:constructionRepository.count();
-        Pageable pageable = new PageRequest(page, total.intValue());
-        if (status == EnumConstructStatus.ALL.ordinal()) {
-            return constructionRepository.findAll(pageable).getContent();
-        } else {
-            return constructionRepository.findConstructionByEnumConstructStatus(EnumConstructStatus.values()[status], pageable).getContent();
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "sDate"));
+        QConstruction qConstruction = QConstruction.construction;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (!StringUtils.isEmpty(id)) {
+            booleanBuilder.and(qConstruction.idConstruct.like("%"+id+"%"));
         }
+        if (!StringUtils.isEmpty(name)) {
+            booleanBuilder.and(qConstruction.production.product.ProductName.like("%" + name + "%"));
+        }
+        if (!StringUtils.isEmpty(staff)) {
+            booleanBuilder.and(qConstruction.staff.staffName.like("%" + staff + "%"));
+        }
+
+        if (!StringUtils.isEmpty(status)) {
+            if (Integer.valueOf(status) != EnumConstructStatus.ALL.ordinal()) {
+                booleanBuilder.and(qConstruction.enumConstructStatus.eq(EnumConstructStatus.values()[Integer.valueOf(status)]));
+            }
+        }
+        return constructionRepository.findAll(booleanBuilder, pageable);
     }
 
     // 根据工单获取对应工序详情

@@ -60,8 +60,13 @@ public class WorkflowController {
 
     // 获取工单
     @RequestMapping(value = "/construction", method = RequestMethod.GET)
-    public List<Construction> getConstructionsByStatus(@RequestParam("status") int status, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
-        return productionFlowService.getConstructionByStatus(status, page, size);
+    public Page<Construction> getConstructionsByStatus(@RequestParam(name="status", defaultValue = "0", required = false) String status,
+                                                       @RequestParam(name="id", required = false)String id,
+                                                       @RequestParam(name="name", required = false) String name,
+                                                       @RequestParam(name="staff", required = false) String staff,
+                                                       @RequestParam("page") int page,
+                                                       @RequestParam(value = "size") int size) throws Exception {
+        return productionFlowService.getConstructionByStatus(page, size, status, id, name ,staff);
     }
 
     // 设置工单状态
