@@ -203,7 +203,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
         if (!StringUtils.isEmpty(status)) {
             if (Integer.valueOf(status) != EnumConstructStatus.ALL.ordinal()) {
-                booleanBuilder.and(qConstruction.enumConstructStatus.eq(EnumConstructStatus.values()[Integer.valueOf(status)]));
+                if (Integer.valueOf(status) != EnumConstructStatus.SCHEDULE.ordinal()) {
+                    booleanBuilder.and(qConstruction.enumConstructStatus.eq(EnumConstructStatus.values()[Integer.valueOf(status)]));
+                } else {
+                    booleanBuilder.andAnyOf(qConstruction.enumConstructStatus
+                            .eq(EnumConstructStatus.values()[EnumConstructStatus.WAITING.ordinal()]),
+                                    qConstruction.enumConstructStatus.eq(EnumConstructStatus.values()[EnumConstructStatus.WORKING.ordinal()]));
+                }
             }
         }
         return constructionRepository.findAll(booleanBuilder, pageable);
