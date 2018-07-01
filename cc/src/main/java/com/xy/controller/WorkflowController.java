@@ -1,5 +1,6 @@
 package com.xy.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xy.domain.Construction;
 import com.xy.domain.ProductionFlow;
@@ -11,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @RestController
@@ -65,8 +66,21 @@ public class WorkflowController {
                                                        @RequestParam(name="name", required = false) String name,
                                                        @RequestParam(name="staff", required = false) String staff,
                                                        @RequestParam("page") int page,
-                                                       @RequestParam(value = "size") int size) throws Exception {
-        return productionFlowService.getConstructionByStatus(page, size, status, id, name ,staff);
+                                                       @RequestParam(value = "size") int size,
+                                                       @RequestParam(value = "moment[]", required = false) List<String> moment) throws Exception {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date start = null;
+        Date end = null;
+        if (moment!=null)
+        {
+            start = formatter.parse(moment.get(0).substring(1, moment.get(0).length() - 1));
+            end = formatter.parse(moment.get(1).substring(1, moment.get(1).length() -1));
+        }
+
+        return productionFlowService.getConstructionByStatus(page, size, status, id, name ,staff, start, end);
     }
 
     // 设置工单状态

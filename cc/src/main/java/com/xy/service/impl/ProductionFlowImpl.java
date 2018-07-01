@@ -2,7 +2,11 @@ package com.xy.service.impl;
 
 import com.github.javafaker.Bool;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.dsl.DateExpression;
+import com.querydsl.core.types.dsl.DateTemplate;
+import com.querydsl.core.types.dsl.Expressions;
 import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
 import com.xy.utils.SnowFlake;
@@ -15,6 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.*;
 
 @Service
@@ -186,7 +193,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 根据状态获取工单
     @Override
-    public Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff) throws Exception {
+    public Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff, Date start, Date end) throws Exception {
         Long total = (size !=0)?size:constructionRepository.count();
         Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "sDate"));
         QConstruction qConstruction = QConstruction.construction;
@@ -212,6 +219,15 @@ public class ProductionFlowImpl implements ProductionFlowService {
                 }
             }
         }
+
+        if (start!= null && end != null) {
+            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
+            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
+//            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "CAST({0} as DATE)", start);
+//            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "CAST({0} as DATE)", end);
+            booleanBuilder.and(qConstruction.sDate.between(exstart, exend));
+        }
+
         return constructionRepository.findAll(booleanBuilder, pageable);
     }
 

@@ -3,6 +3,7 @@ package com.xy.service;
 import com.xy.domain.*;
 import org.springframework.data.domain.Page;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public interface ProductionFlowService {
     Set<Construction> getConstructionByFlowId(String id) throws Exception;
 
     // 根据状态获取工单
-    Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff) throws Exception;
+    Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff, Date start, Date end) throws Exception;
 
     // 设置工单状态
     void setConstructionStatusById(String id, int idHouse, int status, int error, int cmpl) throws Exception;
