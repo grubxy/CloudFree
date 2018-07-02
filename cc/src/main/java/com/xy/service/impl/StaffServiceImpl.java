@@ -1,10 +1,10 @@
 package com.xy.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
-import com.xy.domain.EnumStaffStatus;
-import com.xy.domain.QStaff;
-import com.xy.domain.Staff;
-import com.xy.domain.StaffRepository;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.xy.domain.*;
 import com.xy.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +15,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 @Service
 @Slf4j
 public class StaffServiceImpl implements StaffService {
+
+    @Autowired
+    private EntityManager entityManager;
 
     @Autowired
     private StaffRepository staffRepository;
@@ -56,5 +61,21 @@ public class StaffServiceImpl implements StaffService {
             booleanBuilder.and(qStaff.enumStaffStatus.eq(EnumStaffStatus.values()[Integer.valueOf(status)]));
         }
         return staffRepository.findAll(booleanBuilder, pageable);
+    }
+
+    @Override
+    public Page<SaffSalary> getStaffSalaryByName(int page, int size, String name, Date start, Date end) throws Exception {
+
+        JPAQuery<?> query=new JPAQuery<>(entityManager);
+
+        QStaff qStaff = QStaff.staff;
+        QConstruction qConstruction = QConstruction.construction;
+
+
+
+        query.select(qStaff.staffName)
+                .leftJoin(qStaff.constructs, qConstruction)
+                .fetchAll();
+
     }
 }

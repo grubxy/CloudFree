@@ -26,8 +26,7 @@ public class Staff {
     @JsonIgnore
     private Set<Seq> seqs;       // 工序
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idStaff")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "staff")
     @Getter
     @Setter
     @JsonIgnore
