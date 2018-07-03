@@ -3,6 +3,7 @@ package com.xy;
 import com.alibaba.fastjson.JSON;
 import com.xy.domain.*;
 import com.xy.service.BaseDataService;
+import com.xy.service.StaffService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Date;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -212,6 +215,16 @@ public class BaseDataTest {
         this.addStaff();
         this.addDefaultStaff();
         this.addHouse();
+    }
+
+    @Autowired
+    private StaffService staffService;
+
+    @Test
+    public void getStaffSalary() throws Exception {
+        staffService.getStaffSalaryByName(
+                0, 10, "xx", new Date(), new Date()
+        );
     }
 
 }

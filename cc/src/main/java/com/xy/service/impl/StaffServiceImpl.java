@@ -1,11 +1,13 @@
 package com.xy.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.xy.domain.*;
 import com.xy.service.StaffService;
+import javafx.beans.binding.NumberExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class StaffServiceImpl implements StaffService {
 
     @Autowired
     private EntityManager entityManager;
+
+    private JPAQueryFactory jpaQueryFactory;
 
     @Autowired
     private StaffRepository staffRepository;
@@ -64,18 +69,38 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public Page<SaffSalary> getStaffSalaryByName(int page, int size, String name, Date start, Date end) throws Exception {
+    public Page<StaffSalary> getStaffSalaryByName(int page, int size, String name, Date start, Date end) throws Exception {
 
-        JPAQuery<?> query=new JPAQuery<>(entityManager);
+        jpaQueryFactory = new JPAQueryFactory(entityManager);
+
 
         QStaff qStaff = QStaff.staff;
         QConstruction qConstruction = QConstruction.construction;
+        QSeq qSeq = QSeq.seq;
 
 
+        List<StaffSalary> staffList = new ArrayList<>();
 
-        query.select(qStaff.staffName)
+
+//        staffList = jpaQueryFactory.select(Projections.constructor(
+//               StaffSalary.class, qStaff.staffName
+//        )).from(qStaff)
+//                .leftJoin(qStaff.constructs, qConstruction)
+//        .leftJoin(qConstruction.seq, qSeq).fetch();
+
+        staffList = jpaQueryFactory.selectFrom(qStaff)
                 .leftJoin(qStaff.constructs, qConstruction)
-                .fetchAll();
+                .leftJoin(qConstruction.seq, qSeq)
+                .select(Projections.constructor(
+                        StaffSalary.class, qStaff.staffName, qSeq.seqCost.multiply(qConstruction.dstCount).sum().as("sumCost")))
+                .groupBy(qStaff.staffName, qStaff.idStaff)
+                .fetch();
+//        JPAExpressions.select(qStaff.staffName, qSeq.seqCost)
+//                .from(qStaff)
+//                .leftJoin(qStaff.constructs, qConstruction)
+//                .leftJoin(qConstruction.seq, qSeq);
 
+
+        return null;
     }
 }
