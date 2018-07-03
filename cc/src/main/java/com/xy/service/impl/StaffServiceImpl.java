@@ -2,23 +2,24 @@ package com.xy.service.impl;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.DateExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.xy.domain.*;
 import com.xy.service.StaffService;
-import javafx.beans.binding.NumberExpression;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
+import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
+import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
 
@@ -79,28 +80,53 @@ public class StaffServiceImpl implements StaffService {
         QSeq qSeq = QSeq.seq;
 
 
-        List<StaffSalary> staffList = new ArrayList<>();
-
-
 //        staffList = jpaQueryFactory.select(Projections.constructor(
 //               StaffSalary.class, qStaff.staffName
 //        )).from(qStaff)
 //                .leftJoin(qStaff.constructs, qConstruction)
 //        .leftJoin(qConstruction.seq, qSeq).fetch();
-
-        staffList = jpaQueryFactory.selectFrom(qStaff)
-                .leftJoin(qStaff.constructs, qConstruction)
-                .leftJoin(qConstruction.seq, qSeq)
-                .select(Projections.constructor(
-                        StaffSalary.class, qStaff.staffName, qSeq.seqCost.multiply(qConstruction.dstCount).sum().as("sumCost")))
-                .groupBy(qStaff.staffName, qStaff.idStaff)
-                .fetch();
 //        JPAExpressions.select(qStaff.staffName, qSeq.seqCost)
 //                .from(qStaff)
 //                .leftJoin(qStaff.constructs, qConstruction)
 //                .leftJoin(qConstruction.seq, qSeq);
 
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        if (!StringUtils.isEmpty(name)) {
+            booleanBuilder.and(qStaff.staffName.like("%" + name + "%").and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING)));
+        }
+        if (start != null && end != null) {
+            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
+            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
+            booleanBuilder.and(qConstruction.sDate.between(exstart, exend));
+        }
 
-        return null;
+//        Query query =  jpaQueryFactory.selectFrom(qStaff).createQuery();
+
+        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.dstCount).sum().as("sumCost");
+
+        List<StaffSalary> staffList = jpaQueryFactory.selectFrom(qStaff)
+                .leftJoin(qStaff.constructs, qConstruction)
+                .leftJoin(qConstruction.seq, qSeq)
+                .select(Projections.constructor(
+                        StaffSalary.class, qStaff.staffName, sumCost))
+                .where(booleanBuilder)
+                .orderBy(sumCost.desc())
+                .groupBy(qStaff.staffName, qStaff.idStaff)
+                .offset(page-1 >=0 ? (page-1) * size : 0)
+                .limit(size)
+                .fetch();
+
+        Long total = jpaQueryFactory.selectFrom(qStaff)
+                .leftJoin(qStaff.constructs, qConstruction)
+                .leftJoin(qConstruction.seq, qSeq)
+                .select(Projections.constructor(
+                        StaffSalary.class, qStaff.staffName, sumCost))
+                .where(booleanBuilder)
+                .orderBy(sumCost.desc())
+                .groupBy(qStaff.staffName, qStaff.idStaff).fetchCount();
+
+        Pageable pageable = new QPageRequest(page, size);
+
+        return new PageImpl<StaffSalary>(staffList, pageable, total);
     }
 }
