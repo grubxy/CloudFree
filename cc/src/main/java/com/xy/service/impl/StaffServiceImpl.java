@@ -74,11 +74,9 @@ public class StaffServiceImpl implements StaffService {
 
         jpaQueryFactory = new JPAQueryFactory(entityManager);
 
-
         QStaff qStaff = QStaff.staff;
         QConstruction qConstruction = QConstruction.construction;
         QSeq qSeq = QSeq.seq;
-
 
 //        staffList = jpaQueryFactory.select(Projections.constructor(
 //               StaffSalary.class, qStaff.staffName
@@ -92,7 +90,8 @@ public class StaffServiceImpl implements StaffService {
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (!StringUtils.isEmpty(name)) {
-            booleanBuilder.and(qStaff.staffName.like("%" + name + "%").and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING)));
+            booleanBuilder.and(qStaff.staffName.like("%"+name+"%"))
+                    .and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING));
         }
         if (start != null && end != null) {
             DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
@@ -102,7 +101,7 @@ public class StaffServiceImpl implements StaffService {
 
 //        Query query =  jpaQueryFactory.selectFrom(qStaff).createQuery();
 
-        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.dstCount).sum().as("sumCost");
+        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.dstCount).sum();
 
         List<StaffSalary> staffList = jpaQueryFactory.selectFrom(qStaff)
                 .leftJoin(qStaff.constructs, qConstruction)
@@ -111,7 +110,7 @@ public class StaffServiceImpl implements StaffService {
                         StaffSalary.class, qStaff.staffName, sumCost))
                 .where(booleanBuilder)
                 .orderBy(sumCost.desc())
-                .groupBy(qStaff.staffName, qStaff.idStaff)
+                .groupBy(qStaff.idStaff)
                 .offset(page-1 >=0 ? (page-1) * size : 0)
                 .limit(size)
                 .fetch();
@@ -122,8 +121,7 @@ public class StaffServiceImpl implements StaffService {
                 .select(Projections.constructor(
                         StaffSalary.class, qStaff.staffName, sumCost))
                 .where(booleanBuilder)
-                .orderBy(sumCost.desc())
-                .groupBy(qStaff.staffName, qStaff.idStaff).fetchCount();
+                .groupBy(qStaff.idStaff).fetchCount();
 
         Pageable pageable = new QPageRequest(page, size);
 

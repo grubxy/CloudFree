@@ -223,7 +223,7 @@ public class BaseDataTest {
     @Test
     public void getStaffSalary() throws Exception {
         staffService.getStaffSalaryByName(
-                0, 10, "xx", new Date(), new Date()
+                0, 10, "小黑", null, null
         );
     }
 
