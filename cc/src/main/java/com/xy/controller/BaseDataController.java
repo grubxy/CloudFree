@@ -130,7 +130,7 @@ public class BaseDataController {
     public Page<StaffSalary> getSalary(@RequestParam("page") int page
                                         ,@RequestParam("size") int size
                                         ,@RequestParam(name="moment[]", required = false) List<String> moment
-                                        ,@RequestParam(name="name") String name) throws Exception {
+                                        ,@RequestParam(name="name", required = false) String name) throws Exception {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
 

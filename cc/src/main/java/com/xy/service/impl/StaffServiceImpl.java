@@ -16,9 +16,11 @@ import org.springframework.data.domain.*;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +29,7 @@ import java.util.List;
 @Slf4j
 public class StaffServiceImpl implements StaffService {
 
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
     private JPAQueryFactory jpaQueryFactory;
@@ -70,6 +72,7 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
+    @Transactional
     public Page<StaffSalary> getStaffSalaryByName(int page, int size, String name, Date start, Date end) throws Exception {
 
         jpaQueryFactory = new JPAQueryFactory(entityManager);
