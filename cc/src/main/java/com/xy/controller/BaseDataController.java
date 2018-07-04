@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 @Slf4j
 @RestController
@@ -120,5 +123,24 @@ public class BaseDataController {
     @RequestMapping(value = "/house", method = RequestMethod.GET)
     public Page<House> getHouses(@RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return houseService.getHouse(page, size);
+    }
+
+    // 获取员工工资
+    @RequestMapping(value = "/salary", method = RequestMethod.GET)
+    public Page<StaffSalary> getSalary(@RequestParam("page") int page
+                                        ,@RequestParam("size") int size
+                                        ,@RequestParam(name="moment[]", required = false) List<String> moment
+                                        ,@RequestParam(name="name") String name) throws Exception {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date start = null;
+        Date end = null;
+        if (moment!=null)
+        {
+            start = formatter.parse(moment.get(0).substring(1, moment.get(0).length() - 1));
+            end = formatter.parse(moment.get(1).substring(1, moment.get(1).length() -1));
+        }
+        return staffService.getStaffSalaryByName(page, size, name, start, end);
     }
 }
