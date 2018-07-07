@@ -29,11 +29,6 @@ import java.util.List;
 @Slf4j
 public class StaffServiceImpl implements StaffService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private JPAQueryFactory jpaQueryFactory;
-
     @Autowired
     private StaffRepository staffRepository;
 
@@ -74,60 +69,6 @@ public class StaffServiceImpl implements StaffService {
     @Override
     @Transactional
     public Page<StaffSalary> getStaffSalaryByName(int page, int size, String name, Date start, Date end) throws Exception {
-
-        jpaQueryFactory = new JPAQueryFactory(entityManager);
-
-        QStaff qStaff = QStaff.staff;
-        QConstruction qConstruction = QConstruction.construction;
-        QSeq qSeq = QSeq.seq;
-
-//        staffList = jpaQueryFactory.select(Projections.constructor(
-//               StaffSalary.class, qStaff.staffName
-//        )).from(qStaff)
-//                .leftJoin(qStaff.constructs, qConstruction)
-//        .leftJoin(qConstruction.seq, qSeq).fetch();
-//        JPAExpressions.select(qStaff.staffName, qSeq.seqCost)
-//                .from(qStaff)
-//                .leftJoin(qStaff.constructs, qConstruction)
-//                .leftJoin(qConstruction.seq, qSeq);
-
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (!StringUtils.isEmpty(name)) {
-            booleanBuilder.and(qStaff.staffName.like("%"+name+"%"))
-                    .and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING));
-        }
-        if (start != null && end != null) {
-            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
-            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
-            booleanBuilder.and(qConstruction.sDate.between(exstart, exend));
-        }
-
-//        Query query =  jpaQueryFactory.selectFrom(qStaff).createQuery();
-
-        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.dstCount).sum();
-
-        List<StaffSalary> staffList = jpaQueryFactory.selectFrom(qStaff)
-                .leftJoin(qStaff.constructs, qConstruction)
-                .leftJoin(qConstruction.seq, qSeq)
-                .select(Projections.constructor(
-                        StaffSalary.class, qStaff.staffName, sumCost))
-                .where(booleanBuilder)
-                .orderBy(sumCost.desc())
-                .groupBy(qStaff.idStaff)
-                .offset(page-1 >=0 ? (page-1) * size : 0)
-                .limit(size)
-                .fetch();
-
-        Long total = jpaQueryFactory.selectFrom(qStaff)
-                .leftJoin(qStaff.constructs, qConstruction)
-                .leftJoin(qConstruction.seq, qSeq)
-                .select(Projections.constructor(
-                        StaffSalary.class, qStaff.staffName, sumCost))
-                .where(booleanBuilder)
-                .groupBy(qStaff.idStaff).fetchCount();
-
-        Pageable pageable = new QPageRequest(page, size);
-
-        return new PageImpl<StaffSalary>(staffList, pageable, total);
+        return staffRepository.getStaffSalary(page, size, name ,start, end);
     }
 }

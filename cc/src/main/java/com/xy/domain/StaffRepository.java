@@ -7,7 +7,7 @@ import org.springframework.data.querydsl.QueryDslPredicateExecutor;
 
 import java.util.List;
 
-public interface StaffRepository extends JpaRepository<Staff, Integer>,QueryDslPredicateExecutor<Staff> {
+public interface StaffRepository extends JpaRepository<Staff, Integer>,QueryDslPredicateExecutor<Staff>, StaffRepositoryCustom {
     Page<Staff> findStaffByEnumStaffStatus(EnumStaffStatus enumStaffStatus, Pageable pageable);
 
     List<Staff> findStaffByEnumStaffStatus(EnumStaffStatus enumStaffStatus);
