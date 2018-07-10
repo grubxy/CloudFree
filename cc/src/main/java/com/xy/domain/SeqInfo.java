@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ public class SeqInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idSeqInfo;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "seqInfo")
     @Getter @Setter private Seq seq;
 
     @Getter @Setter private int dstCounts;
@@ -24,4 +25,10 @@ public class SeqInfo {
     @Getter @Setter private int cmplCounts;
 
     @Getter @Setter private int errCounts;
+
+    @Getter @Setter
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProduction")
+    @JsonIgnore
+    private ProductionFlow productionFlow;
 }

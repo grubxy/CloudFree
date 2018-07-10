@@ -19,11 +19,9 @@ public class Product implements Serializable {
     @Column(unique = true)
     @Getter @Setter private String ProductName; // 产品名称
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    @JoinColumn(name="idProduct")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
     @Getter
     @JsonIgnore
-    @OrderBy(value = "idSeq asc")
     @Setter private Set<Seq> seq;            // 工序
 
 }

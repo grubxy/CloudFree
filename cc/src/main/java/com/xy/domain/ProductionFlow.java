@@ -44,12 +44,11 @@ public class ProductionFlow implements Serializable{
     @JoinColumn(name="idProduct", nullable = false)
     @Getter @Setter private Product product;            // 产品
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "idProduction")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "productionFlow")
     @JsonIgnore
     @Getter @Setter private Set<SeqInfo> seqInfo;            // 对应产品工序的详情
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, mappedBy = "production")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "production")
     @JsonIgnore
     @Getter @Setter private Set<Construction> constructs;  // 工单
 

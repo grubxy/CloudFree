@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,6 +31,17 @@ public class Seq implements Serializable{
     @Getter @Setter
     private Material dstMaterial;  // 工序生成
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @Setter @Getter
+    @JoinColumn(name="idSeqInfo", referencedColumnName = "idSeqInfo", unique = true)
+    @JsonIgnore
+    private SeqInfo seqInfo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="idProduct")
+    @Setter @Getter
+    @JsonIgnore
+    private Product product;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -38,5 +50,6 @@ public class Seq implements Serializable{
             inverseJoinColumns = {@JoinColumn(name="idStaff")}
     )
     @JsonIgnore
-    @Getter @Setter private Set<Staff> staffs;
+    @OrderBy("idStaff asc")
+    @Getter @Setter private List<Staff> staffs;
 }

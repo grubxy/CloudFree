@@ -1,6 +1,7 @@
 package com.xy.service.impl;
 
 import com.github.javafaker.Bool;
+import com.google.common.collect.Lists;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Predicate;
@@ -9,6 +10,7 @@ import com.querydsl.core.types.dsl.DateTemplate;
 import com.querydsl.core.types.dsl.Expressions;
 import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
+import com.xy.utils.AuthContext;
 import com.xy.utils.SnowFlake;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.text.DateFormat;
@@ -43,6 +48,12 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Autowired
     private HouseRepository houseRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private SeqRepository seqRepository;
+
     // 新增流程
     @Override
     public void addProductionFlow(ProductionFlow productionFlow) throws Exception {
@@ -53,32 +64,30 @@ public class ProductionFlowImpl implements ProductionFlowService {
         productionFlow.setErrCounts(0);
         productionFlow.setDate(new Date());
         // 获取提单人姓名
-        productionFlow.setOwner("叶晓勇");
+        productionFlow.setOwner(userRepository.findByUsername(AuthContext.getUsername()).getOwner());
+
+        // 保存flow
+        ProductionFlow flow = productionFlowRepository.save(productionFlow);
 
         Product product = productRepository.findOne(productionFlow.getProduct().getIdProduct());
 
-        Set<SeqInfo> seqInfoSet = new HashSet<SeqInfo>();
         for (Seq seq : product.getSeq()) {
             SeqInfo seqInfo = new SeqInfo();
-
-            seqInfo.setSeq(seq);
-
             seqInfo.setCmplCounts(0);
             seqInfo.setErrCounts(0);
             seqInfo.setDoingCounts(0);
-
             // 如果是第一个工序 设置
             if (seq.getSeqIndex() == 1) {
                 seqInfo.setDstCounts(productionFlow.getDstCounts());
             } else {
                 seqInfo.setDstCounts(0);
             }
-            seqInfoSet.add(seqInfo);
+            seqInfo.setProductionFlow(flow);
+            seqInfoRepository.save(seqInfo);
+
+            seq.setSeqInfo(seqInfo);
+            seqRepository.save(seq);
         }
-
-        productionFlow.setSeqInfo(seqInfoSet);
-
-        productionFlowRepository.save(productionFlow);
     }
 
     // 删除流程
@@ -110,19 +119,23 @@ public class ProductionFlowImpl implements ProductionFlowService {
     // 获取生产流程的所有工序
     @Override
     public List<Seq> getAllSeqByFlowId(String id) throws Exception {
-        ProductionFlow productionFlow = productionFlowRepository.findOne(id);
-        List<Seq> seqList = new ArrayList<Seq>();
-        for (SeqInfo tmp: productionFlow.getSeqInfo()) {
-            seqList.add(tmp.getSeq());
-        }
-        return seqList;
+        QSeq qSeq = QSeq.seq;
+        Pageable pageable = new QPageRequest(0, new Long(seqRepository.count()).intValue(),new QSort(qSeq.seqIndex.desc()));
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qSeq.seqInfo.productionFlow.idProduction.eq(id));
+        return seqRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
     // 获取生产流程的工序详情
     @Override
-    public Set<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception {
-        ProductionFlow productionFlow = productionFlowRepository.findOne(id);
-        return productionFlow.getSeqInfo();
+    public List<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception {
+        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
+        Pageable pageable = new QPageRequest(0,
+                new Long(seqInfoRepository.count()).intValue(),
+                new QSort(qSeqInfo.seq.seqIndex.asc()));
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qSeqInfo.productionFlow.idProduction.eq(id));
+        return seqInfoRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
     // 增加施工单
@@ -133,9 +146,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         construction.setSDate(new Date());
         construction.setEnumConstructStatus(EnumConstructStatus.WAITING);
         construction.setIdConstruct(String.valueOf(SnowFlake.getInstance().nextId()));
-
         ProductionFlow productionFlow = productionFlowRepository.findOne(id);
-
         construction.setProduction(productionFlow);
 
         /**  校验数量依赖关系 **/
@@ -173,22 +184,19 @@ public class ProductionFlowImpl implements ProductionFlowService {
         }
 
         //  保存工单
-        Set<Construction> constructionSet = new HashSet<Construction>();
-        if (productionFlow.getConstructs().size()!=0) {
-            productionFlow.getConstructs().add(construction);
-        } else {
-            constructionSet.add(construction);
-            productionFlow.setConstructs(constructionSet);
-        }
-        productionFlowRepository.save(productionFlow);
-
+        constructionRepository.save(construction);
     }
 
     // 获取某流程所有施工单
     @Override
-    public Set<Construction> getConstructionByFlowId(String id) throws Exception {
-        ProductionFlow productionFlow = productionFlowRepository.findOne(id);
-        return productionFlow.getConstructs();
+    public List<Construction> getConstructionByFlowId(String id) throws Exception {
+        QConstruction qConstruction = QConstruction.construction;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qConstruction.production.idProduction.eq(id));
+        Pageable pageable = new QPageRequest(0,
+                new Long(constructionRepository.count()).intValue(),
+                new QSort(qConstruction.sDate.desc()));
+        return constructionRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
     // 根据状态获取工单
@@ -233,13 +241,11 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 根据工单获取对应工序详情
     private SeqInfo getSeqInfoFromConstruction(Construction construction) throws Exception {
-        for (SeqInfo seqInfo:construction.getProduction().getSeqInfo()) {
-            if (seqInfo.getSeq().getIdSeq() == construction.getSeq().getIdSeq()) {
-                return seqInfo;
-            }
-        }
-        log.error("工单中的工序，找不到相对应的流程对应工序详情");
-        throw new UserException(ErrorCode.CONSTRUCTION_SEQINFO_ERROR.getCode(), ErrorCode.CONSTRUCTION_SEQINFO_ERROR.getMsg());
+        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
+        QConstruction qConstruction = QConstruction.construction;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qSeqInfo.seq.idSeq.eq(construction.getSeq().getIdSeq()));
+        return seqInfoRepository.findOne(booleanBuilder);
     }
 
     // 设置工单状态

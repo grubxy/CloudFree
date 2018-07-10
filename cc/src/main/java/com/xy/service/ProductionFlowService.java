@@ -22,12 +22,12 @@ public interface ProductionFlowService {
     List<Seq> getAllSeqByFlowId(String id) throws Exception;
 
     // 获取生产流程的工序详情
-    Set<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception;
+    List<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception;
 
     void addConstructionByFlowId(String id, Construction construction) throws Exception;
 
     // 获取某流程所有施工单
-    Set<Construction> getConstructionByFlowId(String id) throws Exception;
+    List<Construction> getConstructionByFlowId(String id) throws Exception;
 
     // 根据状态获取工单
     Page<Construction> getConstructionByStatus(int page, int size, String status, String id, String name, String staff, Date start, Date end) throws Exception;

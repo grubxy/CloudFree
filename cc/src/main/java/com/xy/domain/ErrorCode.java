@@ -6,6 +6,8 @@ public enum  ErrorCode {
 
     SEQ_ID_ERROR(2001, "工序ID异常"),
 
+    SEQ_NO_ERROR(2002, "没有找到工序,请添加"),
+
     CONSTRUCTION_COUNTS_ERROR(3001, "工单数量错误，必须小于总量大于前批完成量"),
 
     CONSTRUCTION_SEQINFO_ERROR(3002, "工单找不到匹配的工序详情，系统有异常"),

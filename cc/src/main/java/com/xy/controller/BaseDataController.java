@@ -56,8 +56,8 @@ public class BaseDataController {
 
     // 查询工序
     @RequestMapping(value = "/product/{id}/seq", method = RequestMethod.GET)
-    private Set<Seq> getSeq(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
-       return baseDataService.getSeqListByProductId(id);
+    private List<Seq> getSeq(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+       return baseDataService.getSeqListByProductId(id, page, size);
     }
 
     // 删除工序
@@ -74,8 +74,8 @@ public class BaseDataController {
 
     // 获得工序的默认员工
     @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.GET)
-    private Set<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
-        return baseDataService.getStaffBySeqId(id);
+    private List<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return baseDataService.getStaffBySeqId(id, page, size);
     }
 
     // 添加员工

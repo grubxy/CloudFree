@@ -43,7 +43,7 @@ public class WorkflowController {
 
     // 获取生产流程的工序详情
     @RequestMapping(value = "/flow/{id}/seqinfo", method = RequestMethod.GET)
-    public Set<SeqInfo> getSeqInfo(@PathVariable("id") String id) throws Exception {
+    public List<SeqInfo> getSeqInfo(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getAllSeqInfoByFlowId(id);
     }
 
@@ -55,7 +55,7 @@ public class WorkflowController {
 
     // 获取工单
     @RequestMapping(value = "/flow/{id}/construction", method = RequestMethod.GET)
-    public Set<Construction> getConstruction(@PathVariable("id") String id) throws Exception {
+    public List<Construction> getConstruction(@PathVariable("id") String id) throws Exception {
         return productionFlowService.getConstructionByFlowId(id);
     }
 

@@ -9,9 +9,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.querydsl.QPageRequest;
+import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +30,8 @@ public class BaseDataServiceImpl implements BaseDataService {
     private SeqRepository seqRepository;
 
     @Autowired
-    private HouseRepository houseRepository;
+    private StaffRepository staffRepository;
+
 
     // 新增or更新产品
     @Override
@@ -44,7 +48,11 @@ public class BaseDataServiceImpl implements BaseDataService {
     // 新增or更新某个产品的工序
     @Override
     public void addSeqByProductId(int id, Seq seq) throws Exception {
+
         Product product = productRepository.findOne(id);
+        if (product == null) {
+            throw new UserException(ErrorCode.PRODUCT_ID_ERROR.getCode(), ErrorCode.PRODUCT_ID_ERROR.getMsg());
+        }
 
         // 设置源材料
         if (product.getSeq().size() == 0) {
@@ -67,19 +75,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         material.setName(product.getProductName() + "_" + seq.getSeqName());
         seq.setDstMaterial(material);
 
-        if (product != null) {
-            if (product.getSeq().size() != 0) {
-                product.getSeq().add(seq);
-            } else {
-                Set<Seq> seqSet = new HashSet<Seq>();
-                seqSet.add(seq);
-                product.setSeq(seqSet);
-            }
-            productRepository.save(product);
-
-        } else {
-            throw new UserException(ErrorCode.PRODUCT_ID_ERROR.getCode(), ErrorCode.PRODUCT_ID_ERROR.getMsg());
-        }
+        seq.setProduct(product);
+        seqRepository.save(seq);
     }
 
     // 删除某个工序
@@ -90,33 +87,39 @@ public class BaseDataServiceImpl implements BaseDataService {
 
     // 获取产品的工序信息
     @Override
-    public Set<Seq> getSeqListByProductId(int id) throws Exception {
-        Product product = productRepository.findOne(id);
-        return product.getSeq();
+    public List<Seq> getSeqListByProductId(int id, int page, int size) throws Exception {
+        Long total = (size!=0)?size:seqRepository.count();
+        if (total <=0) {
+            throw new  UserException(ErrorCode.SEQ_NO_ERROR.getCode(), ErrorCode.SEQ_NO_ERROR.getMsg());
+        }
+        QSeq qSeq = QSeq.seq;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qSeq.product.idProduct.eq(id));
+        Pageable pageable = new QPageRequest(0, total.intValue(), new QSort(qSeq.seqIndex.asc()));
+        return seqRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
     // 给某个工序添加默认员工
     @Override
     public void addStaffBySeqId(int id, Staff staff) throws Exception {
         Seq seq = seqRepository.findOne(id);
-        if (seq != null) {
-            if (seq.getStaffs().size() != 0) {
-                seq.getStaffs().add(staff);
-            } else {
-                Set<Staff> staffSet = new HashSet<Staff>();
-                staffSet.add(staff);
-                seq.setStaffs(staffSet);
-            }
-            seqRepository.save(seq);
-
-        } else {
+        if (seq == null) {
             throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
         }
+
+        if (seq.getStaffs().size() != 0) {
+            seq.getStaffs().add(staff);
+        } else {
+            List<Staff> staffSet = new ArrayList<>();
+            staffSet.add(staff);
+            seq.setStaffs(staffSet);
+        }
+        seqRepository.save(seq);
     }
 
     // 获取工序默认员工
     @Override
-    public Set<Staff> getStaffBySeqId(int id) throws Exception {
+    public List<Staff> getStaffBySeqId(int id, int page, int size) throws Exception {
         Seq seq = seqRepository.findOne(id);
         return seq.getStaffs();
     }

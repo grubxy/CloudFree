@@ -1,6 +1,7 @@
 package com.xy.service.impl;
 
 import com.xy.domain.*;
+import com.xy.utils.AuthContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,5 +103,4 @@ public class AuthServiceImpl implements AuthService {
     public void deleteUser(Integer id) throws Exception {
         userRepository.delete(id);
     }
-
 }

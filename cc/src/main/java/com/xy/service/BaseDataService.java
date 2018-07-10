@@ -17,12 +17,12 @@ public interface BaseDataService {
     void delSeqById(int id) throws Exception;
 
     // 获取工序信息
-    Set<Seq> getSeqListByProductId(int id) throws Exception;
+    List<Seq> getSeqListByProductId(int id, int page, int size) throws Exception;
 
     // 给某个工序添加默认员工
     void addStaffBySeqId(int id, Staff staff) throws Exception;
 
-    Set<Staff> getStaffBySeqId(int id) throws Exception;
+    List<Staff> getStaffBySeqId(int id, int page, int size) throws Exception;
 
     // 获取所有基础数据信息
     Page<Product> getAllProduct(int page, int size, String name) throws Exception;
