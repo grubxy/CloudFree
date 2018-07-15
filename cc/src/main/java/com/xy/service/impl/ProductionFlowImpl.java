@@ -100,10 +100,6 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name) throws Exception {
 
-        Long total = (size !=0)?size:productionFlowRepository.count();
-
-        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "date"));
-
         QProductionFlow qProductionFlow = QProductionFlow.productionFlow;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (!StringUtils.isEmpty(id)) {
@@ -113,6 +109,13 @@ public class ProductionFlowImpl implements ProductionFlowService {
             booleanBuilder.and(qProductionFlow.product.ProductName.like("%" + name + "%"));
         }
 
+        Long total = (size !=0)?size:productionFlowRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.FLOW_NO.getCode(), ErrorCode.FLOW_NO.getMsg());
+        }
+
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "date"));
+
         return productionFlowRepository.findAll(booleanBuilder, pageable);
     }
 
@@ -120,9 +123,15 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public List<Seq> getAllSeqByFlowId(String id) throws Exception {
         QSeq qSeq = QSeq.seq;
-        Pageable pageable = new QPageRequest(0, new Long(seqRepository.count()).intValue(),new QSort(qSeq.seqIndex.desc()));
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qSeq.seqInfo.productionFlow.idProduction.eq(id));
+        Long total = seqRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.PRODUCT_NO_SEQ.getCode(), ErrorCode.PRODUCT_NO_SEQ.getMsg());
+        }
+        Pageable pageable = new QPageRequest(0,
+                new Long(total).intValue(),
+                new QSort(qSeq.seqIndex.desc()));
         return seqRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
@@ -130,11 +139,15 @@ public class ProductionFlowImpl implements ProductionFlowService {
     @Override
     public List<SeqInfo> getAllSeqInfoByFlowId(String id) throws Exception {
         QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
-        Pageable pageable = new QPageRequest(0,
-                new Long(seqInfoRepository.count()).intValue(),
-                new QSort(qSeqInfo.seq.seqIndex.asc()));
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qSeqInfo.productionFlow.idProduction.eq(id));
+        Long total = seqInfoRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.PRODUCT_NO_SEQINFO.getCode(), ErrorCode.PRODUCT_NO_SEQINFO.getMsg());
+        }
+        Pageable pageable = new QPageRequest(0,
+                new Long(total).intValue(),
+                new QSort(qSeqInfo.seq.seqIndex.asc()));
         return seqInfoRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
@@ -193,8 +206,12 @@ public class ProductionFlowImpl implements ProductionFlowService {
         QConstruction qConstruction = QConstruction.construction;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qConstruction.production.idProduction.eq(id));
+        Long total = constructionRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.CONSTRUCTION_NO.getCode(), ErrorCode.CONSTRUCTION_NO.getMsg());
+        }
         Pageable pageable = new QPageRequest(0,
-                new Long(constructionRepository.count()).intValue(),
+                new Long(total).intValue(),
                 new QSort(qConstruction.sDate.desc()));
         return constructionRepository.findAll(booleanBuilder, pageable).getContent();
     }

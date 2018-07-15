@@ -1,5 +1,6 @@
 package com.xy.service.impl;
 
+import com.github.javafaker.Bool;
 import com.querydsl.core.BooleanBuilder;
 import com.xy.domain.*;
 import com.xy.service.BaseDataService;
@@ -88,13 +89,13 @@ public class BaseDataServiceImpl implements BaseDataService {
     // 获取产品的工序信息
     @Override
     public List<Seq> getSeqListByProductId(int id, int page, int size) throws Exception {
-        Long total = (size!=0)?size:seqRepository.count();
-        if (total <=0) {
-            throw new  UserException(ErrorCode.SEQ_NO_ERROR.getCode(), ErrorCode.SEQ_NO_ERROR.getMsg());
-        }
         QSeq qSeq = QSeq.seq;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qSeq.product.idProduct.eq(id));
+        Long total = (size!=0)?size:seqRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new  UserException(ErrorCode.SEQ_NO_ERROR.getCode(), ErrorCode.SEQ_NO_ERROR.getMsg());
+        }
         Pageable pageable = new QPageRequest(0, total.intValue(), new QSort(qSeq.seqIndex.asc()));
         return seqRepository.findAll(booleanBuilder, pageable).getContent();
     }
@@ -120,22 +121,34 @@ public class BaseDataServiceImpl implements BaseDataService {
     // 获取工序默认员工
     @Override
     public List<Staff> getStaffBySeqId(int id, int page, int size) throws Exception {
-        Seq seq = seqRepository.findOne(id);
-        return seq.getStaffs();
+        QStaff qStaff = QStaff.staff;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qStaff.seqs.any().idSeq.eq(id));
+        Long total = staffRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.STAFF_NO_DEFAULT_ERR.getCode(), ErrorCode.STAFF_NO_DEFAULT_ERR.getMsg());
+        }
+        Pageable pageable = new QPageRequest(page, total.intValue(),
+                new QSort(qStaff.staffName.asc()));
+
+        return staffRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
     // 获取所有基础数据信息
     @Override
     public Page<Product> getAllProduct(int page, int size, String name) throws Exception {
-        Long total = (size != 0)?size:productRepository.count();
-        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idProduct"));
 
         QProduct qProduct = QProduct.product;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (!StringUtils.isEmpty(name)) {
             booleanBuilder.and(qProduct.ProductName.like("%" + name + "%"));
         }
-        return productRepository.findAll(booleanBuilder, pageable);
 
+        Long total = (size != 0)?size:productRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.PRODUCT_NO.getCode(), ErrorCode.PRODUCT_NO.getMsg());
+        }
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idProduct"));
+        return productRepository.findAll(booleanBuilder, pageable);
     }
 }

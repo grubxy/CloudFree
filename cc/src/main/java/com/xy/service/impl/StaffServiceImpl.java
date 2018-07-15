@@ -39,8 +39,6 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public Page<Staff> getStaffListByStatus(int page, int size, String status, String name) throws Exception {
-        Long total = (size!=0)?size:staffRepository.count();
-        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idStaff"));
         QStaff qStaff = QStaff.staff;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if (!StringUtils.isEmpty(name)) {
@@ -49,6 +47,11 @@ public class StaffServiceImpl implements StaffService {
         if (!StringUtils.isEmpty(status)) {
             booleanBuilder.and(qStaff.enumStaffStatus.eq(EnumStaffStatus.values()[Integer.valueOf(status)]));
         }
+        Long total = (size!=0)?size:staffRepository.count(booleanBuilder);
+        if (total == 0) {
+            throw new UserException(ErrorCode.STAFF_NO_ERROR.getCode(), ErrorCode.STAFF_NO_ERROR.getMsg());
+        }
+        Pageable pageable = new PageRequest(page, total.intValue(), new Sort(Sort.Direction.DESC, "idStaff"));
         return staffRepository.findAll(booleanBuilder, pageable);
     }
 
