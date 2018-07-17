@@ -43,6 +43,14 @@ public class BaseDataServiceImpl implements BaseDataService {
     // 删除产品
     @Override
     public void delProduct(int id) throws Exception {
+        Product product = productRepository.findOne(id);
+        // 删除工序与默认员工的关联关系
+        for (Seq seq: product.getSeq()) {
+            seq.getStaffs().removeAll(seq.getStaffs());
+            seqRepository.save(seq);
+        }
+        product.getSeq().removeAll(product.getSeq());
+        productRepository.save(product);
         productRepository.delete(id);
     }
 
@@ -80,10 +88,23 @@ public class BaseDataServiceImpl implements BaseDataService {
         seqRepository.save(seq);
     }
 
-    // 删除某个工序
+    // 删除产品工序
     @Override
-    public void delSeqById(int id) throws Exception{
-        seqRepository.delete(id);
+    public void delSeqById(int id, int idSeq) throws Exception{
+        Product product = productRepository.findOne(id);
+        if (product == null) {
+            throw new UserException(ErrorCode.PRODUCT_ID_ERROR.getCode(), ErrorCode.PRODUCT_ID_ERROR.getMsg());
+        }
+        Seq seq = seqRepository.findOne(idSeq);
+        if (seq == null) {
+            throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
+        }
+        // 删除工序默认员工
+        seq.getStaffs().removeAll(seq.getStaffs());
+        seqRepository.save(seq);
+        // 删除工序
+        product.getSeq().remove(seq);
+        productRepository.save(product);
     }
 
     // 获取产品的工序信息
@@ -135,6 +156,19 @@ public class BaseDataServiceImpl implements BaseDataService {
         return staffRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
+    @Override
+    public void delStaffBySeqId(int id, int idStaff) throws Exception {
+        Seq seq = seqRepository.findOne(id);
+        if (seq == null) {
+            throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
+        }
+        Staff staff = staffRepository.findOne(idStaff);
+        if (staff == null) {
+            throw new UserException(ErrorCode.STAFF_NO_ERROR.getCode(), ErrorCode.STAFF_NO_ERROR.getMsg());
+        }
+        seq.getStaffs().remove(staff);
+        seqRepository.save(seq);
+    }
     // 获取所有基础数据信息
     @Override
     public Page<Product> getAllProduct(int page, int size, String name) throws Exception {

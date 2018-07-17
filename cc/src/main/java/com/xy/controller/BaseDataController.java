@@ -58,9 +58,9 @@ public class BaseDataController {
     }
 
     // 删除工序
-    @RequestMapping(value = "/product/{id}/seq/{idseq}", method = RequestMethod.DELETE)
-    private void delSeq(@PathVariable("idSeq") int id) throws Exception {
-        baseDataService.delSeqById(id);
+    @RequestMapping(value = "/product/{id}/seq/{idSeq}", method = RequestMethod.DELETE)
+    private void delSeq(@PathVariable("id") int id, @PathVariable("idSeq") int idSeq) throws Exception {
+        baseDataService.delSeqById(id, idSeq);
     }
 
     // 给工序添加默认员工
@@ -73,6 +73,12 @@ public class BaseDataController {
     @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.GET)
     private List<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return baseDataService.getStaffBySeqId(id, page, size);
+    }
+
+    // 删除工序默认员工
+    @RequestMapping(value = "/seq/{id}/staff/{idStaff}", method = RequestMethod.DELETE)
+    private void delDefaultStaff(@PathVariable("id") int id, @PathVariable("idStaff") int idStaff) throws Exception {
+        baseDataService.delStaffBySeqId(id, idStaff);
     }
 
     // 添加员工

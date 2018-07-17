@@ -14,7 +14,7 @@ public interface BaseDataService {
     void addSeqByProductId(int id, Seq seq) throws Exception;
 
     // 删除某个工序
-    void delSeqById(int id) throws Exception;
+    void delSeqById(int id, int idSeq) throws Exception;
 
     // 获取工序信息
     List<Seq> getSeqListByProductId(int id, int page, int size) throws Exception;
@@ -23,6 +23,8 @@ public interface BaseDataService {
     void addStaffBySeqId(int id, Staff staff) throws Exception;
 
     List<Staff> getStaffBySeqId(int id, int page, int size) throws Exception;
+
+    void delStaffBySeqId(int id, int idStaff) throws Exception;
 
     // 获取所有基础数据信息
     Page<Product> getAllProduct(int page, int size, String name) throws Exception;
