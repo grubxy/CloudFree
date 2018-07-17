@@ -48,7 +48,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         Product product = productRepository.findOne(id);
         // 删除工序与默认员工的关联关系
         for (Seq seq: product.getSeq()) {
-            if (seq.getSeqInfo().getProductionFlow() != null) {
+            // 没有建立工序信息，也就是没有建立工作流程
+            if (seq.getSeqInfo() != null) {
                 throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
             }
             seq.getStaffs().removeAll(seq.getStaffs());
@@ -104,7 +105,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         if (seq == null) {
             throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
         }
-        if (seq.getSeqInfo().getProductionFlow() != null) {
+        // 没有建立工序信息，也就是没有建立工作流程
+        if (seq.getSeqInfo() != null) {
             throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
         }
         // 删除工序默认员工和工序
@@ -174,7 +176,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         if (staff == null) {
             throw new UserException(ErrorCode.STAFF_NO_ERROR.getCode(), ErrorCode.STAFF_NO_ERROR.getMsg());
         }
-        if (seq.getSeqInfo().getProductionFlow() != null) {
+        // 没有建立工序信息，也就是没有建立工作流程
+        if (seq.getSeqInfo() != null) {
             throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
         }
         seq.getStaffs().remove(staff);
