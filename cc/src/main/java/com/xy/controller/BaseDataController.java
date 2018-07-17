@@ -12,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -136,10 +133,16 @@ public class BaseDataController {
 
         Date start = null;
         Date end = null;
-        if (moment!=null)
-        {
+        if (moment!=null) {
             start = formatter.parse(moment.get(0).substring(1, moment.get(0).length() - 1));
             end = formatter.parse(moment.get(1).substring(1, moment.get(1).length() -1));
+        } else {
+            // 默认情况 当前时间及前一个月算
+            Calendar c = Calendar.getInstance();
+            end = new Date();
+            c.setTime(end);
+            c.add(Calendar.MONTH, -1);
+            start = c.getTime();
         }
         return staffService.getStaffSalaryByName(page, size, name, start, end);
     }

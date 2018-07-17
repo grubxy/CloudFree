@@ -94,7 +94,8 @@ public class BaseDataServiceImpl implements BaseDataService {
         booleanBuilder.and(qSeq.product.idProduct.eq(id));
         Long total = (size!=0)?size:seqRepository.count(booleanBuilder);
         if (total == 0) {
-            throw new  UserException(ErrorCode.SEQ_NO_ERROR.getCode(), ErrorCode.SEQ_NO_ERROR.getMsg());
+            // 返回空
+            return new ArrayList<>();
         }
         Pageable pageable = new QPageRequest(0, total.intValue(), new QSort(qSeq.seqIndex.asc()));
         return seqRepository.findAll(booleanBuilder, pageable).getContent();
@@ -126,7 +127,7 @@ public class BaseDataServiceImpl implements BaseDataService {
         booleanBuilder.and(qStaff.seqs.any().idSeq.eq(id));
         Long total = staffRepository.count(booleanBuilder);
         if (total == 0) {
-            throw new UserException(ErrorCode.STAFF_NO_DEFAULT_ERR.getCode(), ErrorCode.STAFF_NO_DEFAULT_ERR.getMsg());
+            return new ArrayList<>();
         }
         Pageable pageable = new QPageRequest(page, total.intValue(),
                 new QSort(qStaff.staffName.asc()));

@@ -127,7 +127,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         booleanBuilder.and(qSeq.seqInfo.productionFlow.idProduction.eq(id));
         Long total = seqRepository.count(booleanBuilder);
         if (total == 0) {
-            throw new UserException(ErrorCode.PRODUCT_NO_SEQ.getCode(), ErrorCode.PRODUCT_NO_SEQ.getMsg());
+            return new ArrayList<>();
         }
         Pageable pageable = new QPageRequest(0,
                 new Long(total).intValue(),
@@ -143,7 +143,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         booleanBuilder.and(qSeqInfo.productionFlow.idProduction.eq(id));
         Long total = seqInfoRepository.count(booleanBuilder);
         if (total == 0) {
-            throw new UserException(ErrorCode.PRODUCT_NO_SEQINFO.getCode(), ErrorCode.PRODUCT_NO_SEQINFO.getMsg());
+            return new ArrayList<>();
         }
         Pageable pageable = new QPageRequest(0,
                 new Long(total).intValue(),
@@ -208,7 +208,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         booleanBuilder.and(qConstruction.production.idProduction.eq(id));
         Long total = constructionRepository.count(booleanBuilder);
         if (total == 0) {
-            throw new UserException(ErrorCode.CONSTRUCTION_NO.getCode(), ErrorCode.CONSTRUCTION_NO.getMsg());
+            return new ArrayList<>();
         }
         Pageable pageable = new QPageRequest(0,
                 new Long(total).intValue(),

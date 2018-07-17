@@ -37,6 +37,8 @@ public class  StaffRepositoryImpl implements StaffRepositoryCustom {
         QSeq qSeq = QSeq.seq;
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING))
+                .and(qConstruction.enumConstructStatus.eq(EnumConstructStatus.APPROVED));
         if (!StringUtils.isEmpty(name)) {
             booleanBuilder.and(qStaff.staffName.like("%"+name+"%"))
                     .and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING));
