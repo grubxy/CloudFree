@@ -23,15 +23,17 @@ public class Seq implements Serializable{
 
     @Getter @Setter private float seqCost;  // 制作单价
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @Getter @Setter
+    @JoinColumn(name="idSrcMaterial", referencedColumnName = "idMaterial", unique = true)
     private Material srcMaterial;  // 工序源材料
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
     @Getter @Setter
+    @JoinColumn(name="idDstMaterial", referencedColumnName = "idMaterial", unique = true)
     private Material dstMaterial;  // 工序生成
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     @Setter @Getter
     @JoinColumn(name="idSeqInfo", referencedColumnName = "idSeqInfo", unique = true)
     @JsonIgnore

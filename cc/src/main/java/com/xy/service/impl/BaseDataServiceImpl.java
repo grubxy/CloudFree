@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QPageRequest;
 import org.springframework.data.querydsl.QSort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@Transactional
 public class BaseDataServiceImpl implements BaseDataService {
 
     @Autowired
@@ -46,11 +48,14 @@ public class BaseDataServiceImpl implements BaseDataService {
         Product product = productRepository.findOne(id);
         // 删除工序与默认员工的关联关系
         for (Seq seq: product.getSeq()) {
+            if (seq.getSeqInfo().getProductionFlow() != null) {
+                throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
+            }
             seq.getStaffs().removeAll(seq.getStaffs());
-            seqRepository.save(seq);
+            seq.setProduct(null);
+            seq = seqRepository.save(seq);
+            seqRepository.delete(seq);
         }
-        product.getSeq().removeAll(product.getSeq());
-        productRepository.save(product);
         productRepository.delete(id);
     }
 
@@ -99,12 +104,15 @@ public class BaseDataServiceImpl implements BaseDataService {
         if (seq == null) {
             throw new UserException(ErrorCode.SEQ_ID_ERROR.getCode(), ErrorCode.SEQ_ID_ERROR.getMsg());
         }
-        // 删除工序默认员工
+        if (seq.getSeqInfo().getProductionFlow() != null) {
+            throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
+        }
+        // 删除工序默认员工和工序
         seq.getStaffs().removeAll(seq.getStaffs());
-        seqRepository.save(seq);
+        seq.setProduct(null);
+        seq = seqRepository.save(seq);
         // 删除工序
-        product.getSeq().remove(seq);
-        productRepository.save(product);
+        seqRepository.delete(seq);
     }
 
     // 获取产品的工序信息
@@ -165,6 +173,9 @@ public class BaseDataServiceImpl implements BaseDataService {
         Staff staff = staffRepository.findOne(idStaff);
         if (staff == null) {
             throw new UserException(ErrorCode.STAFF_NO_ERROR.getCode(), ErrorCode.STAFF_NO_ERROR.getMsg());
+        }
+        if (seq.getSeqInfo().getProductionFlow() != null) {
+            throw new UserException(ErrorCode.FLOW_EXISTS.getCode(), ErrorCode.FLOW_EXISTS.getMsg());
         }
         seq.getStaffs().remove(staff);
         seqRepository.save(seq);

@@ -1,5 +1,6 @@
 package com.xy.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +17,14 @@ public class Material {
 
     @Column(unique = true)
     @Getter @Setter private String name;
+
+    @Getter @Setter
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "srcMaterial")
+    @JsonIgnore
+    private Seq seqSrc;
+
+    @Getter @Setter
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "dstMaterial")
+    @JsonIgnore
+    private Seq seqDst;
 }

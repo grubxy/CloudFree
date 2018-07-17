@@ -36,7 +36,9 @@ public enum  ErrorCode {
 
     STAFF_NO_DEFAULT_ERR(6003, "工序没有设置默认员工"),
 
-    FLOW_NO(7001, "没有找到生产流程");
+    FLOW_NO(7001, "没有找到生产流程"),
+
+    FLOW_EXISTS(7002, "流程已经建立无法删除");
 
     private int code;
 
