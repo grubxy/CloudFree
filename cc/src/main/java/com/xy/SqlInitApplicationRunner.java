@@ -11,6 +11,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @Slf4j
 public class SqlInitApplicationRunner implements ApplicationRunner {
@@ -44,6 +47,22 @@ public class SqlInitApplicationRunner implements ApplicationRunner {
         user.setUsername("yexiaoyong");
         user.setPassword("123456");
         user.setOwner("叶晓勇");
+        role.setRid(EnumRole.SYSTEM.getId());
+        role.setRole(EnumRole.SYSTEM.getRole());
+        List<Role> roleList = new ArrayList<>();
+        roleList.add(role);
+        user.setRoles(roleList);
         authService.register(user);
+
+        User user1 = new User();
+        user1.setUsername("xiaohei");
+        user1.setPassword("123456");
+        user1.setOwner("小黑");
+        role.setRid(EnumRole.FLOW.getId());
+        role.setRole(EnumRole.FLOW.getRole());
+        roleList = new ArrayList<>();
+        roleList.add(role);
+        user1.setRoles(roleList);
+        authService.register(user1);
     }
 }

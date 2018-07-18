@@ -9,6 +9,7 @@ import com.xy.service.StaffService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -29,67 +30,70 @@ public class BaseDataController {
 
     // 增加产品
     @RequestMapping(value = "/product", method = RequestMethod.POST)
-    private void addProduct(@RequestBody Product product) throws Exception {
+    public void addProduct(@RequestBody Product product) throws Exception {
         baseDataService.addProduct(product);
     }
 
     // 删除产品
+    @PreAuthorize("hasRole('SYSTEM')")
     @RequestMapping(value = "/product/{id}", method = RequestMethod.DELETE)
-    private void delProduct(@PathVariable("id") int id) throws Exception {
+    public void delProduct(@PathVariable("id") int id) throws Exception {
         baseDataService.delProduct(id);
     }
 
     // 获取产品 带分页
     @RequestMapping(value = "/product", method = RequestMethod.GET)
-    private Page<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(value = "name", required = false) String name) throws Exception {
+    public Page<Product> getProductPage(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(value = "name", required = false) String name) throws Exception {
         return baseDataService.getAllProduct(page, size, name);
     }
 
     // 添加工序
     @RequestMapping(value = "/product/{id}/seq", method = RequestMethod.POST)
-    private void addSeq(@RequestBody Seq seq, @PathVariable("id") int id) throws Exception {
+    public void addSeq(@RequestBody Seq seq, @PathVariable("id") int id) throws Exception {
         baseDataService.addSeqByProductId(id, seq);
     }
 
     // 查询工序
     @RequestMapping(value = "/product/{id}/seq", method = RequestMethod.GET)
-    private List<Seq> getSeq(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    public List<Seq> getSeq(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
        return baseDataService.getSeqListByProductId(id, page, size);
     }
 
     // 删除工序
     @RequestMapping(value = "/product/{id}/seq/{idSeq}", method = RequestMethod.DELETE)
-    private void delSeq(@PathVariable("id") int id, @PathVariable("idSeq") int idSeq) throws Exception {
+    @PreAuthorize("hasRole('SYSTEM')")
+    public void delSeq(@PathVariable("id") int id, @PathVariable("idSeq") int idSeq) throws Exception {
         baseDataService.delSeqById(id, idSeq);
     }
 
     // 给工序添加默认员工
     @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.POST)
-    private void addStaff(@RequestBody Staff staff, @PathVariable("id") int id) throws Exception {
+    public void addStaff(@RequestBody Staff staff, @PathVariable("id") int id) throws Exception {
         baseDataService.addStaffBySeqId(id, staff);
     }
 
     // 获得工序的默认员工
     @RequestMapping(value = "/seq/{id}/staff", method = RequestMethod.GET)
-    private List<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+    public List<Staff> getDefaultStaff(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
         return baseDataService.getStaffBySeqId(id, page, size);
     }
 
     // 删除工序默认员工
     @RequestMapping(value = "/seq/{id}/staff/{idStaff}", method = RequestMethod.DELETE)
-    private void delDefaultStaff(@PathVariable("id") int id, @PathVariable("idStaff") int idStaff) throws Exception {
+    @PreAuthorize("hasRole('SYSTEM')")
+    public void delDefaultStaff(@PathVariable("id") int id, @PathVariable("idStaff") int idStaff) throws Exception {
         baseDataService.delStaffBySeqId(id, idStaff);
     }
 
     // 添加员工
     @RequestMapping(value = "/staff", method = RequestMethod.POST)
-    private void addStaff(@RequestBody Staff staff) throws Exception {
+    public void addStaff(@RequestBody Staff staff) throws Exception {
         staffService.addStaff(staff);
     }
 
     // 获取员工
     @RequestMapping(value = "/staff", method = RequestMethod.GET)
-    private Page<Staff> getStaff(@RequestParam("page") int page,
+    public Page<Staff> getStaff(@RequestParam("page") int page,
                                  @RequestParam("size") int size,
                                  @RequestParam(name="status", required = false, defaultValue = "1") String status,
                                  @RequestParam(name="name", required = false) String name) throws Exception{
