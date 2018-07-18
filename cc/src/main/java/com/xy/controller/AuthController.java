@@ -3,6 +3,7 @@ package com.xy.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import com.xy.domain.UserException;
+import com.xy.utils.AuthContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,9 @@ import com.xy.security.JwtAuthenticationRequest;
 import com.xy.security.JwtAuthenticationResponse;
 import com.xy.service.AuthService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -65,5 +68,12 @@ public class AuthController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public void deleteUser(@PathVariable("id") Integer id) throws Exception {
         authService.deleteUser(id);
+    }
+
+    @RequestMapping(value = "/currentuser", method = RequestMethod.GET)
+    public Map<String, String> getCurrentUser() throws Exception {
+        Map map = new HashMap();
+        map.put("current", AuthContext.getUsername());
+        return  map;
     }
 }
