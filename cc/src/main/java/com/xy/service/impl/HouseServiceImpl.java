@@ -47,6 +47,7 @@ public class HouseServiceImpl implements HouseService{
     public void addOriginByHouseId(int id, String name, int counts) throws Exception {
 
         // material不存在的话 添加材料
+        name = name.trim();
         Material material = materialRepository.findMaterialByName(name);
         if (material==null){
             Material tmpMaterial = new Material();

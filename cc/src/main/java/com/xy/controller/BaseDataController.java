@@ -95,9 +95,16 @@ public class BaseDataController {
     @RequestMapping(value = "/staff", method = RequestMethod.GET)
     public Page<Staff> getStaff(@RequestParam("page") int page,
                                  @RequestParam("size") int size,
-                                 @RequestParam(name="status", required = false, defaultValue = "1") String status,
+                                 @RequestParam(name="status", required = false) String status,
                                  @RequestParam(name="name", required = false) String name) throws Exception{
         return staffService.getStaffListByStatus(page, size, status, name);
+    }
+
+    // 修改员工状态
+    @RequestMapping(value = "/staff/{id}", method = RequestMethod.PATCH)
+    public void patchStaff(@PathVariable("id") int id, @RequestBody JSONObject object) throws Exception {
+        int status = object.getIntValue("status");
+        staffService.setStaffStatus(id, status);
     }
 
     // 添加仓库
