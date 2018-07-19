@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@Transactional
 public class HouseServiceImpl implements HouseService{
 
     @Autowired
@@ -38,6 +40,9 @@ public class HouseServiceImpl implements HouseService{
     @Override
     public Page<House> getHouse(int page, int size) throws Exception {
         Long total = (size !=0)?size:houseRepository.count();
+        if (total == 0) {
+            throw new UserException(ErrorCode.HOUSE_NO_ERROR.getCode(), ErrorCode.HOUSE_NO_ERROR.getMsg());
+        }
         Pageable pageable = new PageRequest(page,total.intValue(), new Sort(Sort.Direction.DESC, "idHouse"));
         return houseRepository.findAll(pageable);
     }

@@ -22,10 +22,12 @@ import org.springframework.stereotype.Service;
 import com.xy.security.JwtTokenUtil;
 import com.xy.security.JwtUser;
 import com.xy.service.AuthService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
+@Transactional
 public class AuthServiceImpl implements AuthService {
 
 	private final Logger log = LoggerFactory.getLogger(this.getClass());

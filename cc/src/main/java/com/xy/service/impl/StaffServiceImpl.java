@@ -13,6 +13,7 @@ import java.util.Date;
 
 @Service
 @Slf4j
+@Transactional
 public class StaffServiceImpl implements StaffService {
 
     @Autowired

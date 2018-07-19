@@ -28,6 +28,8 @@ public enum  ErrorCode {
 
     HOUSE_ORIGIN_ID_ERROR(5001, "原料有误"),
 
+    HOUSE_NO_ERROR(5002, "没有仓库信息"),
+
     HOUSE_ORIGIN_COUNT_ERROR(5002, "数量有误"),
 
     STAFF_ENUM_ERROR(6001, "员工状态有误"),
