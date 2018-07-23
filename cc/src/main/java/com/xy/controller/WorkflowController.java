@@ -31,8 +31,23 @@ public class WorkflowController {
 
     // 获取生产流程信息
     @RequestMapping(value = "/flow", method = RequestMethod.GET)
-    public Page<ProductionFlow> getFlows(@RequestParam("page") int page, @RequestParam("size") int size ,@RequestParam(name = "id", required = false) String id, @RequestParam(name = "name", required = false) String name) throws Exception{
-        return productionFlowService.getAllProductionFlow(page, size, id, name);
+    public Page<ProductionFlow> getFlows(@RequestParam("page") int page,
+                                         @RequestParam("size") int size ,
+                                         @RequestParam(name = "id", required = false) String id,
+                                         @RequestParam(name = "name", required = false) String name,
+                                         @RequestParam(value = "moment[]", required = false) List<String> moment) throws Exception{
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        formatter.setTimeZone(TimeZone.getTimeZone("GMT"));
+
+        Date start = null;
+        Date end = null;
+        if (moment!=null)
+        {
+            start = formatter.parse(moment.get(0).substring(1, moment.get(0).length() - 1));
+            end = formatter.parse(moment.get(1).substring(1, moment.get(1).length() -1));
+        }
+        return productionFlowService.getAllProductionFlow(page, size, id, name, start, end);
     }
 
     // 获取生产产品工序

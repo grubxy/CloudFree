@@ -103,6 +103,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void deleteUser(Integer id) throws Exception {
+        User user = userRepository.findOne(id);
+        user.getRoles().removeAll(user.getRoles());
+        userRepository.save(user);
         userRepository.delete(id);
     }
 }

@@ -11,6 +11,9 @@ public interface HouseService {
     // 新增仓库
     void addHouse(House house) throws Exception;
 
+    // 删除仓库
+    void delHouse(int id) throws Exception;
+
     // 获取仓库
     Page<House> getHouse(int page, int size) throws Exception;
 

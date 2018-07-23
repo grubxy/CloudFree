@@ -99,7 +99,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
 
     // 获取生产流程 分页
     @Override
-    public Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name) throws Exception {
+    public Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name, Date start, Date end) throws Exception {
 
         QProductionFlow qProductionFlow = QProductionFlow.productionFlow;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -108,6 +108,12 @@ public class ProductionFlowImpl implements ProductionFlowService {
         }
         if (!StringUtils.isEmpty(name)) {
             booleanBuilder.and(qProductionFlow.product.ProductName.like("%" + name + "%"));
+        }
+
+        if (start!= null && end != null) {
+            DateExpression<Date> exStart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
+            DateExpression<Date> exEnd = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
+            booleanBuilder.and(qProductionFlow.date.between(exStart, exEnd));
         }
 
         Long total = (size !=0)?size:productionFlowRepository.count(booleanBuilder);
@@ -169,7 +175,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         for (SeqInfo seqInfo:productionFlow.getSeqInfo()) {
             if (seqInfo.getSeq().getIdSeq() == construction.getSeq().getIdSeq()) {
                 // 如果是第一道工序
-                if (seqInfo.getSeq().getSeqIndex() == 1) {
+//                if (seqInfo.getSeq().getSeqIndex() == 1) {
                     // 设置数量关系
                     if (construction.getDstCount() <= seqInfo.getDstCounts()
                             && construction.getDstCount() > 0) {
@@ -178,21 +184,23 @@ public class ProductionFlowImpl implements ProductionFlowService {
                         throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
                     }
 
-                } else {
-                    // 非第一道工序 依赖之前工序完成量
-                    for (SeqInfo before:productionFlow.getSeqInfo()) {
-                        // 找到前1道工序
-                        if (before.getSeq().getSeqIndex() == seqInfo.getSeq().getSeqIndex() - 1) {
-                            if (construction.getDstCount() <= before.getCmplCounts()
-                                    && construction.getDstCount() > 0) {
-                                before.setCmplCounts(before.getCmplCounts() - construction.getDstCount());
-                            }else {
-                                throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
-                            }
-                        }
-                        seqInfoRepository.save(before);
-                    }
-                }
+//                }
+//                else {
+//                    // 非第一道工序 依赖之前工序完成量
+//                    for (SeqInfo before:productionFlow.getSeqInfo()) {
+//                        // 找到前1道工序
+//                        if (before.getSeq().getSeqIndex() == seqInfo.getSeq().getSeqIndex() - 1) {
+//                            if (seqInfo.getDstCounts() >= construction.getDstCount()
+//                                    && construction.getDstCount() > 0) {
+//                                seqInfo.setDstCounts(seqInfo.getDstCounts() + construction.getDstCount());
+//                            }
+//                            else {
+//                                throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
+//                            }
+//                        }
+//                        seqInfoRepository.save(before);
+//                    }
+//                }
                 seqInfoRepository.save(seqInfo);
             }
         }
@@ -247,11 +255,11 @@ public class ProductionFlowImpl implements ProductionFlowService {
         }
 
         if (start!= null && end != null) {
-            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
-            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
+            DateExpression<Date> exStart = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", start, "%Y-%m-%d %T");
+            DateExpression<Date> exEnd = Expressions.dateTemplate(Date.class, "DATE_FORMAT({0}, {1})", end,  "%Y-%m-%d %T");
 //            DateExpression<Date> exstart = Expressions.dateTemplate(Date.class, "CAST({0} as DATE)", start);
 //            DateExpression<Date> exend = Expressions.dateTemplate(Date.class, "CAST({0} as DATE)", end);
-            booleanBuilder.and(qConstruction.sDate.between(exstart, exend));
+            booleanBuilder.and(qConstruction.sDate.between(exStart, exEnd));
         }
 
         return constructionRepository.findAll(booleanBuilder, pageable);
@@ -260,12 +268,23 @@ public class ProductionFlowImpl implements ProductionFlowService {
     // 根据工单获取对应工序详情
     private SeqInfo getSeqInfoFromConstruction(Construction construction) throws Exception {
         QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
-        QConstruction qConstruction = QConstruction.construction;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qSeqInfo.seq.idSeq.eq(construction.getSeq().getIdSeq()));
         return seqInfoRepository.findOne(booleanBuilder);
     }
 
+    // 获取后一个工序
+    private SeqInfo getNextSeqInfoFromConstruction(Construction construction) throws Exception {
+        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qSeqInfo.seq.idSeq.eq(construction.getSeq().getIdSeq() + 1));
+        SeqInfo seqInfo = seqInfoRepository.findOne(booleanBuilder);
+        if (seqInfo == null) {
+            return  null;
+        } else {
+            return  seqInfo;
+        }
+    }
     // 设置工单状态
     @Override
     public void setConstructionStatusById(String id, int idHouse, int status, int error, int cmpl) throws Exception {
@@ -326,6 +345,19 @@ public class ProductionFlowImpl implements ProductionFlowService {
                 seqInfo.setCmplCounts(seqInfo.getCmplCounts() + construction.getCmplCount());
                 seqInfo.setErrCounts(seqInfo.getErrCounts() + construction.getErrCount());
                 seqInfoRepository.save(seqInfo);
+
+                // 设置流程报废数量
+                construction.getProduction().setErrCounts(construction.getProduction().getErrCounts() + construction.getErrCount());
+                //判断是否是最后一个流程
+                SeqInfo seqInfoNext = getNextSeqInfoFromConstruction(construction);
+                if (seqInfoNext == null) {
+                    // 设置流程完成数量
+                    construction.getProduction().setCmplCounts(construction.getProduction().getCmplCounts() + construction.getCmplCount());
+                } else {
+                    // 设置下个流程的待生产数
+                    seqInfoNext.setDstCounts(seqInfoNext.getDstCounts() + construction.getCmplCount());
+                    seqInfoRepository.save(seqInfoNext);
+                }
                 break;
             case APPROVED:
                 // 审批完成，计算工资

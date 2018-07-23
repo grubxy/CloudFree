@@ -36,6 +36,17 @@ public class HouseServiceImpl implements HouseService{
         houseRepository.save(house);
     }
 
+    // 删除仓库
+    @Override
+    public void delHouse(int id) throws Exception {
+        House house = houseRepository.findOne(id);
+        if (house.getOrigins() != null) {
+            throw new UserException(ErrorCode.HOUSE_HAVE_ORIGIN.getCode(), ErrorCode.HOUSE_HAVE_ORIGIN.getMsg());
+        } else {
+            houseRepository.delete(house);
+        }
+    }
+
     // 获取仓库
     @Override
     public Page<House> getHouse(int page, int size) throws Exception {
@@ -108,8 +119,7 @@ public class HouseServiceImpl implements HouseService{
                     origin.setCounts(origin.getCounts() - counts);
                     originRepository.save(origin);
                 }
-            } else {
-                throw new UserException(ErrorCode.HOUSE_ORIGIN_ID_ERROR.getCode(), ErrorCode.HOUSE_ORIGIN_ID_ERROR.getMsg());
+                return;
             }
         }
     }

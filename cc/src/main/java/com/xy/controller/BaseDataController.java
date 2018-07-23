@@ -139,6 +139,12 @@ public class BaseDataController {
         return houseService.getHouse(page, size);
     }
 
+    // 删除仓库
+    @RequestMapping(value = "/house/{id}", method = RequestMethod.DELETE)
+    public void delHouse(@PathVariable("id") int id) throws Exception {
+
+    }
+
     // 获取员工工资
     @RequestMapping(value = "/salary", method = RequestMethod.GET)
     public Page<StaffSalary> getSalary(@RequestParam("page") int page

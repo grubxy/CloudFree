@@ -30,6 +30,8 @@ public enum  ErrorCode {
 
     HOUSE_NO_ERROR(5002, "没有仓库信息"),
 
+    HOUSE_HAVE_ORIGIN(5003, "仓库中有物料无法删除"),
+
     HOUSE_ORIGIN_COUNT_ERROR(5002, "数量有误"),
 
     STAFF_ENUM_ERROR(6001, "员工状态有误"),

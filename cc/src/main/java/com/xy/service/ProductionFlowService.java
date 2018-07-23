@@ -16,7 +16,7 @@ public interface ProductionFlowService {
     void delProductionFlow(String id) throws Exception;
 
     // 获取生产流程 分页
-    Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name) throws Exception;
+    Page<ProductionFlow> getAllProductionFlow(int page, int size, String id, String name, Date start, Date end) throws Exception;
 
     // 获取生产流程的所有工序
     List<Seq> getAllSeqByFlowId(String id) throws Exception;

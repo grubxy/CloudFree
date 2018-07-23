@@ -44,9 +44,9 @@ public class SqlInitApplicationRunner implements ApplicationRunner {
 
 
         User user = new User();
-        user.setUsername("yexiaoyong");
-        user.setPassword("123456");
-        user.setOwner("叶晓勇");
+        user.setUsername("admin");
+        user.setPassword("qwer1234~");
+        user.setOwner("管理员账户");
         role.setRid(EnumRole.SYSTEM.getId());
         role.setRole(EnumRole.SYSTEM.getRole());
         List<Role> roleList = new ArrayList<>();
@@ -55,9 +55,9 @@ public class SqlInitApplicationRunner implements ApplicationRunner {
         authService.register(user);
 
         User user1 = new User();
-        user1.setUsername("xiaohei");
+        user1.setUsername("yexiaoyong");
         user1.setPassword("123456");
-        user1.setOwner("小黑");
+        user1.setOwner("叶晓勇");
         role.setRid(EnumRole.FLOW.getId());
         role.setRole(EnumRole.FLOW.getRole());
         roleList = new ArrayList<>();
