@@ -49,7 +49,7 @@ public class  StaffRepositoryImpl implements StaffRepositoryCustom {
             booleanBuilder.and(qConstruction.sDate.between(exstart, exend));
         }
 
-        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.dstCount).sum();
+        NumberExpression<Float> sumCost = qSeq.seqCost.multiply(qConstruction.cmplCount).sum();
 
         List<StaffSalary> staffList = jpaQueryFactory.selectFrom(qStaff)
                 .leftJoin(qStaff.constructs, qConstruction)
