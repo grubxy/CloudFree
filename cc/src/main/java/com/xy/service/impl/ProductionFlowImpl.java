@@ -84,10 +84,8 @@ public class ProductionFlowImpl implements ProductionFlowService {
                 seqInfo.setDstCounts(0);
             }
             seqInfo.setProductionFlow(flow);
+            seqInfo.setSeq(seq);
             seqInfoRepository.save(seqInfo);
-
-            seq.setSeqInfo(seqInfo);
-            seqRepository.save(seq);
         }
     }
 
@@ -131,7 +129,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
     public List<Seq> getAllSeqByFlowId(String id) throws Exception {
         QSeq qSeq = QSeq.seq;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        booleanBuilder.and(qSeq.seqInfo.productionFlow.idProduction.eq(id));
+        booleanBuilder.and(qSeq.seqInfo.any().productionFlow.idProduction.eq(id));
         Long total = seqRepository.count(booleanBuilder);
         if (total == 0) {
             return new ArrayList<>();
@@ -154,7 +152,7 @@ public class ProductionFlowImpl implements ProductionFlowService {
         }
         Pageable pageable = new QPageRequest(0,
                 new Long(total).intValue(),
-                new QSort(qSeqInfo.seq.seqIndex.asc()));
+                new QSort(QSeq.seq.seqIndex.asc()));
         return seqInfoRepository.findAll(booleanBuilder, pageable).getContent();
     }
 
@@ -172,38 +170,18 @@ public class ProductionFlowImpl implements ProductionFlowService {
         /**  校验数量依赖关系 **/
 
         // 查找该工单对应的工序详情
-        for (SeqInfo seqInfo:productionFlow.getSeqInfo()) {
-            if (seqInfo.getSeq().getIdSeq() == construction.getSeq().getIdSeq()) {
-                // 如果是第一道工序
-//                if (seqInfo.getSeq().getSeqIndex() == 1) {
-                    // 设置数量关系
-                    if (construction.getDstCount() <= seqInfo.getDstCounts()
-                            && construction.getDstCount() > 0) {
-                        seqInfo.setDstCounts(seqInfo.getDstCounts() - construction.getDstCount());
-                    } else {
-                        throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
-                    }
+        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
+        SeqInfo seqInfo = seqInfoRepository.findOne(qSeqInfo.idSeqInfo.eq(construction.getSeqInfo().getIdSeqInfo()));
 
-//                }
-//                else {
-//                    // 非第一道工序 依赖之前工序完成量
-//                    for (SeqInfo before:productionFlow.getSeqInfo()) {
-//                        // 找到前1道工序
-//                        if (before.getSeq().getSeqIndex() == seqInfo.getSeq().getSeqIndex() - 1) {
-//                            if (seqInfo.getDstCounts() >= construction.getDstCount()
-//                                    && construction.getDstCount() > 0) {
-//                                seqInfo.setDstCounts(seqInfo.getDstCounts() + construction.getDstCount());
-//                            }
-//                            else {
-//                                throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
-//                            }
-//                        }
-//                        seqInfoRepository.save(before);
-//                    }
-//                }
-                seqInfoRepository.save(seqInfo);
+        // 如果是第一道工序
+            if (construction.getDstCount() <= seqInfo.getDstCounts()
+                    && construction.getDstCount() > 0) {
+                seqInfo.setDstCounts(seqInfo.getDstCounts() - construction.getDstCount());
+            } else {
+                throw new UserException(ErrorCode.CONSTRUCTION_COUNTS_ERROR.getCode(), ErrorCode.CONSTRUCTION_COUNTS_ERROR.getMsg());
             }
-        }
+
+        seqInfoRepository.save(seqInfo);
 
         //  保存工单
         constructionRepository.save(construction);
@@ -269,16 +247,15 @@ public class ProductionFlowImpl implements ProductionFlowService {
     private SeqInfo getSeqInfoFromConstruction(Construction construction) throws Exception {
         QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
         BooleanBuilder booleanBuilder = new BooleanBuilder();
-        booleanBuilder.and(qSeqInfo.seq.idSeq.eq(construction.getSeq().getIdSeq()));
+        booleanBuilder.and(qSeqInfo.idSeqInfo.eq(construction.getSeqInfo().getIdSeqInfo()));
         return seqInfoRepository.findOne(booleanBuilder);
     }
 
     // 获取后一个工序
     private SeqInfo getNextSeqInfoFromConstruction(Construction construction) throws Exception {
-        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        booleanBuilder.and(qSeqInfo.seq.idSeq.eq(construction.getSeq().getIdSeq() + 1));
-        SeqInfo seqInfo = seqInfoRepository.findOne(booleanBuilder);
+        Seq seq = seqRepository.findOne(QSeq.seq.seqInfo.any().idSeqInfo.eq(construction.getSeqInfo().getIdSeqInfo()));
+        SeqInfo seqInfo = seqInfoRepository.findOne(QSeqInfo.seqInfo.seq.seqIndex.eq(seq.getSeqIndex() + 1)
+                .and(QSeqInfo.seqInfo.productionFlow.idProduction.eq(construction.getProduction().getIdProduction())));
         if (seqInfo == null) {
             return  null;
         } else {

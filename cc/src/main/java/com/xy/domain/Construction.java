@@ -47,9 +47,9 @@ public class Construction {
     @Getter
     @Setter private Staff staff;                                // 施工人员
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idSeqInfo")
     @Getter
     @Setter
-    private Seq seq;
-
+    private SeqInfo seqInfo;
 }

@@ -95,7 +95,7 @@ public class ProductionFlowTest {
 
         Seq seq = new Seq();
         seq.setIdSeq(1);
-        construction.setSeq(seq);
+//        construction.setSeq(seq);
 
         Staff staff = new Staff();
         staff.setIdStaff(1);

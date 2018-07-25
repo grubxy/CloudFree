@@ -33,11 +33,10 @@ public class Seq implements Serializable{
     @JoinColumn(name="idDstMaterial", referencedColumnName = "idMaterial", unique = true)
     private Material dstMaterial;  // 工序生成
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "seq")
     @Setter @Getter
-    @JoinColumn(name="idSeqInfo", referencedColumnName = "idSeqInfo", unique = true)
     @JsonIgnore
-    private SeqInfo seqInfo;
+    private Set<SeqInfo> seqInfo;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="idProduct")

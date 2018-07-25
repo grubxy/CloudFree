@@ -35,6 +35,7 @@ public class  StaffRepositoryImpl implements StaffRepositoryCustom {
         QStaff qStaff = QStaff.staff;
         QConstruction qConstruction = QConstruction.construction;
         QSeq qSeq = QSeq.seq;
+        QSeqInfo qSeqInfo = QSeqInfo.seqInfo;
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         booleanBuilder.and(qStaff.enumStaffStatus.eq(EnumStaffStatus.POSITIONING))
@@ -53,7 +54,8 @@ public class  StaffRepositoryImpl implements StaffRepositoryCustom {
 
         List<StaffSalary> staffList = jpaQueryFactory.selectFrom(qStaff)
                 .leftJoin(qStaff.constructs, qConstruction)
-                .leftJoin(qConstruction.seq, qSeq)
+                .leftJoin(qConstruction.seqInfo, qSeqInfo)
+                .leftJoin(qSeqInfo.seq, qSeq)
                 .select(Projections.constructor(
                         StaffSalary.class, qStaff.staffName, sumCost))
                 .where(booleanBuilder)
@@ -65,7 +67,8 @@ public class  StaffRepositoryImpl implements StaffRepositoryCustom {
 
         Long total = jpaQueryFactory.selectFrom(qStaff)
                 .leftJoin(qStaff.constructs, qConstruction)
-                .leftJoin(qConstruction.seq, qSeq)
+                .leftJoin(qConstruction.seqInfo, qSeqInfo)
+                .leftJoin(qSeqInfo.seq, qSeq)
                 .select(Projections.constructor(
                         StaffSalary.class, qStaff.staffName, sumCost))
                 .where(booleanBuilder)

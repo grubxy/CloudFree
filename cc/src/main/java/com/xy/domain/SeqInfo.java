@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 // 生产流程的每个工序详情
 @Entity
@@ -15,7 +16,8 @@ public class SeqInfo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Getter @Setter private int idSeqInfo;
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "seqInfo")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idSeq")
     @Getter @Setter private Seq seq;
 
     @Getter @Setter private int dstCounts;
@@ -31,4 +33,9 @@ public class SeqInfo {
     @JoinColumn(name = "idProduction")
     @JsonIgnore
     private ProductionFlow productionFlow;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "seqInfo")
+    @JsonIgnore
+    @Getter @Setter
+    private Set<Construction> constructions;
 }

@@ -78,6 +78,12 @@ public class BaseDataController {
         return baseDataService.getStaffBySeqId(id, page, size);
     }
 
+    // 获取工序默认员工
+    @RequestMapping(value = "/seqInfo/{id}/staff", method = RequestMethod.GET)
+    public List<Staff> getDefaultStaffBySeqInfo(@PathVariable("id") int id, @RequestParam("page") int page, @RequestParam("size") int size) throws Exception {
+        return baseDataService.getStaffBySeqInfo(id, page, size);
+    }
+
     // 删除工序默认员工
     @RequestMapping(value = "/seq/{id}/staff/{idStaff}", method = RequestMethod.DELETE)
     @PreAuthorize("hasRole('SYSTEM')")

@@ -24,6 +24,8 @@ public interface BaseDataService {
 
     List<Staff> getStaffBySeqId(int id, int page, int size) throws Exception;
 
+    List<Staff> getStaffBySeqInfo(int id, int page, int size) throws Exception;
+
     void delStaffBySeqId(int id, int idStaff) throws Exception;
 
     // 获取所有基础数据信息

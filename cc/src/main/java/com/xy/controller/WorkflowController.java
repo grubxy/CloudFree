@@ -2,10 +2,7 @@ package com.xy.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.xy.domain.Construction;
-import com.xy.domain.ProductionFlow;
-import com.xy.domain.Seq;
-import com.xy.domain.SeqInfo;
+import com.xy.domain.*;
 import com.xy.service.ProductionFlowService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,5 +104,4 @@ public class WorkflowController {
         int cmpl = obj.getIntValue("cmpl");
         productionFlowService.setConstructionStatusById(id, idHouse, status, error, cmpl);
     }
-
 }

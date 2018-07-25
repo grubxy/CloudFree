@@ -167,6 +167,21 @@ public class BaseDataServiceImpl implements BaseDataService {
     }
 
     @Override
+    public List<Staff> getStaffBySeqInfo(int id, int page, int size) throws Exception {
+        QStaff qStaff = QStaff.staff;
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        booleanBuilder.and(qStaff.seqs.any().seqInfo.any().idSeqInfo.eq(id));
+        Long total = staffRepository.count(booleanBuilder);
+        if (total == 0) {
+            return new ArrayList<>();
+        }
+        Pageable pageable = new QPageRequest(page, total.intValue(),
+                new QSort(qStaff.staffName.asc()));
+
+        return staffRepository.findAll(booleanBuilder, pageable).getContent();
+    }
+
+    @Override
     public void delStaffBySeqId(int id, int idStaff) throws Exception {
         Seq seq = seqRepository.findOne(id);
         if (seq == null) {
