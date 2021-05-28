@@ -1,1 +1,2 @@
-# server for BaiHui CiXi ZheJiang
+# erp server
+a erp demo use java 
